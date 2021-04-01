@@ -1,0 +1,40 @@
+
+.node {
+	rx: 2;
+	ry: 2;
+
+	fill: #222;
+	stroke: #eee; 
+	stroke-width: 0.5;
+
+	width: 20px;
+	height: 20px;
+}
+
+.node:hover {
+	stroke: #fff; 
+	stroke-width: 1;
+}
+
+.edge {
+	fill: rgb(104, 35, 35);
+}
+
+.selected {
+	fill: #eee;
+	stroke-width: 2;
+}
+
+.connector {
+	stroke: #eee; 
+	stroke-width: 0.4;
+
+	marker-end: url(#arrowhead);
+	/* marker-start: url(#arrowhead); */
+}
+
+#arrowhead {
+	stroke: #eee; 
+	fill: #eee; 
+	stroke-width: 0.4;
+}

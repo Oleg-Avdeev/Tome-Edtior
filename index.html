@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+	<meta charset="UTF-8">
+	<title>TOME — Narrative tree editor</title>
+
+	<link rel="stylesheet" href="styles/style.css">
+	<link rel="stylesheet" href="styles/svg.css">
+	<link rel="stylesheet" href="styles/script.css">
+	<link rel="stylesheet" href="styles/table.css">
+
+	<script src="./scripts/tree_renderer.js"></script>
+	<script src="./scripts/chapter_renderer.js"></script>
+</head>
+
+<body>
+	
+	<div class="split left">
+		<svg viewBox="0 0 500 1600" id="canvas">
+			<defs>
+				<marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+					<polygon points="0 0, 10 3.5, 0 7" />
+				</marker>
+			</defs>
+		</svg>
+		<a id="selectBtn">Open file</a>
+	</div>
+	<div class="split right script" id="chapter-container">
+		<table id="chapter-table">
+		</table>
+	</div>
+
+	<script src="./scripts/dialog.js"></script>
+</body>
+
+</html>
