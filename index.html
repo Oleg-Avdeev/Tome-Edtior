@@ -16,23 +16,23 @@
 </head>
 
 <body>
+	<svg>
+		<defs>
+			<marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+				<polygon points="0 0, 10 3.5, 0 7" />
+			</marker>
+		</defs>
+	</svg>
 	
 	<div class="split left">
 		<svg viewBox="0 0 500 1600" id="canvas">
-			<defs>
-				<marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-					<polygon points="0 0, 10 3.5, 0 7" />
-				</marker>
-			</defs>
 		</svg>
-		<a id="selectBtn">Open file</a>
 	</div>
+
 	<div class="split right script" id="chapter-container">
 		<table id="chapter-table">
 		</table>
 	</div>
-
-	<script src="./scripts/dialog.js"></script>
 </body>
 
 </html>

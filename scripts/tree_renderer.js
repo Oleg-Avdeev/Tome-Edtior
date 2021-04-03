@@ -2,23 +2,41 @@ var connectionsMap = new Map();
 var depthMap = new Map();
 var nodes = [];
 
-var xCenter = 250;
 var xOffset = 50;
 var yOffset = 50;
 
 var currentNode;
 
-render = function (json) {
+let minX = 9999, maxX = 0, minY = 9999, maxY = 0;
 
+clear = function(container) {
+	connectionsMap.clear();
+	depthMap.clear();
+	nodes = [];
+	minX = 9999; 
+	minY = 9999; 
+	maxX = 0; 
+	maxY = 0;
+}
+
+render = function (json) {
+	
 	var container = document.getElementById('canvas');
+	container.innerHTML = '';
+	clear(container);
+
 	json.Scenes.forEach(scene => {
-		nodes.push({ "x": 0, "y": 0, "depth": 0, "branch": "", "passed": false, "scene": scene, "htmlNode": null });
+		if (scene.Id == '') return;
+		nodes.push({ "index" : 0, "x": 0, "y": 0, "depth": 0, "branch": "", "passed": false, "scene": scene, "htmlNode": null });
 	});
 
+	let i = 0;
 	nodes.forEach(node => {
 		var connections = getConnections(node);
 		connectionsMap.set(node, connections);
 		node.passed = true;
+		node.index = i;
+		i++;
 	});
 
 	treeDepthPass();
@@ -29,13 +47,16 @@ render = function (json) {
 
 	for (const entries of depthMap.entries()) {
 		var index = 0;
-		entries[1].sort((x, y) => x.branch < y.branch);
+		entries[1].sort((x, y) => x.branch.localeCompare(y.branch));
 		entries[1].forEach(n => {
-			n.x = xCenter + xOffset * WMap(index, entries[1].length)
-			n.y = yOffset + yOffset * n.depth;
+			n.x = xOffset * WMap(index, entries[1].length)
+			n.y = yOffset * n.depth;
+			updateBoundingBox(n);
 			index++;
 		})
 	}
+	
+	container.setAttribute('viewBox', `${minX} ${minY} ${maxX - minX} ${maxY - minY}`);
 
 	nodes.forEach(n => {
 		var node = buildSVGNode(n);
@@ -44,7 +65,7 @@ render = function (json) {
 
 	for (const entry of connectionsMap.entries()) {
 		entry[1].forEach(node2 => {
-			var line = buildSVGLine(entry[0], node2);
+			var line = buildSVGLine(entry[0], node2.node);
 			container.appendChild(line);
 		})
 	}
@@ -70,7 +91,7 @@ getConnections = function (node) {
 			if (action.ActionType === 1) {
 				var n = findNodeById(action.Value);
 				if (n != null) {
-					actions.push(n);
+					actions.push({'node':n, 'ignoreDepthPass':action.Cyclical});
 				}
 			}
 		});
@@ -80,11 +101,11 @@ getConnections = function (node) {
 
 treeDepthPass = function () {
 	for (const entry of connectionsMap.entries()) {
-		var choice = 0;
 		entry[1].forEach(node2 => {
-			node2.depth = Math.max(node2.depth, entry[0].depth + 1);
-			node2.branch = entry[0].branch + choice;
-			choice++;
+			if (node2.ignoreDepthPass) return;
+
+			node2.node.depth = Math.max(node2.node.depth, entry[0].depth + 1);
+			node2.node.branch = entry[0].branch + `${node2.node.index}`;
 		})
 	}
 }
@@ -100,7 +121,6 @@ treeWidthPass = function () {
 
 findNodeById = function (id) {
 	return nodes.find(x => {
-		// console.log(`${x.scene.Id} = ${id}`)
 		return x.scene.Id == id;
 	});
 }
@@ -113,6 +133,13 @@ WMap = function (index, length) {
 	return index - length / 2;
 }
 
+updateBoundingBox = function(node) {
+	minX = Math.min(node.x - 100, minX);
+	minY = Math.min(node.y - 100, minY);
+	maxX = Math.max(node.x + 100, maxX);
+	maxY = Math.max(node.y + 100, maxY);
+}
+
 buildSVGNode = function (n) {
 	const node = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
 	node.setAttribute('x', n.x - 10);
@@ -122,7 +149,9 @@ buildSVGNode = function (n) {
 	if (connectionsMap.get(n).length == 0)
 		node.classList.add('edge');
 
-	node.onclick = e => selectNode(n);
+	node.onclick = e => { 
+		selectNode(n); 
+	}
 	n.htmlNode = node;
 
 	return node;

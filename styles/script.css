@@ -28,6 +28,18 @@
 	margin-right: 5%;
 }
 
+.script textarea {
+	margin-left: 5%;
+    margin-right: 5%;
+    resize: none;
+    border: none;
+    background-color: #00000000;
+    font-family: inherit;
+  	font-size: 100%;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 .script h1 {
     font-size: 18pt;
     font-weight: bold;

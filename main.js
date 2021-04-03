@@ -1,7 +1,6 @@
-const { app, BrowserWindow, dialog, Menu } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
+const menu = require('./scripts/app/menu')
 const path = require('path')
-const fs = require('fs')
-const menu = require('./scripts/menu')
 
 function createWindow() {
 	const win = new BrowserWindow({
@@ -14,31 +13,7 @@ function createWindow() {
 
 	win.loadFile('index.html')
 	win.webContents.openDevTools()
-
-	win.webContents.once('dom-ready', () => {
-		getFileFromUser(win);
-	})
-}
-
-const getFileFromUser = (win) => {
-	const files = dialog.showOpenDialog(win, {
-		properties: ['openFile'],
-		defaultPath: app.getAppPath(),
-		filters: [
-			{ name: 'JSON Files', extensions: ['json'] },
-			{ name: 'All Files', extensions: ['*'] }
-		],
-	});
-
-	if (!files) { return; }
-	
-	files.then(file => {
-		if (file.filePaths.length == 0) return;
-		fs.readFile(file.filePaths[0], (er, data) => {
-			if (er != null) return;
-			win.webContents.executeJavaScript(`render(${data})`)
-		});
-	});
+	menu.setWindow(win);
 }
 
 app.whenReady().then(() => {
@@ -56,4 +31,3 @@ app.on('window-all-closed', () => {
 		app.quit()
 	}
 })
-  
