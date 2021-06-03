@@ -1,9 +1,16 @@
 const { app, Menu, dialog } = require('electron')
+
+const fs = require('fs')
+const Store = require('electron-store');
+
 const parser = require('./TSVParser')
+const tsvBuilder = require('./JSONtoTSV')
+
 const isMac = process.platform === 'darwin'
 
 let win;
 let lastOpenedFile;
+const store = new Store();
 
 exports.setWindow = function(window) {
 	win = window;
@@ -47,7 +54,7 @@ const template = [
 			{
 				label: 'Save',
 				accelerator: 'CommandOrControl+S',
-				click: () => { console.log('Save') }
+				click: () => { saveFile() }
 			},
 			{ label: 'Export' },
 			isMac ? { role: 'close' } : { role: 'quit' }
@@ -146,6 +153,7 @@ const openFile = (win) => {
 	files.then(file => {
 		if (file.filePaths.length == 0) return;
 		parser.parseFile(file, renderResult);
+		store.set('document.path', file.filePaths[0]);
 		lastOpenedFile = file;
 	});
 }
@@ -157,4 +165,22 @@ const reOpenFile = () => {
 
 const renderResult = (data) => {
 	win.webContents.executeJavaScript(`render(${JSON.stringify (data)})`);
+}
+
+const saveFile = () => {
+	var document = store.get('document');
+
+	if (document.path !== null && fs.existsSync(document.path))
+	{
+		let tsv = tsvBuilder.build(document.wip);
+		fs.writeFileSync(document.path, tsv);
+	}
+	else
+	{
+		saveFileDialogue();
+	}
+}
+
+const saveFileDialogue = () => {
+
 }

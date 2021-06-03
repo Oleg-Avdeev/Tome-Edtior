@@ -7,6 +7,7 @@ exports.parseFile = function (file, callback) {
 		if (er != null) return;
 
 		if (!data.startsWith('Scene'))
+			// data = `Scene	Character	Text	Count1	Desc	Trans	Count2	Action	Condition	Comments	Video\n${data}`;
 			data = `Scene	Character	Text	Count	Action\n${data}`;
 
 		let result = parse.parse(data, {
@@ -16,9 +17,7 @@ exports.parseFile = function (file, callback) {
 			trimHeaders: true,
 		});
 
-		console.log(result);
 		let json = toTJSON(result);
-		console.log(json);
 
 		callback(json);
 	});
@@ -39,14 +38,16 @@ let toTJSON = function (tsv) {
 		if (scene.Id == '')
 			scene.Id = l.Scene;
 
-		let line = { 'Character': l.Character, 'Text': l.Text, 'Actions': [] }
+		let line = {};
+		var keys = Object.keys(l);
+		keys.forEach(key => line[key] = l[key]);
 
 		if (l.Scene != scene.Id) {
 			json.Scenes.push(scene);
 			scene = { 'Id': l.Scene, 'Lines': [] }
 		}
 		
-		line.Actions = parseActions(l.Action)
+		line.Actions = parseActions(l.Actions)
 		
 		scene.Lines.push(line);
 	})

@@ -20,7 +20,8 @@ clear = function(container) {
 }
 
 render = function (json) {
-	
+	Story.initialize(json);
+
 	var container = document.getElementById('canvas');
 	container.innerHTML = '';
 	clear(container);
@@ -71,6 +72,7 @@ render = function (json) {
 	}
 
 	selectNode(nodes[0]);
+	
 }
 
 selectNode = function (node) {
