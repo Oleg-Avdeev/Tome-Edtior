@@ -69,7 +69,9 @@ createParagraph = function (line, index) {
 }
 
 addNewParagraph = function (index) {
-	let line = { "Text": "...", "Character": "?", Actions: [] };
+	let line = { ...currentChapter.Lines[index - 1] };
+	line.Character = '?';
+	line.Text = '...';
 
 	currentChapter.Lines.splice(index, 0, line);
 	Story.invalidate();

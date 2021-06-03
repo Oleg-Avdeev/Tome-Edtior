@@ -1,4 +1,5 @@
 const parse = require('papaparse');
+const actionsParser = require('./ActionParser')
 const fs = require('fs')
 
 exports.parseFile = function (file, callback) {
@@ -47,7 +48,7 @@ let toTJSON = function (tsv) {
 			scene = { 'Id': l.Scene, 'Lines': [] }
 		}
 		
-		line.Actions = parseActions(l.Actions)
+		line.Actions = actionsParser.parse(l.Actions)
 		
 		scene.Lines.push(line);
 	})
@@ -55,25 +56,4 @@ let toTJSON = function (tsv) {
 	json.Scenes.push(scene);
 
 	return json;
-}
-
-let actionRE = /\[([^\[\]]*)\]/;
-let parseActions = function (actions) {
-	var matches = actionRE.exec(actions);
-
-	if (matches != null) {
-		let id = matches[1];
-		let cyclicalEdge = false
-		
-		if (id.startsWith('*'))
-		{
-			id = id.replace('*', '');
-			cyclicalEdge = true;
-		}
-
-		var action = { 'ActionType': 1, 'Value': id, 'Cyclical': cyclicalEdge }
-		return [action];
-	}
-
-	return []; 
 }
