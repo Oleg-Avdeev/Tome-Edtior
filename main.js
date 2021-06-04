@@ -1,17 +1,17 @@
-const { app, BrowserWindow, Menu } = require('electron')
-const { ipcMain } = require('electron')
-const menu = require('./scripts/app/menu')
-const path = require('path')
+const { app, BrowserWindow, Menu } = require('electron');
+const { ipcMain } = require('electron');
+const menu = require('./scripts/app/menu');
+const path = require('path');
 const Store = require('electron-store');
 
 const store = new Store();
 let win;
 
-ipcMain.on("store-json", (event, args) => {
+ipcMain.on('store-json', (event, args) => {
 	store.set('document.wip', args);
 });
 
-ipcMain.on("select-scene", (event, args) => {
+ipcMain.on('select-scene', (event, args) => {
 	store.set('document.scene', args);
 });
 
@@ -24,10 +24,10 @@ function createWindow() {
       		enableRemoteModule: false,
 			preload: path.join(__dirname, 'preload.js')
 		}
-	})
+	});
 
-	win.loadFile('index.html')
-	win.webContents.openDevTools()
+	win.loadFile('index.html');
+	win.webContents.openDevTools();
 	menu.setWindow(win);
 	
 	var document = store.get('document');
@@ -46,17 +46,17 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-	createWindow()
+	createWindow();
 
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0) {
-			createWindow()
+			createWindow();
 		}
-	})
-})
+	});
+});
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
-		app.quit()
+		app.quit();
 	}
-})
+});

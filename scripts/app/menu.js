@@ -1,12 +1,12 @@
-const { app, Menu, dialog } = require('electron')
+const { app, Menu, dialog } = require('electron');
 
-const fs = require('fs')
+const fs = require('fs');
 const Store = require('electron-store');
 
-const parser = require('./TSVParser')
-const tsvBuilder = require('./JSONtoTSV')
+const parser = require('./TSVParser');
+const tsvBuilder = require('./JSONtoTSV');
 
-const isMac = process.platform === 'darwin'
+const isMac = process.platform === 'darwin';
 
 let win;
 let lastOpenedFile;
@@ -14,7 +14,7 @@ const store = new Store();
 
 exports.setWindow = function(window) {
 	win = window;
-}
+};
 
 const template = [
 	// { role: 'appMenu' }
@@ -39,22 +39,22 @@ const template = [
 			{
 				label: 'New',
 				accelerator: 'CommandOrControl+N',
-				click: () => { console.log('New') }
+				click: () => { console.log('New'); }
 			},
 			{
 				label: 'Open',
 				accelerator: 'CommandOrControl+O',
-				click: () => { openFile() }
+				click: () => { openFile(); }
 			},
 			{
 				label: 'Refresh',
 				accelerator: 'CommandOrControl+R',
-				click: () => { reOpenFile() }
+				click: () => { reOpenFile(); }
 			},
 			{
 				label: 'Save',
 				accelerator: 'CommandOrControl+S',
-				click: () => { saveFile() }
+				click: () => { saveFile(); }
 			},
 			{ label: 'Export' },
 			isMac ? { role: 'close' } : { role: 'quit' }
@@ -126,16 +126,16 @@ const template = [
 			{
 				label: 'Learn More',
 				click: async () => {
-					const { shell } = require('electron')
-					await shell.openExternal('https://electronjs.org')
+					const { shell } = require('electron');
+					await shell.openExternal('https://electronjs.org');
 				}
 			}
 		]
 	}
-]
+];
 
-const menu = Menu.buildFromTemplate(template)
-Menu.setApplicationMenu(menu)
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
 
 const openFile = (win) => {
 	const files = dialog.showOpenDialog(win, {
@@ -156,16 +156,16 @@ const openFile = (win) => {
 		store.set('document.path', file.filePaths[0]);
 		lastOpenedFile = file;
 	});
-}
+};
 
 const reOpenFile = () => {
 	if (lastOpenedFile == null) return;
 	parser.parseFile(lastOpenedFile, renderResult);
-}
+};
 
 const renderResult = (data) => {
 	win.webContents.executeJavaScript(`render(${JSON.stringify (data)})`);
-}
+};
 
 const saveFile = () => {
 	var document = store.get('document');
@@ -179,8 +179,8 @@ const saveFile = () => {
 	{
 		saveFileDialogue();
 	}
-}
+};
 
 const saveFileDialogue = () => {
 
-}
+};

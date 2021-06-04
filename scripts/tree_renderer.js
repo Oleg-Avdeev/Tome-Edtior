@@ -17,7 +17,7 @@ clear = function() {
 	minY = 9999; 
 	maxX = 0; 
 	maxY = 0;
-}
+};
 
 render = function (json) {
 	Story.initialize(json);
@@ -28,7 +28,7 @@ render = function (json) {
 
 	json.Scenes.forEach(scene => {
 		if (scene.Id == '') return;
-		nodes.push({ "index" : 0, "x": 0, "y": 0, "depth": 0, "branch": "", "passed": false, "scene": scene, "htmlNode": null });
+		nodes.push({ 'index' : 0, 'x': 0, 'y': 0, 'depth': 0, 'branch': '', 'passed': false, 'scene': scene, 'htmlNode': null });
 	});
 
 	let i = 0;
@@ -50,11 +50,11 @@ render = function (json) {
 		var index = 0;
 		entries[1].sort((x, y) => x.branch.localeCompare(y.branch));
 		entries[1].forEach(n => {
-			n.x = xOffset * WMap(index, entries[1].length)
+			n.x = xOffset * WMap(index, entries[1].length);
 			n.y = yOffset * n.depth;
 			updateBoundingBox(n);
 			index++;
-		})
+		});
 	}
 	
 	container.setAttribute('viewBox', `${minX} ${minY} ${maxX - minX} ${maxY - minY}`);
@@ -68,17 +68,17 @@ render = function (json) {
 		entry[1].forEach(node2 => {
 			var line = buildSVGLine(entry[0], node2.node);
 			container.appendChild(line);
-		})
+		});
 	}
 
 	selectNode(nodes[0]);
 	
-}
+};
 
 selectNodeById = function (sceneId) {
-	var node = nodes.find(n => n.scene.Id == sceneId)
+	var node = nodes.find(n => n.scene.Id == sceneId);
 	if (node) selectNode(node);
-}
+};
 
 selectNode = function (node) {
 	if (currentNode)
@@ -93,7 +93,7 @@ selectNode = function (node) {
 	NewNode.draw(node);
 
 	Story.selectNode(node.scene.Id);
-}
+};
 
 getConnections = function (node) {
 	var actions = [];
@@ -108,7 +108,7 @@ getConnections = function (node) {
 		});
 	});
 	return actions;
-}
+};
 
 treeDepthPass = function () {
 	for (const entry of connectionsMap.entries()) {
@@ -117,42 +117,42 @@ treeDepthPass = function () {
 
 			node2.node.depth = Math.max(node2.node.depth, entry[0].depth + 1);
 			node2.node.branch = entry[0].branch + `${node2.node.index}`;
-		})
+		});
 	}
-}
+};
 
 treeWidthPass = function () {
 	nodes.forEach(n => {
 		var depthList = depthMap.get(n.depth);
 		if (depthList == null) depthList = [];
-		depthList.push(n)
+		depthList.push(n);
 		depthMap.set(n.depth, depthList);
-	})
-}
+	});
+};
 
 findNodeById = function (id) {
 	return nodes.find(x => {
 		return x.scene.Id == id;
 	});
-}
+};
 
 ZMap = function (index) {
 	return Math.pow(-1, index + 1) * Math.ceil(0.5 * index);
-}
+};
 
 WMap = function (index, length) {
 	return index - length / 2;
-}
+};
 
 updateBoundingBox = function(node) {
 	minX = Math.min(node.x - 100, minX);
 	minY = Math.min(node.y - 100, minY);
 	maxX = Math.max(node.x + 100, maxX);
 	maxY = Math.max(node.y + 100, maxY);
-}
+};
 
 buildSVGNode = function (n) {
-	const node = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+	const node = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 	node.setAttribute('x', n.x - 10);
 	node.setAttribute('y', n.y - 10);
 	node.classList.add('node');
@@ -162,22 +162,22 @@ buildSVGNode = function (n) {
 
 	node.onclick = e => { 
 		selectNode(n); 
-	}
+	};
 	n.htmlNode = node;
 
 	return node;
-}
+};
 
 buildSVGLine = function (node1, node2) {
-	const line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+	const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 	var coordinates = shortenLine(node1.x, node2.x, node1.y, node2.y, 10);
 	line.setAttribute('x1', coordinates[0]);
 	line.setAttribute('x2', coordinates[1]);
 	line.setAttribute('y1', coordinates[2]);
 	line.setAttribute('y2', coordinates[3]);
 	line.classList.add('connector');
-	return line
-}
+	return line;
+};
 
 shortenLine = function (x1, x2, y1, y2, r) {
 	var dx = x2 - x1;
@@ -191,4 +191,4 @@ shortenLine = function (x1, x2, y1, y2, r) {
 	var ny2 = (1 - n / D) * y1 + (n / D) * y2;
 
 	return [nx1, nx2, ny1, ny2];
-}
+};
