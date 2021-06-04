@@ -46,6 +46,7 @@ createParagraph = function (line, index) {
 		Story.invalidate();
 	});
 
+	//TODO: Split instead of create new
 	paragraph.addEventListener('keydown', event => {
 		if (event.key == 'Enter') {
 			if (paragraph.textContent.length > 0)

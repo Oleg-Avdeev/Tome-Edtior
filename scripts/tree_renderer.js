@@ -9,7 +9,7 @@ var currentNode;
 
 let minX = 9999, maxX = 0, minY = 9999, maxY = 0;
 
-clear = function(container) {
+clear = function() {
 	connectionsMap.clear();
 	depthMap.clear();
 	nodes = [];
@@ -81,14 +81,17 @@ selectNodeById = function (sceneId) {
 }
 
 selectNode = function (node) {
-	if (currentNode != null)
+	if (currentNode)
 		currentNode.htmlNode.classList.remove('selected');
 
 	currentNode = node;
 	currentNode.htmlNode.classList.add('selected');
 
-	// displayChapter(node.scene);
-	displayTable(node.scene);
+	displayChapter(node.scene);
+	// displayTable(node.scene);
+
+	NewNode.draw(node);
+
 	Story.selectNode(node.scene.Id);
 }
 
@@ -154,7 +157,7 @@ buildSVGNode = function (n) {
 	node.setAttribute('y', n.y - 10);
 	node.classList.add('node');
 
-	if (connectionsMap.get(n).length == 0)
+	if (connectionsMap.has(n) && connectionsMap.get(n).length == 0)
 		node.classList.add('edge');
 
 	node.onclick = e => { 

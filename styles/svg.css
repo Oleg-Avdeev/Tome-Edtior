@@ -14,6 +14,7 @@
 .node:hover {
 	stroke: #fff; 
 	stroke-width: 1;
+	cursor: default;
 }
 
 .edge {
@@ -22,15 +23,22 @@
 
 .selected {
 	fill: #eee;
-	stroke-width: 2;
+	font: bold 30px sans-serif;
+}
+
+.new {
+	stroke-dasharray: 3;
+}
+
+text.new {
+	fill: #eee;
+	pointer-events: none;
 }
 
 .connector {
 	stroke: #eee; 
 	stroke-width: 0.4;
-
 	marker-end: url(#arrowhead);
-	/* marker-start: url(#arrowhead); */
 }
 
 #arrowhead {
