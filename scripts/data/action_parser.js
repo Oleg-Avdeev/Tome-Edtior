@@ -2,9 +2,9 @@ const ActionType = Object.freeze({ 'goto': 1, 'command': 2, 'compute': 3 });
 const OpenedBracket = ['', '[', '(', '{'];
 const ClosedBracket = ['', ']', ')', '}'];
 
-const gotoRE = /\[([^\[\]]*)\]/;
-const commandRE = /\(([^\(\)]*)\)/;
-const computeRE = /\{([^\{\}]*)\}/;
+const gotoRE = /\[([^[]]*)\]/;
+const commandRE = /\(([^()]*)\)/;
+const computeRE = /\{([^{}]*)\}/;
 
 const ActionParser = {
 	parse: function (actions) {

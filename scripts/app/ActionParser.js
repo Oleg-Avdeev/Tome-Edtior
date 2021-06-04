@@ -3,9 +3,9 @@ const OpenedBracket = ['', '[', '(', '{'];
 const ClosedBracket = ['', ']', ')', '}'];
 
 
-let gotoRE = /\[([^\[\]]*)\]/;
-let commandRE = /\(([^\(\)]*)\)/;
-let computeRE = /\{([^\{\}]*)\}/;
+let gotoRE = /\[([^[]]*)\]/;
+let commandRE = /\(([^()]*)\)/;
+let computeRE = /\{([^{}]*)\}/;
 
 exports.parse = function(actions) {
 	var parsedActions = [];
