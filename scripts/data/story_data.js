@@ -17,14 +17,14 @@ const Story = {
 		{
 			this.valid = true;
 			console.log('Saving wip...');
-			window.api.send("store-json", this.json);
+			window.api.send('store-json', this.json);
 		}
 	},
 
 	selectNode : function(sceneId) {
 		window.api.send('select-scene', sceneId);
 	},
-}
+};
 
 setInterval(() => Story.commit(), 1000);
   

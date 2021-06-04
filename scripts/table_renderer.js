@@ -1,4 +1,4 @@
-displayTable = function(chapter) {
+let displayTable = function(chapter) {
 	var container = document.getElementById('chapter-table');
 	container.textContent = '';
 
@@ -7,11 +7,11 @@ displayTable = function(chapter) {
 	chapter.Lines.forEach(line => {
 		var tr = createRow(line);
 		container.appendChild(tr);
-	})
-}
+	});
+};
 
-createHeader = function(line) {
-	const row = document.createElement("tr");
+let createHeader = function(line) {
+	const row = document.createElement('tr');
 	let keys = Object.keys(line);
 
 	keys.forEach((value, index) => {
@@ -22,10 +22,10 @@ createHeader = function(line) {
 	});
 
 	return row;
-}
+};
 
-createRow = function(line) {
-	const row = document.createElement("tr");
+let createRow = function(line) {
+	const row = document.createElement('tr');
 	const values = Object.values(line);
 	const keys = Object.keys(line);
 	
@@ -45,4 +45,4 @@ createRow = function(line) {
 	});
 
 	return row;
-}
+};

@@ -1,4 +1,4 @@
-const actionsParser = require('./ActionParser')
+const actionsParser = require('./ActionParser');
 
 exports.build = function (document) {
 	let body = getHeader(document);
@@ -10,14 +10,14 @@ exports.build = function (document) {
 		});
 	});
 	return body;
-}
+};
 
-getHeader = function (document) {
+let getHeader = function (document) {
 	let keys = Object.keys(document.Scenes[0].Lines[0]);
 	return buildLine(keys);
-}
+};
 
-buildLine = function (array) {
+let buildLine = function (array) {
 	var line = '';
 
 	for (let index = 0; index < array.length; index++) {
@@ -27,4 +27,4 @@ buildLine = function (array) {
 	}
 
 	return line;
-}
+};

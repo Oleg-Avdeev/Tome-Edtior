@@ -8,10 +8,10 @@ var NewNode = {
 	draw : function (parentNode) {
 		this.parentNode = parentNode;
 
-		let newNode =  { ...parentNode };
+		let newNode = { ...parentNode };
 		let indexInLine = depthMap.get(parentNode.depth + 1).length;
 		newNode.depth = parentNode.depth + 1;
-		newNode.x = xOffset * WMap(indexInLine, indexInLine)
+		newNode.x = xOffset * WMap(indexInLine, indexInLine);
 		newNode.y = yOffset * newNode.depth;
 
 		this.destroy();
@@ -27,7 +27,7 @@ var NewNode = {
 
 		this.line = buildSVGLine(parentNode, newNode);
 		
-		this.plus = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+		this.plus = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 		this.plus.classList.add('new');
 		this.plus.textContent = '+';
 		this.plus.setAttribute('x', newNode.x - 4.3);
@@ -40,20 +40,20 @@ var NewNode = {
 
 	destroy : function() {
 		if (this.node && this.node.parentNode)
-			this.node.parentNode.removeChild(this.node)
+			this.node.parentNode.removeChild(this.node);
 
 		if (this.line && this.line.parentNode)
-			this.line.parentNode.removeChild(this.line)
+			this.line.parentNode.removeChild(this.line);
 
 		if (this.plus && this.plus.parentNode)
-			this.plus.parentNode.removeChild(this.plus)
+			this.plus.parentNode.removeChild(this.plus);
 	},
 
 	onClick : function() {
 		let newSceneId = this.getUniqueSceneId(this.parentNode.scene.Id)
 		
 		let lastLine = this.parentNode.scene.Lines[this.parentNode.scene.Lines.length - 1];
-		let gotoAction = { 'ActionType': ActionType.goto, 'Value': newSceneId }
+		let gotoAction = { 'ActionType': ActionType.goto, 'Value': newSceneId };
 		let newLink = { ... lastLine };
 		newLink.Actions = [gotoAction];
 		newLink.Text = `Go to ${newSceneId}`;
@@ -65,7 +65,7 @@ var NewNode = {
 		newLine.Actions = [];
 		newLine.Text = '...';
 		
-		let newScene = { Id: newSceneId, Lines: [ newLine ] }
+		let newScene = { Id: newSceneId, Lines: [ newLine ] };
 		Story.json.Scenes.push(newScene);
 		Story.invalidate();
 
@@ -82,4 +82,4 @@ var NewNode = {
 		console.log(uid);
 		return uid;
 	}
-}
+};

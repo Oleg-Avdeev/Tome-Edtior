@@ -1,6 +1,6 @@
 const parse = require('papaparse');
-const actionsParser = require('./ActionParser')
-const fs = require('fs')
+const actionsParser = require('./ActionParser');
+const fs = require('fs');
 
 exports.parseFile = function (file, callback) {
 
@@ -22,12 +22,12 @@ exports.parseFile = function (file, callback) {
 
 		callback(json);
 	});
-}
+};
 
 let toTJSON = function (tsv) {
-	let json = { 'Scenes': [] }
+	let json = { 'Scenes': [] };
 
-	let scene = { 'Id': '', 'Lines': [] }
+	let scene = { 'Id': '', 'Lines': [] };
 
 	tsv.data.forEach(l => {
 		if (l.Text == null || l.Text.length == 0) 
@@ -45,15 +45,15 @@ let toTJSON = function (tsv) {
 
 		if (l.Scene != scene.Id) {
 			json.Scenes.push(scene);
-			scene = { 'Id': l.Scene, 'Lines': [] }
+			scene = { 'Id': l.Scene, 'Lines': [] };
 		}
 		
-		line.Actions = actionsParser.parse(l.Actions)
+		line.Actions = actionsParser.parse(l.Actions);
 		
 		scene.Lines.push(line);
-	})
+	});
 
 	json.Scenes.push(scene);
 
 	return json;
-}
+};

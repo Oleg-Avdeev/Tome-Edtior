@@ -1,7 +1,7 @@
 var container;
 var currentChapter;
 
-displayChapter = function (chapter) {
+let displayChapter = function (chapter) {
 	container = document.getElementById('chapter-container');
 	container.textContent = '';
 
@@ -9,18 +9,18 @@ displayChapter = function (chapter) {
 	chapter.Lines.forEach(createParagraph);
 
 	currentChapter = chapter;
-}
+};
 
-createTitle = function (chapter) {
-	const title = document.createElement("h1");
+let createTitle = function (chapter) {
+	const title = document.createElement('h1');
 	title.textContent = chapter.Id;
 	container.appendChild(title);
-}
+};
 
-createParagraph = function (line, index) {
+let createParagraph = function (line, index) {
 
-	const character = document.createElement("p");
-	const paragraph = document.createElement("p");
+	const character = document.createElement('p');
+	const paragraph = document.createElement('p');
 
 	if (!isLineNarrated(line)) {
 		character.classList.add('character');
@@ -28,8 +28,8 @@ createParagraph = function (line, index) {
 		character.textContent = `${line.Character}`;
 
 		character.addEventListener('input', () => {
-			character.textContent = character.textContent.replace("\n", "");
-			line.Character = character.textContent
+			character.textContent = character.textContent.replace('\n', '');
+			line.Character = character.textContent;
 			Story.invalidate();
 		});
 
@@ -41,7 +41,7 @@ createParagraph = function (line, index) {
 	paragraph.contentEditable = true;
 	paragraph.textContent = `${line.Text}`;
 	paragraph.addEventListener('input', (event) => {
-		paragraph.textContent = paragraph.textContent.replace("\n", "");
+		paragraph.textContent = paragraph.textContent.replace('\n', '');
 		line.Text = paragraph.textContent;
 		Story.invalidate();
 	});
@@ -63,15 +63,15 @@ createParagraph = function (line, index) {
 		var target = findNodeById(action.Value);
 		paragraph.onclick = (e) => {
 			if (e.shiftKey) selectNode(target);
-		}
+		};
 		paragraph.classList.add('goto');
 	}
 
 	container.insertBefore(paragraph, container.childNodes[index * 2 + 1]);
 	container.insertBefore(character, container.childNodes[index * 2 + 1]);
-}
+};
 
-addNewParagraph = function (index) {
+let addNewParagraph = function (index) {
 	let line = { ...currentChapter.Lines[index - 1] };
 	line.Character = '?';
 	line.Text = '...';
@@ -80,10 +80,10 @@ addNewParagraph = function (index) {
 	Story.invalidate();
 
 	createParagraph(line, index);
-	container.childNodes[index * 2 + 1].focus()
-}
+	container.childNodes[index * 2 + 1].focus();
+};
 
-removeParagraph = function (index, character, paragraph) {
+let removeParagraph = function (index, character, paragraph) {
 	currentChapter.Lines.splice(index, 1);
 	Story.invalidate();
 
@@ -92,9 +92,9 @@ removeParagraph = function (index, character, paragraph) {
 
 	if (paragraph.parentNode)
 		paragraph.parentNode.removeChild(paragraph);
-}
+};
 
-isLineNarrated = function (line) {
+let isLineNarrated = function (line) {
 	if (line.Character.toLocaleLowerCase().includes('нарратор'))
 		return true;
 
@@ -102,4 +102,4 @@ isLineNarrated = function (line) {
 		return true;
 
 	return false;
-}
+};

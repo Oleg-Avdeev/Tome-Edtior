@@ -2,13 +2,16 @@ const ActionType = Object.freeze({ 'goto': 1, 'command': 2, 'compute': 3 });
 const OpenedBracket = ['', '[', '(', '{'];
 const ClosedBracket = ['', ']', ')', '}'];
 
+// eslint-disable-next-line no-useless-escape
 const gotoRE = /\[([^\[\]]*)\]/;
+// eslint-disable-next-line no-useless-escape
 const commandRE = /\(([^\(\)]*)\)/;
+// eslint-disable-next-line no-useless-escape
 const computeRE = /\{([^\{\}]*)\}/;
 
 const ActionParser = {
 	parse: function (actions) {
-		var parsedActions = []
+		var parsedActions = [];
 
 		parseGoTo(actions).forEach(a => parsedActions.push(a));
 		parseCommand(actions).forEach(a => parsedActions.push(a));
@@ -25,18 +28,18 @@ const ActionParser = {
 			if (action.ActionType == ActionType.goto && action.Cyclical)
 				id = `*${id}`;
 
-			text += `${OpenedBracket[action.ActionType]}${id}${ClosedBracket[action.ActionType]}`
+			text += `${OpenedBracket[action.ActionType]}${id}${ClosedBracket[action.ActionType]}`;
 		});
 		return text;
 	}
-}
+};
 
-parseGoTo = function (actions) {
+let parseGoTo = function (actions) {
 	var matches = gotoRE.exec(actions);
 
 	if (matches != null) {
 		let id = matches[1];
-		let cyclicalEdge = false
+		let cyclicalEdge = false;
 
 		if (id.startsWith('*')) {
 			id = id.replace('*', '');
@@ -47,17 +50,17 @@ parseGoTo = function (actions) {
 			'ActionType': ActionType.goto,
 			'Value': id,
 			'Cyclical': cyclicalEdge
-		}
+		};
 
 		return [action];
 	}
 
 	return [];
-}
+};
 
 //TODO: Parse all actions
 //TODO: Parse completely
-parseCommand = function (actions) {
+let parseCommand = function (actions) {
 	var matches = commandRE.exec(actions);
 
 	if (matches != null) {
@@ -66,17 +69,17 @@ parseCommand = function (actions) {
 		var action = {
 			'ActionType': ActionType.command,
 			'Value': id,
-		}
+		};
 
 		return [action];
 	}
 
 	return [];
-}
+};
 
 //TODO: Parse all actions
 //TODO: Parse completely
-parseCompute = function (actions) {
+let parseCompute = function (actions) {
 	var matches = computeRE.exec(actions);
 
 	if (matches != null) {
@@ -85,10 +88,10 @@ parseCompute = function (actions) {
 		var action = {
 			'ActionType': ActionType.compute,
 			'Value': id,
-		}
+		};
 
 		return [action];
 	}
 
 	return [];
-}
+};
