@@ -1,25 +1,31 @@
-#chapter {
+.chapter-table {
 	font-family: Arial, Helvetica, sans-serif;
 	border-collapse: collapse;
+	table-layout: fixed;
 	width: 100%;
 }
   
-#chapter td, #chapter th {	
+.chapter-table td, .chapter-table th {	
 	border: 1px solid #ddd;
-}
-
-#chapter td {
 	padding: 8px;
+	text-align: center; 
+    vertical-align: middle;
+	
+	width: 100px;
 }
   
-  #chapter tr:nth-child(even){background-color: #f2f2f2;}
+.chapter-table tr:nth-child(even){background-color: #f2f2f2;}
   
-  #chapter tr:hover {background-color: #ddd;}
-  
-  #chapter th {
-	text-align: left;
+.chapter-table th {
+	text-align: center;
 	background-color: #222;
 	color: white;
-	padding-left: 8px;
-	padding-right: 8px;
-  }
+}
+
+th.column-Text {
+	width: 300px;
+}
+
+td.column-Text {
+	text-align: left; 
+}

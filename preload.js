@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld(
     "api", {
         send: (channel, data) => {
             // whitelist channels
-            let validChannels = ["store-json"];
+            let validChannels = ['store-json', 'select-scene'];
             if (validChannels.includes(channel)) {
                 ipcRenderer.send(channel, data);
             }

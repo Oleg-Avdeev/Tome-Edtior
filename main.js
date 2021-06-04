@@ -10,7 +10,10 @@ let win;
 ipcMain.on("store-json", (event, args) => {
 	store.set('document.wip', args);
 });
-  
+
+ipcMain.on("select-scene", (event, args) => {
+	store.set('document.scene', args);
+});
 
 function createWindow() {
 	win = new BrowserWindow({
@@ -26,12 +29,19 @@ function createWindow() {
 	win.loadFile('index.html')
 	win.webContents.openDevTools()
 	menu.setWindow(win);
-
+	
 	var document = store.get('document');
+	const sceneId = document.scene;
+	
 	if (document.wip)
 	{
 		var wipJSON = JSON.stringify(document.wip);
 		win.webContents.executeJavaScript(`render(${wipJSON})`);
+	}
+
+	if (sceneId)
+	{
+		win.webContents.executeJavaScript(`selectNodeById("${sceneId}")`);
 	}
 }
 

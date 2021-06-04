@@ -75,15 +75,21 @@ render = function (json) {
 	
 }
 
-selectNode = function (node) {
+selectNodeById = function (sceneId) {
+	var node = nodes.find(n => n.scene.Id == sceneId)
+	if (node) selectNode(node);
+}
 
+selectNode = function (node) {
 	if (currentNode != null)
 		currentNode.htmlNode.classList.remove('selected');
 
 	currentNode = node;
 	currentNode.htmlNode.classList.add('selected');
 
-	displayChapter(node.scene);
+	// displayChapter(node.scene);
+	displayTable(node.scene);
+	Story.selectNode(node.scene.Id);
 }
 
 getConnections = function (node) {

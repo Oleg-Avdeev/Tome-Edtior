@@ -2,17 +2,47 @@ displayTable = function(chapter) {
 	var container = document.getElementById('chapter-table');
 	container.textContent = '';
 
+	container.appendChild(createHeader(chapter.Lines[0]));
+
 	chapter.Lines.forEach(line => {
-		var p = createRow(line);
-		container.appendChild(p);
+		var tr = createRow(line);
+		container.appendChild(tr);
 	})
+}
+
+createHeader = function(line) {
+	const row = document.createElement("tr");
+	let keys = Object.keys(line);
+
+	keys.forEach((value, index) => {
+		const cell = document.createElement('th');
+		cell.classList.add(`column-${keys[index]}`);
+		cell.textContent = value;
+		row.appendChild(cell);
+	});
+
+	return row;
 }
 
 createRow = function(line) {
 	const row = document.createElement("tr");
+	const values = Object.values(line);
+	const keys = Object.keys(line);
 	
-	// paragraph.classList.add('chapter-line');
-	// paragraph.textContent = `${line.Character}:\t${line.Text}`;
+	values.forEach((value, index) => {
+		const cell = document.createElement('td');
+		
+		if (keys[index] == 'Actions')
+			value = ActionParser.toText(value);
+		
+		if (!value)
+			value = '-';
 
-	return paragraph;
+		cell.textContent = value;
+		cell.classList.add(`column-${keys[index]}`);
+		cell.contentEditable = true;
+		row.appendChild(cell);
+	});
+
+	return row;
 }

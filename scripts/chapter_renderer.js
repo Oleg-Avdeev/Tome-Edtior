@@ -60,7 +60,9 @@ createParagraph = function (line, index) {
 	var action = line.Actions.find(a => a.ActionType === 1);
 	if (action != null) {
 		var target = findNodeById(action.Value);
-		paragraph.onclick = (e) => selectNode(target);
+		paragraph.onclick = (e) => {
+			if (e.shiftKey) selectNode(target);
+		}
 		paragraph.classList.add('goto');
 	}
 
