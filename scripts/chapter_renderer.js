@@ -1,7 +1,7 @@
 var container;
 var currentChapter;
 
-displayChapter = function (chapter) {
+let displayChapter = function (chapter) {
 	container = document.getElementById('chapter-container');
 	container.textContent = '';
 
@@ -11,13 +11,13 @@ displayChapter = function (chapter) {
 	currentChapter = chapter;
 };
 
-createTitle = function (chapter) {
+let createTitle = function (chapter) {
 	const title = document.createElement('h1');
 	title.textContent = chapter.Id;
 	container.appendChild(title);
 };
 
-createParagraph = function (line, index) {
+let createParagraph = function (line, index) {
 
 	const character = document.createElement('p');
 	const paragraph = document.createElement('p');
@@ -71,7 +71,7 @@ createParagraph = function (line, index) {
 	container.insertBefore(character, container.childNodes[index * 2 + 1]);
 };
 
-addNewParagraph = function (index) {
+let addNewParagraph = function (index) {
 	let line = { ...currentChapter.Lines[index - 1] };
 	line.Character = '?';
 	line.Text = '...';
@@ -83,7 +83,7 @@ addNewParagraph = function (index) {
 	container.childNodes[index * 2 + 1].focus();
 };
 
-removeParagraph = function (index, character, paragraph) {
+let removeParagraph = function (index, character, paragraph) {
 	currentChapter.Lines.splice(index, 1);
 	Story.invalidate();
 
@@ -94,7 +94,7 @@ removeParagraph = function (index, character, paragraph) {
 		paragraph.parentNode.removeChild(paragraph);
 };
 
-isLineNarrated = function (line) {
+let isLineNarrated = function (line) {
 	if (line.Character.toLocaleLowerCase().includes('нарратор'))
 		return true;
 

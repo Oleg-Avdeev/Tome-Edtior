@@ -1,4 +1,4 @@
-displayTable = function(chapter) {
+let displayTable = function(chapter) {
 	var container = document.getElementById('chapter-table');
 	container.textContent = '';
 
@@ -10,7 +10,7 @@ displayTable = function(chapter) {
 	});
 };
 
-createHeader = function(line) {
+let createHeader = function(line) {
 	const row = document.createElement('tr');
 	let keys = Object.keys(line);
 
@@ -24,7 +24,7 @@ createHeader = function(line) {
 	return row;
 };
 
-createRow = function(line) {
+let createRow = function(line) {
 	const row = document.createElement('tr');
 	const values = Object.values(line);
 	const keys = Object.keys(line);

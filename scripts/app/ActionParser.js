@@ -30,7 +30,7 @@ exports.toText = function(actions) {
 	return text;
 };
 
-parseGoTo = function(actions) {
+let parseGoTo = function(actions) {
 	var matches = gotoRE.exec(actions);
 
 	if (matches != null) {
@@ -57,7 +57,7 @@ parseGoTo = function(actions) {
 
 //TODO: Parse all actions
 //TODO: Parse completely
-parseCommand = function(actions) {
+let parseCommand = function(actions) {
 	var matches = commandRE.exec(actions);
 
 	if (matches != null) {
@@ -76,7 +76,7 @@ parseCommand = function(actions) {
 
 //TODO: Parse all actions
 //TODO: Parse completely
-parseCompute = function(actions) {
+let parseCompute = function(actions) {
 	var matches = computeRE.exec(actions);
 
 	if (matches != null) {

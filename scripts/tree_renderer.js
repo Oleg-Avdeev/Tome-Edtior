@@ -9,7 +9,7 @@ var currentNode;
 
 let minX = 9999, maxX = 0, minY = 9999, maxY = 0;
 
-clear = function() {
+let clear = function() {
 	connectionsMap.clear();
 	depthMap.clear();
 	nodes = [];
@@ -19,7 +19,7 @@ clear = function() {
 	maxY = 0;
 };
 
-render = function (json) {
+let render = function (json) {
 	Story.initialize(json);
 
 	var container = document.getElementById('canvas');
@@ -75,12 +75,12 @@ render = function (json) {
 	
 };
 
-selectNodeById = function (sceneId) {
+let selectNodeById = function (sceneId) {
 	var node = nodes.find(n => n.scene.Id == sceneId);
 	if (node) selectNode(node);
 };
 
-selectNode = function (node) {
+let selectNode = function (node) {
 	if (currentNode)
 		currentNode.htmlNode.classList.remove('selected');
 
@@ -95,7 +95,7 @@ selectNode = function (node) {
 	Story.selectNode(node.scene.Id);
 };
 
-getConnections = function (node) {
+let getConnections = function (node) {
 	var actions = [];
 	node.scene.Lines.forEach(line => {
 		line.Actions.forEach(action => {
@@ -110,7 +110,7 @@ getConnections = function (node) {
 	return actions;
 };
 
-treeDepthPass = function () {
+let treeDepthPass = function () {
 	for (const entry of connectionsMap.entries()) {
 		entry[1].forEach(node2 => {
 			if (node2.ignoreDepthPass) return;
@@ -121,7 +121,7 @@ treeDepthPass = function () {
 	}
 };
 
-treeWidthPass = function () {
+let treeWidthPass = function () {
 	nodes.forEach(n => {
 		var depthList = depthMap.get(n.depth);
 		if (depthList == null) depthList = [];
@@ -130,28 +130,28 @@ treeWidthPass = function () {
 	});
 };
 
-findNodeById = function (id) {
+let findNodeById = function (id) {
 	return nodes.find(x => {
 		return x.scene.Id == id;
 	});
 };
 
-ZMap = function (index) {
+let ZMap = function (index) {
 	return Math.pow(-1, index + 1) * Math.ceil(0.5 * index);
 };
 
-WMap = function (index, length) {
+let WMap = function (index, length) {
 	return index - length / 2;
 };
 
-updateBoundingBox = function(node) {
+let updateBoundingBox = function(node) {
 	minX = Math.min(node.x - 100, minX);
 	minY = Math.min(node.y - 100, minY);
 	maxX = Math.max(node.x + 100, maxX);
 	maxY = Math.max(node.y + 100, maxY);
 };
 
-buildSVGNode = function (n) {
+let buildSVGNode = function (n) {
 	const node = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 	node.setAttribute('x', n.x - 10);
 	node.setAttribute('y', n.y - 10);
@@ -168,7 +168,7 @@ buildSVGNode = function (n) {
 	return node;
 };
 
-buildSVGLine = function (node1, node2) {
+let buildSVGLine = function (node1, node2) {
 	const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 	var coordinates = shortenLine(node1.x, node2.x, node1.y, node2.y, 10);
 	line.setAttribute('x1', coordinates[0]);
@@ -179,7 +179,7 @@ buildSVGLine = function (node1, node2) {
 	return line;
 };
 
-shortenLine = function (x1, x2, y1, y2, r) {
+let shortenLine = function (x1, x2, y1, y2, r) {
 	var dx = x2 - x1;
 	var dy = y2 - y1;
 	var D = Math.sqrt(dx * dx + dy * dy);

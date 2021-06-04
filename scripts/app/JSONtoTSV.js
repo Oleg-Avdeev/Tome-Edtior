@@ -12,12 +12,12 @@ exports.build = function (document) {
 	return body;
 };
 
-getHeader = function (document) {
+let getHeader = function (document) {
 	let keys = Object.keys(document.Scenes[0].Lines[0]);
 	return buildLine(keys);
 };
 
-buildLine = function (array) {
+let buildLine = function (array) {
 	var line = '';
 
 	for (let index = 0; index < array.length; index++) {
