@@ -3,9 +3,12 @@ const OpenedBracket = ['', '[', '(', '{'];
 const ClosedBracket = ['', ']', ')', '}'];
 
 
-let gotoRE = /\[([^[]]*)\]/;
-let commandRE = /\(([^()]*)\)/;
-let computeRE = /\{([^{}]*)\}/;
+// eslint-disable-next-line no-useless-escape
+let gotoRE = /\[([^\[\]]*)\]/;
+// eslint-disable-next-line no-useless-escape
+let commandRE = /\(([^\(\)]*)\)/;
+// eslint-disable-next-line no-useless-escape
+let computeRE = /\{([^\{\}]*)\}/;
 
 exports.parse = function(actions) {
 	var parsedActions = [];
