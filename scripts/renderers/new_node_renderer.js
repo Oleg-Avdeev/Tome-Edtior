@@ -50,7 +50,7 @@ var NewNode = {
 	},
 
 	onClick : function() {
-		let newSceneId = this.parentNode.scene.Id + '_';
+		let newSceneId = this.getUniqueSceneId(this.parentNode.scene.Id)
 		
 		let lastLine = this.parentNode.scene.Lines[this.parentNode.scene.Lines.length - 1];
 		let gotoAction = { 'ActionType': ActionType.goto, 'Value': newSceneId }
@@ -71,5 +71,15 @@ var NewNode = {
 
 		render(Story.json);
 		selectNodeById(newSceneId);
+	},
+
+	getUniqueSceneId : function(parentId) {
+		let uid = parentId;
+
+		while (Story.json.Scenes.find(s => s.Id == uid))
+			uid = uid + '_';
+		
+		console.log(uid);
+		return uid;
 	}
 }
