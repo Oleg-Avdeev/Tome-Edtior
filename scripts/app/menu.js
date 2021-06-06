@@ -3,6 +3,7 @@ const { app, Menu, dialog } = require('electron');
 const fs = require('fs');
 const Store = require('electron-store');
 
+const Story = require('./story');
 const parser = require('./TSVParser');
 const tsvBuilder = require('./JSONtoTSV');
 
@@ -39,7 +40,7 @@ const template = [
 			{
 				label: 'New',
 				accelerator: 'CommandOrControl+N',
-				click: () => { console.log('New'); }
+				click: () => { newFile(); }
 			},
 			{
 				label: 'Open',
@@ -137,7 +138,34 @@ const template = [
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
 
-const openFile = (win) => {
+const requestConfirmation = () => {
+	const resultPromise = dialog.showMessageBox(win, {
+		message: 'Are you sure you would like to create a new file? Current progress will be lost.',
+		type : 'info',
+		buttons: ['Cancel', 'OK'],
+		cancelId: 0,
+		title: 'Unsaved progress'
+	});
+
+	if (!resultPromise) return;
+
+	return resultPromise;
+};
+
+const newFile = () => {
+	let confirmationPromise = requestConfirmation();
+	let document = { path: '', wip: Story.createEmpty(), scene : 'Scene 1' };
+	
+	confirmationPromise.then(result => {
+		if (result.response == 1) {
+			store.set('document', document);
+			renderResult(document.wip);
+			win.webContents.executeJavaScript(`selectNodeById("${document.scene}")`);
+		}
+	});
+};
+
+const openFile = () => {
 	const files = dialog.showOpenDialog(win, {
 		properties: ['openFile'],
 		defaultPath: app.getAppPath(),
@@ -159,8 +187,10 @@ const openFile = (win) => {
 };
 
 const reOpenFile = () => {
-	if (lastOpenedFile == null) return;
-	parser.parseFile(lastOpenedFile, renderResult);
+	// lastOpenedFile = store.get('document.path');
+
+	if (lastOpenedFile)
+		parser.parseFile(lastOpenedFile, renderResult);
 };
 
 const renderResult = (data) => {

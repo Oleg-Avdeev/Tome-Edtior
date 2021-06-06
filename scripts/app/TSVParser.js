@@ -28,6 +28,7 @@ let toTJSON = function (tsv) {
 	let json = { 'Scenes': [] };
 
 	let scene = { 'Id': '', 'Lines': [] };
+	let lastCharacter = '';
 
 	tsv.data.forEach(l => {
 		if (l.Text == null || l.Text.length == 0) 
@@ -35,6 +36,10 @@ let toTJSON = function (tsv) {
 		
 		if (l.Scene == '')
 			l.Scene = scene.Id;
+		
+		if (l.Character == '')
+			l.Character = lastCharacter;
+		else lastCharacter = l.Character;
 		
 		if (scene.Id == '')
 			scene.Id = l.Scene;
