@@ -16,7 +16,7 @@ let createHeader = function(line) {
 
 	keys.forEach((value, index) => {
 		const cell = document.createElement('th');
-		cell.classList.add(`column-${keys[index]}`);
+		cell.classList.add(`column-${keys[index].replace(' ', '')}`);
 		cell.textContent = value;
 		row.appendChild(cell);
 	});
@@ -39,7 +39,7 @@ let createRow = function(line) {
 			value = '-';
 
 		cell.textContent = value;
-		cell.classList.add(`column-${keys[index]}`);
+		cell.classList.add(`column-${keys[index].replace(' ', '')}`);
 		cell.contentEditable = true;
 		row.appendChild(cell);
 	});
