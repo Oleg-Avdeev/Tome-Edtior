@@ -1,13 +1,17 @@
 const Title = {
 	scene: {},
+	htmlNode : {},
 
 	render: function (scene) {
 		this.scene = scene;
 
 		const container = document.getElementById('chapter-container');
 		const title = document.createElement('h1');
+		this.htmlNode = title;
 
 		title.textContent = scene.Id;
+		this.displayIdValidity(scene.Id);
+
 		title.contentEditable = true;
 
 		//TODO: Validate Id
@@ -19,14 +23,9 @@ const Title = {
 			title.textContent = newId;
 			
 			if (this.isValidId(newId))
-			{
 				this.updateId(newId);
-				title.classList.remove('invalid');
-			}
-			else
-			{
-				title.classList.add('invalid');
-			}
+			
+			this.displayIdValidity(newId);
 		});
 
 		container.appendChild(title);
@@ -59,7 +58,25 @@ const Title = {
 	},
 
 	isValidId : function (id) {
-		let scene = Story.json.Scenes.find(scene => scene.Id == id);
-		return scene == null;
+		let idIsTaken = 0;
+
+		Story.json.Scenes.forEach(scene => {
+			if (idIsTaken) return;
+			if (scene.Id == id && scene != this.scene)
+				idIsTaken = true;
+		});
+
+		return !idIsTaken;
+	},
+
+	displayIdValidity : function (id) {
+		if (this.isValidId(id))
+		{
+			this.htmlNode.classList.remove('invalid');
+		}
+		else
+		{
+			this.htmlNode.classList.add('invalid');
+		}
 	}
 }
