@@ -9,7 +9,11 @@ var NewNode = {
 		this.parentNode = parentNode;
 
 		let newNode = { ...parentNode };
-		let indexInLine = depthMap.get(parentNode.depth + 1).length;
+		let indexInLine = 0;
+		
+		let depthSlice = depthMap.get(parentNode.depth + 1);
+		if (depthSlice) indexInLine = depthSlice.length;
+
 		newNode.depth = parentNode.depth + 1;
 		newNode.x = xOffset * WMap(indexInLine, indexInLine);
 		newNode.y = yOffset * newNode.depth;
@@ -50,7 +54,7 @@ var NewNode = {
 	},
 
 	onClick : function() {
-		let newSceneId = this.getUniqueSceneId(this.parentNode.scene.Id)
+		let newSceneId = this.getUniqueSceneId(this.parentNode.scene.Id);
 		
 		let lastLine = this.parentNode.scene.Lines[this.parentNode.scene.Lines.length - 1];
 		let gotoAction = { 'ActionType': ActionType.goto, 'Value': newSceneId };

@@ -1,78 +1,28 @@
-var container;
-var currentChapter;
+let container = document.getElementById('chapter-container');
+let currentChapter;
 
 let displayChapter = function (chapter) {
 	container = document.getElementById('chapter-container');
 	container.textContent = '';
+	currentChapter = chapter;
 
-	createTitle(chapter);
+	Title.render(chapter);
 	chapter.Lines.forEach(createParagraph);
 
-	currentChapter = chapter;
-};
-
-let createTitle = function (chapter) {
-	const title = document.createElement('h1');
-	title.textContent = chapter.Id;
-	container.appendChild(title);
 };
 
 let createParagraph = function (line, index) {
+	const character = new Character(line);
+	const paragraph = new Paragraph(line, character.htmlNode);
 
-	const character = document.createElement('p');
-	const paragraph = document.createElement('p');
-
-	if (!isLineNarrated(line)) {
-		character.classList.add('character');
-		character.contentEditable = true;
-		character.textContent = `${line.Character}`;
-
-		character.addEventListener('input', () => {
-			character.textContent = character.textContent.replace('\n', '');
-			line.Character = character.textContent;
-			Story.invalidate();
-		});
-
-		character.addEventListener('keydown', event => {
-			if (event.key == 'Enter') paragraph.focus();
-		});
-	}
-
-	paragraph.contentEditable = true;
-	paragraph.textContent = `${line.Text}`;
-	paragraph.addEventListener('input', (event) => {
-		paragraph.textContent = paragraph.textContent.replace('\n', '');
-		line.Text = paragraph.textContent;
-		Story.invalidate();
-	});
-
-	//TODO: Split instead of create new
-	paragraph.addEventListener('keydown', event => {
-		if (event.key == 'Enter') {
-			if (paragraph.textContent.length > 0)
-				addNewParagraph(index + 1, paragraph);
-			else removeParagraph(index, character, paragraph);
-		}
-	});
-
-	if (!isLineNarrated(line))
-		paragraph.classList.add('line');
-
-	var action = line.Actions.find(a => a.ActionType === 1);
-	if (action != null) {
-		var target = findNodeById(action.Value);
-		paragraph.onclick = (e) => {
-			if (e.shiftKey) selectNode(target);
-		};
-		paragraph.classList.add('goto');
-	}
-
-	container.insertBefore(paragraph, container.childNodes[index * 2 + 1]);
-	container.insertBefore(character, container.childNodes[index * 2 + 1]);
+	container.insertBefore(paragraph.htmlNode, container.childNodes[index * 2 + 1]);
+	container.insertBefore(character.htmlNode, container.childNodes[index * 2 + 1]);
 };
 
-let addNewParagraph = function (index) {
-	let line = { ...currentChapter.Lines[index - 1] };
+let addNewParagraph = function (paragraph) {
+	let line = { ...paragraph.line };
+	let index = currentChapter.Lines.findIndex(line => line == paragraph.line) + 1;
+
 	line.Character = '?';
 	line.Text = '...';
 
@@ -83,23 +33,12 @@ let addNewParagraph = function (index) {
 	container.childNodes[index * 2 + 1].focus();
 };
 
-let removeParagraph = function (index, character, paragraph) {
+let removeParagraph = function (paragraph) {
+	let index = currentChapter.Lines.findIndex(line => line == paragraph.line);
+	
 	currentChapter.Lines.splice(index, 1);
 	Story.invalidate();
 
-	if (character.parentNode)
-		character.parentNode.removeChild(character);
-
-	if (paragraph.parentNode)
-		paragraph.parentNode.removeChild(paragraph);
-};
-
-let isLineNarrated = function (line) {
-	if (line.Character.toLocaleLowerCase().includes('нарратор'))
-		return true;
-
-	if (line.Character.toLocaleLowerCase().includes('narrator'))
-		return true;
-
-	return false;
+	container.removeChild(container.childNodes[index * 2 + 1]);
+	container.removeChild(container.childNodes[index * 2 + 1]);
 };

@@ -104,6 +104,9 @@ let getConnections = function (node) {
 				if (n != null) {
 					actions.push({'node':n, 'ignoreDepthPass':action.Cyclical});
 				}
+				else {
+					console.error(`Node ${action.Value} not found`);
+				}
 			}
 		});
 	});
