@@ -17,6 +17,14 @@
 	margin-right: 20%;
 }
 
+.line:last-child {
+	margin-bottom: 50px;
+}
+
+.goto:last-child {
+	margin-bottom: 50px;
+}
+
 .script .goto {
 	text-decoration: underline;
 	color: rgb(150, 5, 5);
@@ -65,4 +73,31 @@
 	padding-left: 10px;
 	padding-right: 10px;
     margin-left: 10px;
+}
+
+.script .action {
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+
+	background-color: #222;
+	color: white;
+
+	padding: 10px;
+
+	display: flex;
+	flex-wrap: nowrap;
+
+}
+
+.script .action-label {
+	content: 'Actions:';
+	color: #fffa;
+	flex-basis: content;
+}
+
+.script .action-input {
+	flex-grow: 1;
+	outline: 0px solid transparent;
+	caret-color: white;
 }

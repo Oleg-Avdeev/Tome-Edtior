@@ -13,7 +13,7 @@ let displayChapter = function (chapter) {
 
 let createParagraph = function (line, index) {
 	const character = new Character(line);
-	const paragraph = new Paragraph(line, character.htmlNode);
+	const paragraph = new Paragraph(line, character);
 
 	container.insertBefore(paragraph.htmlNode, container.childNodes[index * 2 + 1]);
 	container.insertBefore(character.htmlNode, container.childNodes[index * 2 + 1]);

@@ -1,32 +1,35 @@
-
 class Paragraph {
 
 	constructor(line, character) {
 		const paragraph = document.createElement('p');
+		const content = document.createElement('span');
 
-		paragraph.textContent = `${line.Text}`;
+		paragraph.appendChild(content);
+		content.textContent = `${line.Text}`;
 
 		if (!isLineNarrated(line))
 			paragraph.classList.add('line');
-		
+
+		character.setTargetParagraph(paragraph);
+
 		this.htmlNode = paragraph;
-		this.character = character;
+		this.character = character.htmlNode;
 		this.line = line;
 
 		this.setAsEditable();
 		this.setAsActionable();
 	}
 
-	setAsEditable () {
+	setAsEditable() {
 		this.htmlNode.contentEditable = true;
 
 		this.htmlNode.addEventListener('input', () => {
-			var content = this.htmlNode.childNodes[0].textContent;
+			var content = this.getTextContent();
 			this.line.Text = content;
 
 			var actions = this.htmlNode.childNodes[1].textContent;
 			this.actionView.onTextChange(actions);
-			
+
 			Story.invalidate();
 		});
 
@@ -41,24 +44,29 @@ class Paragraph {
 		this.htmlNode.addEventListener('focus', () => {
 			this.actionView = new ActionView(this.line, this);
 		});
-		
+
 		this.htmlNode.addEventListener('blur', () => {
-			this.actionView.destroy();
+			this.actionView.onOwnerLostFocus();
 			this.actionView = null;
 		});
 	}
 
 	setAsActionable() {
 		var action = this.line.Actions.find(a => a.ActionType == 1);
+		if (action) {
 
-		if (action != null) {
-			
 			this.htmlNode.classList.add('goto');
-			this.gotoTarget = findNodeById(action.Value);	
+			this.gotoTarget = getSceneById(action.Value);
 			this.htmlNode.onclick = event => this.onActionClick(event);
 
 			if (!this.gotoTarget)
-				this.htmlNode.classList.add('invalid');	
+				this.htmlNode.classList.add('invalid');
+		}
+		else {
+			this.htmlNode.classList.remove('goto');
+			this.htmlNode.classList.remove('invalid');
+			this.htmlNode.onclic = null;
+			this.gotoTarget = null;
 		}
 	}
 
@@ -66,8 +74,16 @@ class Paragraph {
 		if (!this.gotoTarget)
 			return;
 
-		if (event.shiftKey) 
-			selectNode(this.gotoTarget);
-		
+		if (event.shiftKey)
+			Story.selectScene(this.gotoTarget.Id);
+	}
+
+	getTextContent() {
+		var content = this.htmlNode.childNodes[0];
+
+		if (content)
+			return content.textContent;
+
+		return '';
 	}
 }
