@@ -3,10 +3,13 @@ const Story = {
 	json : {},
 	currentSceneId : '',
 	valid : false,
+
+	onTreeUpdate : null,
+	onSceneSelect : null,
 	
 	initialize : function(json) {
 		this.json = json;
-		this.invalidate();
+		this.onTreeUpdate(json);
 	},
 
 	invalidate : function() {
@@ -22,9 +25,14 @@ const Story = {
 		}
 	},
 
-	selectNode : function(sceneId) {
+	selectScene : function(sceneId) {
 		this.currentSceneId = sceneId;
 		window.api.send('select-scene', sceneId);
+		this.onSceneSelect(sceneId);
+	},
+
+	updateTree : function () {
+		this.onTreeUpdate(this.json);
 	},
 };
 
@@ -38,4 +46,8 @@ let isLineNarrated = function (line) {
 		return true;
 
 	return false;
-}
+};
+
+let getSceneById = function (sceneId) {
+	return Story.json.Scenes.find(scene => scene.Id == sceneId);
+};

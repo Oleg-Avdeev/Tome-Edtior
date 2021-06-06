@@ -13,9 +13,9 @@ var NewNode = {
 		
 		let depthSlice = depthMap.get(parentNode.depth + 1);
 		if (depthSlice) indexInLine = depthSlice.length;
-
+		
 		newNode.depth = parentNode.depth + 1;
-		newNode.x = xOffset * WMap(indexInLine, indexInLine);
+		newNode.x = xOffset * WMap(indexInLine, Math.max(1, indexInLine));
 		newNode.y = yOffset * newNode.depth;
 
 		this.destroy();
@@ -71,10 +71,9 @@ var NewNode = {
 		
 		let newScene = { Id: newSceneId, Lines: [ newLine ] };
 		Story.json.Scenes.push(newScene);
+		Story.updateTree();
+		Story.selectScene(newSceneId);
 		Story.invalidate();
-
-		render(Story.json);
-		selectNodeById(newSceneId);
 	},
 
 	getUniqueSceneId : function(parentId) {
@@ -83,7 +82,6 @@ var NewNode = {
 		while (Story.json.Scenes.find(s => s.Id == uid))
 			uid = uid + '_';
 		
-		console.log(uid);
 		return uid;
 	}
 };

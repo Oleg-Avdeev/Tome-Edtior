@@ -160,7 +160,7 @@ const newFile = () => {
 		if (result.response == 1) {
 			store.set('document', document);
 			renderResult(document.wip);
-			win.webContents.executeJavaScript(`selectNodeById("${document.scene}")`);
+			win.webContents.executeJavaScript(`onSceneSelect("${document.scene}")`);
 		}
 	});
 };
@@ -193,8 +193,8 @@ const reOpenFile = () => {
 		parser.parseFile(lastOpenedFile, renderResult);
 };
 
-const renderResult = (data) => {
-	win.webContents.executeJavaScript(`render(${JSON.stringify (data)})`);
+const renderResult = (document) => {
+	win.webContents.executeJavaScript(`setDocument(${JSON.stringify (document)})`);
 };
 
 const saveFile = () => {

@@ -36,12 +36,12 @@ function createWindow() {
 	if (document.wip)
 	{
 		var wipJSON = JSON.stringify(document.wip);
-		win.webContents.executeJavaScript(`render(${wipJSON})`);
+		win.webContents.executeJavaScript(`setDocument(${wipJSON})`);
 	}
 
 	if (sceneId)
 	{
-		win.webContents.executeJavaScript(`selectNodeById("${sceneId}")`);
+		win.webContents.executeJavaScript(`onSceneSelect("${sceneId}")`);
 	}
 }
 

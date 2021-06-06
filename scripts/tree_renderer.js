@@ -20,7 +20,6 @@ let clear = function() {
 };
 
 let render = function (json) {
-	Story.initialize(json);
 
 	var container = document.getElementById('canvas');
 	container.innerHTML = '';
@@ -70,8 +69,6 @@ let render = function (json) {
 			container.appendChild(line);
 		});
 	}
-
-	selectNodeById(Story.currentSceneId);
 };
 
 let selectNodeById = function (sceneId) {
@@ -86,12 +83,7 @@ let selectNode = function (node) {
 	currentNode = node;
 	currentNode.htmlNode.classList.add('selected');
 
-	displayChapter(node.scene);
-	// displayTable(node.scene);
-
 	NewNode.draw(node);
-
-	Story.selectNode(node.scene.Id);
 };
 
 let getConnections = function (node) {
@@ -163,7 +155,7 @@ let buildSVGNode = function (n) {
 		node.classList.add('edge');
 
 	node.onclick = e => { 
-		selectNode(n); 
+		Story.selectScene(n.scene.Id); 
 	};
 	n.htmlNode = node;
 

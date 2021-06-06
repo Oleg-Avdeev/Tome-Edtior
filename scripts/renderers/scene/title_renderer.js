@@ -44,17 +44,17 @@ const Title = {
 			scene.Lines.forEach(line => {
 				let gotoAction = line.Actions.find(action => action.ActionType == 1);
 
-				if (gotoAction && gotoAction.value == newId)
+				if (gotoAction && gotoAction.Value == newId)
 					requiresTopologyUpdate = true;
-
-				if (gotoAction && gotoAction.value == oldId)
-					gotoAction.value = newId;
+				
+				if (gotoAction && gotoAction.Value == oldId)
+					gotoAction.Value = newId;
 			});
 		});
 
 		
 		if(requiresTopologyUpdate)
-			render(Story.json);
+			Story.updateTree();
 	},
 
 	isValidId : function (id) {
