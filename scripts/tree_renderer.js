@@ -71,8 +71,7 @@ let render = function (json) {
 		});
 	}
 
-	selectNode(nodes[0]);
-	
+	selectNodeById(Story.currentSceneId);
 };
 
 let selectNodeById = function (sceneId) {

@@ -1,6 +1,7 @@
 const Story = {
 	id: 0,
 	json : {},
+	currentSceneId : '',
 	valid : false,
 	
 	initialize : function(json) {
@@ -22,6 +23,7 @@ const Story = {
 	},
 
 	selectNode : function(sceneId) {
+		this.currentSceneId = sceneId;
 		window.api.send('select-scene', sceneId);
 	},
 };
