@@ -48,3 +48,12 @@
     margin-bottom: 20px;
     margin-top: 40px;
 }
+
+.script .invalid {
+	color: red;
+	text-decoration: line-through;
+}
+
+.script .invalid::after {
+	content: 'Invalid ID';
+}
