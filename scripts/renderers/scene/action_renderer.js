@@ -45,11 +45,19 @@ class ActionView {
 	onTextChange(text) {
 		if (text != this.currentText) {
 			var newActions = ActionParser.parse(text);
-			this.line.Actions = newActions;
-			this.paragraph.setAsActionable();
-
-			Story.invalidate();
-			Story.updateTree();
+			
+			if (!this.compareActions(this.line.Actions, newActions))
+			{
+				this.line.Actions = newActions;
+				this.paragraph.setAsActionable();
+				
+				Story.invalidate();
+				Story.updateTree();
+			}
 		}
+	}
+
+	compareActions(oldAction, newAction) {
+		return JSON.stringify(oldAction) == JSON.stringify(newAction);
 	}
 }

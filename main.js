@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const { ipcMain } = require('electron');
 const menu = require('./scripts/app/menu');
 const path = require('path');
@@ -21,7 +21,7 @@ function createWindow() {
 		height: 900,
 		webPreferences: {
 			contextIsolation: true,
-      		enableRemoteModule: false,
+			enableRemoteModule: false,
 			preload: path.join(__dirname, 'preload.js')
 		}
 	});
@@ -29,19 +29,17 @@ function createWindow() {
 	win.loadFile('index.html');
 	win.webContents.openDevTools();
 	menu.setWindow(win);
-	
+
 	var document = store.get('document');
 	const sceneId = document.scene;
-	
-	if (document.wip)
-	{
+
+	if (document.wip) {
 		var wipJSON = JSON.stringify(document.wip);
 		win.webContents.executeJavaScript(`setDocument(${wipJSON})`);
 	}
 
-	if (sceneId)
-	{
-		win.webContents.executeJavaScript(`onSceneSelect("${sceneId}")`);
+	if (sceneId) {
+		win.webContents.executeJavaScript(`Story.selectScene("${sceneId}")`);
 	}
 }
 

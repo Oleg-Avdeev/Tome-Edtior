@@ -15,4 +15,5 @@ function onSceneSelect (sceneId) {
 
 function onTreeUpdate (tree) {
 	render(tree);
+	selectNodeById(Story.currentSceneId);
 }

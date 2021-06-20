@@ -20,7 +20,7 @@ let clear = function() {
 };
 
 let render = function (json) {
-
+	console.log('render');
 	var container = document.getElementById('canvas');
 	container.innerHTML = '';
 	clear(container);
@@ -72,6 +72,7 @@ let render = function (json) {
 };
 
 let selectNodeById = function (sceneId) {
+	console.log(sceneId);
 	var node = nodes.find(n => n.scene.Id == sceneId);
 	if (node) selectNode(node);
 };

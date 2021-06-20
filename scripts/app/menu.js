@@ -160,7 +160,7 @@ const newFile = () => {
 		if (result.response == 1) {
 			store.set('document', document);
 			renderResult(document.wip);
-			win.webContents.executeJavaScript(`onSceneSelect("${document.scene}")`);
+			win.webContents.executeJavaScript(`Story.selectScene("${document.scene}")`);
 		}
 	});
 };

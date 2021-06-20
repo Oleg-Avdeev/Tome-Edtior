@@ -26,6 +26,7 @@ const Story = {
 	},
 
 	selectScene : function(sceneId) {
+		console.log('selectScene ' + sceneId);
 		this.currentSceneId = sceneId;
 		window.api.send('select-scene', sceneId);
 		this.onSceneSelect(sceneId);
