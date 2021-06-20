@@ -27,9 +27,6 @@ class Paragraph {
 			var content = this.getTextContent();
 			this.line.Text = content;
 
-			var actions = this.htmlNode.childNodes[1].textContent;
-			this.actionView.onTextChange(actions);
-
 			Story.invalidate();
 		});
 
