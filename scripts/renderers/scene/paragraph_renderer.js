@@ -18,6 +18,7 @@ class Paragraph {
 
 		this.setAsEditable();
 		this.setAsActionable();
+		this.updateApprovedState();
 	}
 
 	setAsEditable() {
@@ -26,7 +27,7 @@ class Paragraph {
 		this.htmlNode.addEventListener('input', () => {
 			var content = this.getTextContent();
 			this.line.Text = content;
-
+			this.updateApprovedState();
 			Story.invalidate();
 		});
 
@@ -82,5 +83,12 @@ class Paragraph {
 			return content.textContent;
 
 		return '';
+	}
+
+	updateApprovedState() {
+		if (LineValidator.isValid(this.line))
+			this.htmlNode.classList.add('approved');
+		else 
+			this.htmlNode.classList.add('pending');
 	}
 }

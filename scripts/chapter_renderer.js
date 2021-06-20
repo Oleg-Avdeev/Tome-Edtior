@@ -9,6 +9,7 @@ let displayChapter = function (chapter) {
 	Title.render(chapter);
 	chapter.Lines.forEach(createParagraph);
 
+	let approvePanel = new ApproveView(chapter, container);
 };
 
 let createParagraph = function (line, index) {
@@ -21,6 +22,8 @@ let createParagraph = function (line, index) {
 
 let addNewParagraph = function (paragraph) {
 	let line = { ...paragraph.line };
+	line['checksum'] = null;
+	
 	let index = currentChapter.Lines.findIndex(line => line == paragraph.line) + 1;
 
 	line.Character = '?';

@@ -1,8 +1,8 @@
 
 exports.createEmptyLine = function () {
 	return {
-		Text : 'First line of your story',
 		Character : 'Character 1',
+		Text : 'First line of your story',
 		Actions : [],
 	};
 };

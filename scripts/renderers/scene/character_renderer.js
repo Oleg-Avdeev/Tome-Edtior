@@ -5,12 +5,14 @@ class Character {
 
 		this.line = line;
 		this.htmlNode = character;
-
+		
 		if (!isLineNarrated(line)) {
 			character.textContent = `${line.Character}`;
 			character.classList.add('character');
 			this.setAsEditable(character, line);
 		}
+		
+		this.updateApprovedState();
 	}
 
 	setAsEditable() {
@@ -19,6 +21,7 @@ class Character {
 		this.htmlNode.addEventListener('input', () => {
 			this.htmlNode.textContent = this.htmlNode.textContent.replace('\n', '');
 			this.line.Character = this.htmlNode.textContent;
+			this.updateApprovedState();
 			Story.invalidate();
 		});
 
@@ -29,5 +32,12 @@ class Character {
 
 	setTargetParagraph(paragraph) {
 		this.paragraph = paragraph;
+	}
+
+	updateApprovedState() {
+		if (LineValidator.isValid(this.line))
+			this.htmlNode.classList.add('approved');
+		else 
+			this.htmlNode.classList.add('pending');
 	}
 }

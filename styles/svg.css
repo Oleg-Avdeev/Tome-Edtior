@@ -9,6 +9,8 @@
 
 	width: 20px;
 	height: 20px;
+
+	transition: fill 0.1s ease-out;
 }
 
 .node:hover {

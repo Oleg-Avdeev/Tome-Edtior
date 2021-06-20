@@ -60,6 +60,7 @@ let render = function (json) {
 
 	nodes.forEach(n => {
 		var node = buildSVGNode(n);
+		updateApprovedState(n);
 		container.appendChild(node);
 	});
 
@@ -158,6 +159,7 @@ let buildSVGNode = function (n) {
 	node.onclick = e => { 
 		Story.selectScene(n.scene.Id); 
 	};
+
 	n.htmlNode = node;
 
 	return node;
@@ -187,3 +189,19 @@ let shortenLine = function (x1, x2, y1, y2, r) {
 
 	return [nx1, nx2, ny1, ny2];
 };
+
+let updateApprovedState = function(node) {
+	let invalidCount = 0;
+
+	node.scene.Lines.forEach(line => {
+		if (!LineValidator.isValid(line)) {
+			invalidCount++;
+			return;
+		}
+	});
+
+	if (invalidCount > 0)
+		node.htmlNode.classList.add('pending');
+	else 
+		node.htmlNode.classList.add('approved');
+}

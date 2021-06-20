@@ -13,7 +13,7 @@ let win;
 let lastOpenedFile;
 const store = new Store();
 
-exports.setWindow = function(window) {
+exports.setWindow = function (window) {
 	win = window;
 };
 
@@ -99,9 +99,13 @@ const template = [
 	{
 		label: 'View',
 		submenu: [
-			// { role: 'reload' },
-			// { role: 'forceReload' },
 			{ role: 'toggleDevTools' },
+			{ type: 'separator' },
+			{
+				label: 'Toggle Proofreading Mode',
+				accelerator: 'CommandOrControl+1',
+				click: () => { toggleProofreading(); }
+			},
 			{ type: 'separator' },
 			{ role: 'resetZoom' },
 			{ role: 'zoomIn' },
@@ -146,7 +150,7 @@ Menu.setApplicationMenu(menu);
 const requestConfirmation = () => {
 	const resultPromise = dialog.showMessageBox(win, {
 		message: 'Are you sure you would like to create a new file? Current progress will be lost.',
-		type : 'info',
+		type: 'info',
 		buttons: ['Cancel', 'OK'],
 		cancelId: 0,
 		title: 'Unsaved progress'
@@ -159,8 +163,8 @@ const requestConfirmation = () => {
 
 const newFile = () => {
 	let confirmationPromise = requestConfirmation();
-	let document = { path: '', wip: Story.createEmpty(), scene : 'Scene 1' };
-	
+	let document = { path: '', wip: Story.createEmpty(), scene: 'Scene 1' };
+
 	confirmationPromise.then(result => {
 		if (result.response == 1) {
 			store.set('document', document);
@@ -182,7 +186,7 @@ const openFile = () => {
 	});
 
 	if (!files) { return; }
-	
+
 	files.then(file => {
 		if (file.filePaths.length == 0) return;
 		parser.parseFile(file, renderResult);
@@ -199,14 +203,13 @@ const reOpenFile = () => {
 };
 
 const renderResult = (document) => {
-	win.webContents.executeJavaScript(`setDocument(${JSON.stringify (document)})`);
+	win.webContents.executeJavaScript(`setDocument(${JSON.stringify(document)})`);
 };
 
 const saveFile = () => {
 	var document = store.get('document');
- 
-	if (!document.path || !fs.existsSync(document.path)) 
-	{
+
+	if (!document.path || !fs.existsSync(document.path)) {
 		var path = saveFileDialogue(document.path);
 		if (!path) return;
 		document.path = path;
@@ -219,7 +222,7 @@ const saveFile = () => {
 
 const saveAsFile = () => {
 	var document = store.get('document');
-	
+
 	var path = saveFileDialogue(document.path);
 	if (!path) return;
 
@@ -239,4 +242,10 @@ const saveFileDialogue = (currentPath) => {
 			{ name: 'TSV Files', extensions: ['tsv'] },
 		],
 	});
+};
+
+const toggleProofreading = () => {
+	let proofreading = !store.get('document.mode.proofreading', false);
+	store.set('document.mode.proofreading', proofreading);
+	win.webContents.executeJavaScript(`setProofreadingMode(${proofreading})`);
 };

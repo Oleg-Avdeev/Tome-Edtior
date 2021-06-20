@@ -1,0 +1,48 @@
+:root {
+	--pending: #8d6c11;
+	--approved: #2f571f;
+}
+
+body.proofreading .node.pending {
+	fill: var(--pending);
+}
+
+body.proofreading .node.approved {
+	fill: var(--approved);
+}
+
+body.proofreading .script .pending {
+	background-color: var(--pending);
+	color: white;
+}
+
+.approve-panel {
+	display: none;
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	margin: auto;
+
+	background-color: #222;
+	color: white;
+	padding: 10px;
+
+}
+
+.approve-label {
+	color: #fffa;
+	margin-right: 10px;
+}
+
+.approve-button {
+	display: inline-block;
+	width: 50px;
+	background-color: var(--approved);
+	color: white;
+	text-align: center;
+	cursor: pointer;
+}
+
+body.proofreading .approve-panel {
+	display: block;
+}
