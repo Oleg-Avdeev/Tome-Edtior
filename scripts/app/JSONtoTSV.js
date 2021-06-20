@@ -1,11 +1,14 @@
 const actionsParser = require('./ActionParser');
 
 exports.build = function (document) {
-	let body = getHeader(document);
+	let header = getHeader(document);
+	let body = buildHeader(header);
+
 	document.Scenes.forEach(scene => {
 		scene.Lines.forEach(line => {
+			line.Scene = scene.Id;
 			line.Actions = actionsParser.toText(line.Actions);
-			let tsvLine = buildLine(Object.values(line));
+			let tsvLine = buildLine(header, line);
 			body = body + '\n' + tsvLine;
 		});
 	});
@@ -13,16 +16,28 @@ exports.build = function (document) {
 };
 
 let getHeader = function (document) {
-	let keys = Object.keys(document.Scenes[0].Lines[0]);
-	return buildLine(keys);
+	return ['Scene'].concat(Object.keys(document.Scenes[0].Lines[0]));
 };
 
-let buildLine = function (array) {
-	var line = '';
+let buildLine = function (header, line) {
+	var tsv = '';
+	
+	for (let index = 0; index < header.length; index++) {
+		tsv = tsv + line[header[index]];
+		if (index < header.length - 1)
+			tsv = tsv + '\t';
+	}
 
-	for (let index = 0; index < array.length; index++) {
-		line = line + array[index];
-		if (index < array.length - 1)
+	return tsv;
+};
+
+let buildHeader = function (header) {
+	console.log(header);
+	var line = '';
+	
+	for (let index = 0; index < header.length; index++) {
+		line = line + header[index];
+		if (index < header.length - 1)
 			line = line + '\t';
 	}
 
