@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const { ipcMain } = require('electron');
 const menu = require('./scripts/app/menu');
+const Story = require('./scripts/app/story');
 const path = require('path');
 const Store = require('electron-store');
 
@@ -31,6 +32,10 @@ function createWindow() {
 	menu.setWindow(win);
 
 	var document = store.get('document');
+	
+	if (!document)
+		document = { path: '', wip: Story.createEmpty(), scene : 'Scene 1' };
+
 	const sceneId = document.scene;
 
 	if (document.wip) {
