@@ -57,6 +57,11 @@ const template = [
 				accelerator: 'CommandOrControl+S',
 				click: () => { saveFile(); }
 			},
+			{
+				label: 'Save As',
+				accelerator: 'Shift+CommandOrControl+S',
+				click: () => { saveAsFile(); }
+			},
 			{ label: 'Export' },
 			isMac ? { role: 'close' } : { role: 'quit' }
 		]
@@ -199,18 +204,39 @@ const renderResult = (document) => {
 
 const saveFile = () => {
 	var document = store.get('document');
+ 
+	if (!document.path || !fs.existsSync(document.path)) 
+	{
+		var path = saveFileDialogue(document.path);
+		if (!path) return;
+		document.path = path;
+		store.set('document.path', document.path);
+	}
 
-	if (document.path !== null && fs.existsSync(document.path))
-	{
-		let tsv = tsvBuilder.build(document.wip);
-		fs.writeFileSync(document.path, tsv);
-	}
-	else
-	{
-		saveFileDialogue();
-	}
+	let tsv = tsvBuilder.build(document.wip);
+	fs.writeFileSync(document.path, tsv);
 };
 
-const saveFileDialogue = () => {
+const saveAsFile = () => {
+	var document = store.get('document');
+	
+	var path = saveFileDialogue(document.path);
+	if (!path) return;
 
+	store.set('document.path', document.path);
+
+	let tsv = tsvBuilder.build(document.wip);
+	fs.writeFileSync(document.path, tsv);
+};
+
+const saveFileDialogue = (currentPath) => {
+	if (!currentPath) currentPath = app.getAppPath();
+
+	return dialog.showSaveDialogSync(win, {
+		properties: ['createDirectory'],
+		defaultPath: currentPath,
+		filters: [
+			{ name: 'TSV Files', extensions: ['tsv'] },
+		],
+	});
 };
