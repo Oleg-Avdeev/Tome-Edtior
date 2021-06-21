@@ -19,7 +19,7 @@ function onTreeUpdate(tree) {
 }
 
 function setProofreadingMode(active) {
-	if (active == 'true')
+	if (active == true)
 		document.body.classList.add('proofreading');
 	else document.body.classList.remove('proofreading');
 }

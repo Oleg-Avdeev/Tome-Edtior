@@ -203,6 +203,7 @@ const reOpenFile = () => {
 };
 
 const renderResult = (document) => {
+	store.set('document.wip', document);
 	win.webContents.executeJavaScript(`setDocument(${JSON.stringify(document)})`);
 };
 

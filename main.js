@@ -46,7 +46,7 @@ function createWindow() {
 	}
 	
 	if (document.mode) {
-		win.webContents.executeJavaScript(`setProofreadingMode("${document.mode.proofreading}")`);
+		win.webContents.executeJavaScript(`setProofreadingMode(${document.mode.proofreading})`);
 	}
 }
 
