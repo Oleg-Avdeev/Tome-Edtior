@@ -36,15 +36,17 @@ function createWindow() {
 	if (!document)
 		document = { path: '', wip: Story.createEmpty(), scene : 'Scene 1' };
 
-	const sceneId = document.scene;
-
 	if (document.wip) {
 		var wipJSON = JSON.stringify(document.wip);
 		win.webContents.executeJavaScript(`setDocument(${wipJSON})`);
 	}
 
-	if (sceneId) {
-		win.webContents.executeJavaScript(`Story.selectScene("${sceneId}")`);
+	if (document.scene) {
+		win.webContents.executeJavaScript(`Story.selectScene("${document.scene}")`);
+	}
+	
+	if (document.mode) {
+		win.webContents.executeJavaScript(`setProofreadingMode("${document.mode.proofreading}")`);
 	}
 }
 
