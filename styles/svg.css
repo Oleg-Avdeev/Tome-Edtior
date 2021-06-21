@@ -10,7 +10,7 @@
 	width: 20px;
 	height: 20px;
 
-	transition: fill 0.1s ease-out;
+	transition: all 0.1s ease-out;
 }
 
 .node:hover {
@@ -26,6 +26,8 @@
 .selected {
 	fill: #eee;
 	font: bold 30px sans-serif;
+	rx: 10;
+	ry: 10;
 }
 
 .new {
