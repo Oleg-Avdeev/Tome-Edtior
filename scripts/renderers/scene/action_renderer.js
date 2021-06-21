@@ -38,7 +38,7 @@ class ActionView {
 	}
 
 	destroy() {
-		if (this.htmlNode)
+		if (this.htmlNode && this.htmlNode.parentNode)
 			this.htmlNode.parentNode.removeChild(this.htmlNode);
 	}
 

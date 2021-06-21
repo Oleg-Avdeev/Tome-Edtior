@@ -26,7 +26,11 @@ class Character {
 		});
 
 		this.htmlNode.addEventListener('keydown', event => {
-			if (event.key == 'Enter') this.paragraph.focus();
+			if (event.key == 'Enter') 
+			{
+				event.stopPropagation();
+				this.paragraph.focus();
+			}
 		});
 	}
 

@@ -6,7 +6,7 @@ class ApproveView {
 
 		let label = document.createElement('span');
 		label.classList.add('approve-label');
-		label.textContent = 'Mark as valid?';
+		label.textContent = 'Approve changes?';
 
 		let button = document.createElement('div');
 		button.classList.add('approve-button');
@@ -32,7 +32,8 @@ class ApproveView {
 			LineValidator.validate(line);
 		});
 
-		Story.updateTree();
 		Story.invalidate();
+		Story.updateTree();
+		Story.selectScene(this.scene.Id);
 	}
 }

@@ -8,7 +8,7 @@ class Paragraph {
 		content.textContent = `${line.Text}`;
 
 		if (!isLineNarrated(line))
-			paragraph.classList.add('line');
+			paragraph.classList.add('paragraph');
 
 		character.setTargetParagraph(paragraph);
 
@@ -78,9 +78,11 @@ class Paragraph {
 
 	getTextContent() {
 		var content = this.htmlNode.childNodes[0];
-
-		if (content)
+		
+		if (content) {
+			content.textContent = content.textContent.replace('\n', '');
 			return content.textContent;
+		}
 
 		return '';
 	}

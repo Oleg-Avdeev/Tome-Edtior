@@ -9,15 +9,19 @@ let displayChapter = function (chapter) {
 	Title.render(chapter);
 	chapter.Lines.forEach(createParagraph);
 
-	let approvePanel = new ApproveView(chapter, container);
+	new ApproveView(chapter, container);
 };
 
 let createParagraph = function (line, index) {
 	const character = new Character(line);
 	const paragraph = new Paragraph(line, character);
 
-	container.insertBefore(paragraph.htmlNode, container.childNodes[index * 2 + 1]);
-	container.insertBefore(character.htmlNode, container.childNodes[index * 2 + 1]);
+	let lineDiv = document.createElement('div');
+	lineDiv.appendChild(character.htmlNode);
+	lineDiv.appendChild(paragraph.htmlNode);
+	lineDiv.classList.add('line');
+
+	container.insertBefore(lineDiv, container.childNodes[index + 1]);
 };
 
 let addNewParagraph = function (paragraph) {
@@ -33,7 +37,7 @@ let addNewParagraph = function (paragraph) {
 	Story.invalidate();
 
 	createParagraph(line, index);
-	container.childNodes[index * 2 + 1].focus();
+	container.childNodes[index + 1].childNodes[0].focus();
 };
 
 let removeParagraph = function (paragraph) {
@@ -42,6 +46,5 @@ let removeParagraph = function (paragraph) {
 	currentChapter.Lines.splice(index, 1);
 	Story.invalidate();
 
-	container.removeChild(container.childNodes[index * 2 + 1]);
-	container.removeChild(container.childNodes[index * 2 + 1]);
+	container.removeChild(container.childNodes[index + 1]);
 };
