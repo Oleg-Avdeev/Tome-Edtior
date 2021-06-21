@@ -20,7 +20,6 @@ let clear = function() {
 };
 
 let render = function (json) {
-	console.log('render');
 	var container = document.getElementById('canvas');
 	container.innerHTML = '';
 	clear(container);

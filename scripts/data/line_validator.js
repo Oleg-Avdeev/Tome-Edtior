@@ -6,7 +6,6 @@ const LineValidator = {
 
 	validate: function (line) {
 		line['checksum'] = this.getHashCode(line);
-		console.log(line['checksum']);
 	},
 
 	getHashCode: function(line) {

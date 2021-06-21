@@ -32,7 +32,6 @@ let buildLine = function (header, line) {
 };
 
 let buildHeader = function (header) {
-	console.log(header);
 	var line = '';
 	
 	for (let index = 0; index < header.length; index++) {
