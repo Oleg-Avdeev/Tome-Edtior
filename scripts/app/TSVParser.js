@@ -6,22 +6,29 @@ exports.parseFile = function (file, callback) {
 
 	fs.readFile(file.filePaths[0], 'utf-8', (er, data) => {
 		if (er != null) return;
-
-		if (!data.startsWith('Scene'))
-			// data = `Scene	Character	Text	Count1	Desc	Trans	Count2	Action	Condition	Comments	Video\n${data}`;
-			data = `Scene	Character	Text	Count	Action\n${data}`;
-
-		let result = parse.parse(data, {
-			delimiter: '\t',
-			encoding: 'utf-8',
-			header: true,
-			trimHeaders: true,
-		});
-
-		let json = toTJSON(result);
-
-		callback(json);
+		parseTSV(data, callback);
 	});
+};
+
+exports.parseTSV = function (tsv, callback) {
+	parseTSV(tsv, callback);
+};
+
+let parseTSV = function (data, callback) {
+	if (!data.startsWith('Scene'))
+		// data = `Scene	Character	Text	Count1	Desc	Trans	Count2	Action	Condition	Comments	Video\n${data}`;
+		data = `Scene	Character	Text	Count	Action\n${data}`;
+
+	let result = parse.parse(data, {
+		delimiter: '\t',
+		encoding: 'utf-8',
+		header: true,
+		trimHeaders: true,
+	});
+
+	let json = toTJSON(result);
+
+	callback(json);
 };
 
 let toTJSON = function (tsv) {
@@ -31,16 +38,16 @@ let toTJSON = function (tsv) {
 	let lastCharacter = '';
 
 	tsv.data.forEach(l => {
-		if (l.Text == null || l.Text.length == 0) 
+		if (l.Text == null || l.Text.length == 0)
 			return;
-		
+
 		if (l.Scene == '')
 			l.Scene = scene.Id;
-		
+
 		if (l.Character == '')
 			l.Character = lastCharacter;
 		else lastCharacter = l.Character;
-		
+
 		if (scene.Id == '')
 			scene.Id = l.Scene;
 
@@ -52,9 +59,9 @@ let toTJSON = function (tsv) {
 			json.Scenes.push(scene);
 			scene = { 'Id': l.Scene, 'Lines': [] };
 		}
-		
+
 		line.Actions = actionsParser.parse(l.Actions);
-		
+
 		scene.Lines.push(line);
 	});
 

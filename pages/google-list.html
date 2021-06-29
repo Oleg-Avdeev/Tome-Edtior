@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+	<meta charset="UTF-8">
+	<title>TOME — List of Available Google Spreadsheets</title>
+
+	<link rel="stylesheet" href="../styles/google-auth.css">
+</head>
+
+<body>
+	<div id='container'>
+
+	</div>
+
+	<script>
+		const render = function(dataJSON) {
+
+			dataJSON = dataJSON.replace('\t', ' ');
+
+			let data = JSON.parse(dataJSON);
+			let container = document.getElementById('container');
+
+			data.files.forEach(item => {
+				let node = document.createElement('div');
+				node.textContent = item.name;
+				node.classList = 'spreadsheet';
+				node.onclick = () => onItemClick(item.id);
+
+				container.appendChild(node);
+			});
+		}
+
+		function onItemClick(id) {
+			window.api.send('google-sheet-id', id);
+			window.close();
+		}
+	</script>
+</body>
+
+</html>

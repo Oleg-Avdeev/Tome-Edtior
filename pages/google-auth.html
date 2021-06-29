@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+	<meta charset="UTF-8">
+	<title>TOME — Google API Authentication</title>
+
+	<link rel="stylesheet" href="../styles/google-auth.css">
+</head>
+
+<body>
+	<div class='form'>
+		<label>Please complete your authentication and enter your Google Code here:</label>
+		<input id='code-input'></input>
+		<button id='ok-button'>OK</button>
+	</div>
+
+	<script>
+		document.getElementById('ok-button').onclick = function () {
+			let code = document.getElementById('code-input').value;
+			window.api.send('google-auth-code', code);
+			window.close();
+		}
+	</script>
+</body>
+
+</html>
