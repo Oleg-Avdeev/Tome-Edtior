@@ -45,7 +45,13 @@ exports.get = function (sheetId, onResult) {
 		includeGridData: true
 	}, (err, res) => {
 		if (err) return console.log('The API returned an error: ' + err);
-		onResult(parser.parseSpreadsheet(res.data.sheets[0].data[0]));
+		
+		let tsvs = [];
+		res.data.sheets.forEach(sheet => {
+			tsvs.push(parser.parseSpreadsheet(sheet.data[0]));
+		});
+		
+		onResult(tsvs);
 	});
 };
 

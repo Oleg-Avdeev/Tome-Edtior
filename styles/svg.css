@@ -10,6 +10,9 @@
 	width: 20px;
 	height: 20px;
 
+	transform-origin: center;
+	transform-box: fill-box;
+
 	transition: all 0.1s ease-out;
 }
 
@@ -26,8 +29,9 @@
 .selected {
 	fill: #eee;
 	font: bold 30px sans-serif;
-	rx: 10;
-	ry: 10;
+	transform: rotate( 45deg );
+	rx: 5;
+	ry: 5;
 }
 
 .new {
@@ -37,6 +41,22 @@
 text.new {
 	fill: #eee;
 	pointer-events: none;
+}
+
+text.node-id {
+	fill: #222;
+	font-family: 'Courier New', monospace;
+	font-size: 8pt;
+	display: block;
+}
+
+rect.node-id {
+	fill: #eee;
+	display: block;
+}
+
+.node-id.hidden {
+	display: none;
 }
 
 .connector {

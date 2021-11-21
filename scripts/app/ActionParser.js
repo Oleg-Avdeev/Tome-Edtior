@@ -1,10 +1,10 @@
 const ActionType = Object.freeze({ 'goto' : 1, 'command' : 2, 'compute' : 3 });
-const OpenedBracket = ['', '[', '(', '{'];
-const ClosedBracket = ['', ']', ')', '}'];
+const OpenedBracket = ['', '[', '{', '('];
+const ClosedBracket = ['', ']', '}', ')'];
 
 const gotoRE = /\[([^[\]]*)\]/;
-const commandRE = /\(([^()]*)\)/;
-const computeRE = /\{([^{}]*)\}/;
+const commandRE = /\{([^()]*)\}/;
+const computeRE = /\(([^{}]*)\)/;
 
 exports.parse = function(actions) {
 	var parsedActions = [];
@@ -73,19 +73,38 @@ let parseCommand = function(actions) {
 	return [];
 };
 
-//TODO: Parse all actions
-//TODO: Parse completely
-let parseCompute = function(actions) {
-	var matches = computeRE.exec(actions);
+const plusRE = /([\\+])([a-zА-ЯA-Zа-я0-9]*)/;
+const minusRE = /([\\-])([a-zА-ЯA-Zа-я0-9]*)/;
+const assignRE = /([a-zА-ЯA-Zа-я0-9]*)\\=([\\-a-zА-ЯA-Zа-я0-9]*)/;
+
+let parseCompute = function (actions) {
+	const matches = computeRE.exec(actions);
+	const parsedActions = [];
 
 	if (matches != null) {
-		let id = matches[1];
+		parseComputeWithRE(matches[1], plusRE, 'plus', 2, 1).forEach(a => parsedActions.push(a));
+		parseComputeWithRE(matches[1], minusRE, 'minus', 2, 1).forEach(a => parsedActions.push(a));
+		parseComputeWithRE(matches[1], assignRE, 'assign', 1, 2).forEach(a => parsedActions.push(a));
+	}
 
-		var action = { 
-			'ActionType': ActionType.compute, 
-			'Value': id, 
+	if (parsedActions.length > 0)
+		console.log(JSON.stringify(parsedActions));
+
+	return parsedActions;
+};
+
+let parseComputeWithRE = function (string, re, operator, varIndex, valIndex) {
+	var matches = re.exec(string);
+
+	if (matches != null) {
+
+		var action = {
+			'ActionType': ActionType.compute,
+			'Operator': operator,
+			'Variable': matches[varIndex],
+			'Value': matches[valIndex],
 		};
-		
+
 		return [action];
 	}
 

@@ -1,10 +1,12 @@
 {
   "name": "tome-editor",
+  "productName": "tome-editor",
   "version": "0.1.0",
   "description": "Tome Editor — Editor for TOME-format narrative trees",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+	"build": "electron-packager . --overwrite"
   },
   "keywords": [],
   "author": "Oleg Avdeev",
@@ -14,6 +16,7 @@
   },
   "devDependencies": {
     "electron": "^12.0.1",
+    "electron-packager": "^15.2.0",
     "eslint": "^7.27.0"
   },
   "dependencies": {

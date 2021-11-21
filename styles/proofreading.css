@@ -11,8 +11,8 @@ body.proofreading .node.approved {
 	fill: var(--approved);
 }
 
-body.proofreading .script .pending {
-	background-color: var(--pending);
+body.proofreading .script .approved {
+	background-color: var(--approved);
 	color: white;
 }
 

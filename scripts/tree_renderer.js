@@ -9,13 +9,13 @@ var currentNode;
 
 let minX = 9999, maxX = 0, minY = 9999, maxY = 0;
 
-let clear = function() {
+let clear = function () {
 	connectionsMap.clear();
 	depthMap.clear();
 	nodes = [];
-	minX = 9999; 
-	minY = 9999; 
-	maxX = 0; 
+	minX = 9999;
+	minY = 9999;
+	maxX = 0;
 	maxY = 0;
 };
 
@@ -26,7 +26,7 @@ let render = function (json) {
 
 	json.Scenes.forEach(scene => {
 		if (scene.Id == '') return;
-		nodes.push({ 'index' : 0, 'x': 0, 'y': 0, 'depth': 0, 'branch': '', 'passed': false, 'scene': scene, 'htmlNode': null });
+		nodes.push({ 'index': 0, 'x': 0, 'y': 0, 'depth': 0, 'branch': '', 'passed': false, 'scene': scene, 'htmlNode': null });
 	});
 
 	let i = 0;
@@ -54,7 +54,7 @@ let render = function (json) {
 			index++;
 		});
 	}
-	
+
 	container.setAttribute('viewBox', `${minX} ${minY} ${maxX - minX} ${maxY - minY}`);
 
 	nodes.forEach(n => {
@@ -69,6 +69,8 @@ let render = function (json) {
 			container.appendChild(line);
 		});
 	}
+
+	NodeIdRenderer.initialize();
 };
 
 let selectNodeById = function (sceneId) {
@@ -94,7 +96,7 @@ let getConnections = function (node) {
 			if (action.ActionType === 1) {
 				var n = findNodeById(action.Value);
 				if (n != null) {
-					actions.push({'node':n, 'ignoreDepthPass':action.Cyclical});
+					actions.push({ 'node': n, 'ignoreDepthPass': action.Cyclical });
 				}
 				else {
 					console.error(`Node ${action.Value} not found`);
@@ -139,7 +141,7 @@ let WMap = function (index, length) {
 	return index - length / 2;
 };
 
-let updateBoundingBox = function(node) {
+let updateBoundingBox = function (node) {
 	minX = Math.min(node.x - 100, minX);
 	minY = Math.min(node.y - 100, minY);
 	maxX = Math.max(node.x + 100, maxX);
@@ -148,15 +150,19 @@ let updateBoundingBox = function(node) {
 
 let buildSVGNode = function (n) {
 	const node = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
 	node.setAttribute('x', n.x - 10);
 	node.setAttribute('y', n.y - 10);
 	node.classList.add('node');
 
+	node.onmouseenter = () => NodeIdRenderer.draw(n);
+	node.onmouseleave = () => NodeIdRenderer.hide();
+
 	if (connectionsMap.has(n) && connectionsMap.get(n).length == 0)
 		node.classList.add('edge');
 
-	node.onclick = e => { 
-		Story.selectScene(n.scene.Id); 
+	node.onclick = e => {
+		Story.selectScene(n.scene.Id);
 	};
 
 	n.htmlNode = node;
@@ -189,7 +195,7 @@ let shortenLine = function (x1, x2, y1, y2, r) {
 	return [nx1, nx2, ny1, ny2];
 };
 
-let updateApprovedState = function(node) {
+let updateApprovedState = function (node) {
 	let invalidCount = 0;
 
 	node.scene.Lines.forEach(line => {
@@ -201,6 +207,6 @@ let updateApprovedState = function(node) {
 
 	if (invalidCount > 0)
 		node.htmlNode.classList.add('pending');
-	else 
+	else
 		node.htmlNode.classList.add('approved');
-}
+};

@@ -71,6 +71,9 @@ ts-gen
 patches/mtime-cache.json
 
 /data
+/verification
 scripts/google/credentials-electron.json
 scripts/google/credentials.json
 scripts/google/token.json
+
+/tome-editor-darwin-x64

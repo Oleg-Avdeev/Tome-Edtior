@@ -5,6 +5,9 @@ const fs = require('fs');
 const Story = require('../story');
 const parser = require('../TSVParser');
 const tsvBuilder = require('../JSONtoTSV');
+const { Autoplayer } = require('../../data/verification/autoplayer');
+const { Verifier } = require('../../data/verification/verifier');
+const { randomInt } = require('crypto');
 
 let window;
 let lastOpenedFile;
@@ -40,6 +43,10 @@ exports.buildMenu = function (win, refreshMenu) {
 				label: 'Save As',
 				accelerator: 'Shift+CommandOrControl+S',
 				click: () => { saveAsFile(); }
+			},
+			{
+				label: 'Verify Current Document',
+				click: () => { verifyDocument(); }
 			},
 			{ label: 'Export' },
 			isMac ? { role: 'close' } : { role: 'quit' }
@@ -142,5 +149,29 @@ const saveFileDialogue = (currentPath) => {
 		filters: [
 			{ name: 'TSV Files', extensions: ['tsv'] },
 		],
+	});
+};
+
+const verifyDocument = () => {
+	console.log('verifying');
+	let story = store.get('document').wip;
+	Verifier.verifyStory(story);
+	
+	console.log(`total contexts: ${Autoplayer._subcontexts.length}`);
+
+	let report = Verifier.buildVariableDistributionReport('12сцена10.3');
+	fs.writeFile('verification/Variable-Distribution-Report.json', JSON.stringify(report), () => {
+		console.log('Variable-Distribution-Report written');
+	});
+
+	report = Verifier.buildErrorsReport();
+	fs.writeFile('verification/Errors-Report.json', JSON.stringify(report), () => {
+		console.log('Errors-Report written');
+	});
+
+	report = Verifier.buildTextLengthDistributionReport('12сцена10.3');
+	fs.writeFile('verification/Text-Length-Distribution-Report.json', JSON.stringify(report), () => {
+		console.log('Text-Length-Distribution-Report written');
+		Autoplayer.cleanup();
 	});
 };
