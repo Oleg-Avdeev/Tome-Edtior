@@ -16,6 +16,9 @@
 	<script src="./scripts/data/action_parser.js"></script>
 	<script src="./scripts/data/story_data.js"></script>
 	
+	<script src="./scripts/renderers/splitter_renderer.js"></script>
+	
+	<script src="./scripts/renderers/tree/node_id_renderer.js"></script>
 	<script src="./scripts/renderers/tree/new_node_renderer.js"></script>
 	<script src="./scripts/tree_renderer.js"></script>
 	
@@ -32,7 +35,7 @@
 </head>
 
 <body>
-	<svg>
+	<svg style="display: none;">
 		<defs>
 			<marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
 				<polygon points="0 0, 10 3.5, 0 7" />
@@ -40,15 +43,21 @@
 		</defs>
 	</svg>
 	
-	<div class="split left">
-		<svg viewBox="0 0 500 1600" id="canvas">
-		</svg>
+	<div class="editor">
+		<div class="split left">
+			<svg viewBox="0 0 500 1600" id="canvas">
+			</svg>
+		</div>
+
+		<div class="splitter" id="splitter">
+		</div>		
+
+		<div class="split right script" id="chapter-container">
+			<table class="chapter-table" id="chapter-table">
+			</table>
+		</div>
 	</div>
 
-	<div class="split right script" id="chapter-container">
-		<table class="chapter-table" id="chapter-table">
-		</table>
-	</div>
 </body>
 
 </html>

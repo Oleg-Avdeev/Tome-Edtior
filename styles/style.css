@@ -1,3 +1,13 @@
+body {
+	margin: 0px;
+}
+
+.editor {
+	height: 100%;
+	width: 100%;
+	padding: 0PX;
+}
+
 .split {
 	height: 100%;
 	width: 50%;
@@ -36,6 +46,17 @@
 	right: 0;
 	background-color: #eee;
     overflow: scroll;
+  }
+
+  .splitter {
+	z-index: 2;
+	position: fixed;
+	height: 100%;
+	left: 50%;
+	cursor: col-resize;
+	width: 4px;
+	background-color: #fff;
+	user-select: none;
   }
   
   /* If you want the content centered horizontally and vertically */
