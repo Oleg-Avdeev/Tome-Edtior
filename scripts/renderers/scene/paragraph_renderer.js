@@ -3,9 +3,16 @@ class Paragraph {
 	constructor(line, character) {
 		const paragraph = document.createElement('p');
 		const content = document.createElement('span');
+		const condition = document.createElement('span');
 
 		paragraph.appendChild(content);
 		content.textContent = `${line.Text}`;
+		
+		if (line.Conditions.length > 0)
+		{
+			condition.textContent = `	(Если ${ConditionParser.toText(line.Conditions)})`;
+			paragraph.appendChild(condition);
+		}
 
 		if (!isLineNarrated(line))
 			paragraph.classList.add('paragraph');

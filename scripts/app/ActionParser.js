@@ -87,9 +87,6 @@ let parseCompute = function (actions) {
 		parseComputeWithRE(matches[1], assignRE, 'assign', 1, 2).forEach(a => parsedActions.push(a));
 	}
 
-	if (parsedActions.length > 0)
-		console.log(JSON.stringify(parsedActions));
-
 	return parsedActions;
 };
 

@@ -38,9 +38,8 @@ let render = function (json) {
 		i++;
 	});
 
-	treeDepthPass();
-	treeDepthPass();
-	treeDepthPass();
+	for (let i = 0; i < 3; i++)
+		treeDepthPass();
 
 	treeWidthPass();
 

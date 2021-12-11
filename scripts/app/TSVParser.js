@@ -1,5 +1,6 @@
 const parse = require('papaparse');
 const actionsParser = require('./ActionParser');
+const conditionsParser = require('./ConditionsParser');
 const fs = require('fs');
 
 exports.parseFile = function (file, callback) {
@@ -61,6 +62,7 @@ let toTJSON = function (tsv) {
 		}
 
 		line.Actions = actionsParser.parse(l.Actions);
+		line.Conditions = conditionsParser.ConditionParser.parse(l.Conditions);
 
 		scene.Lines.push(line);
 	});

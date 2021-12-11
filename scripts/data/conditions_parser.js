@@ -6,9 +6,7 @@ const ConditionParser = {
 		var parsedConditions = [];
 		
 		parsedConditions = parseOperation(conditions);
-		
-		if (parsedConditions.length > 0)
-			console.log(JSON.stringify(parsedConditions));
+		console.log(JSON.stringify(parsedConditions));
 
 		return parsedConditions;
 	},
@@ -24,8 +22,6 @@ const ConditionParser = {
 	},
 
 };
-
-exports.ConditionParser = ConditionParser;
 
 const operationRE = /([a-zА-ЯA-Zа-я0-9]*)([\\=\\>\\<\\!])([\\-a-zА-ЯA-Zа-я0-9]*)/;
 

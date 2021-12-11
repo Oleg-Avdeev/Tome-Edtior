@@ -15,6 +15,7 @@ module.exports = {
 		'semi': ['error', 'always'],
 		'quotes': ['error', 'single'],
 		'indent': ['error', 'tab'],
-		'no-multi-spaces': ['warn']
+		'no-multi-spaces': ['warn'],
+		'no-unused-vars': 'off'
 	},
 };
