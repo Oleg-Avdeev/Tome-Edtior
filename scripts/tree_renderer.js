@@ -23,10 +23,11 @@ let render = function (json) {
 	var container = document.getElementById('canvas');
 	container.innerHTML = '';
 	clear(container);
+	NodeContextRenderer.destroy();
 
 	json.Scenes.forEach(scene => {
 		if (scene.Id == '') return;
-		nodes.push({ 'index': 0, 'x': 0, 'y': 0, 'depth': 0, 'branch': '', 'passed': false, 'scene': scene, 'htmlNode': null });
+		nodes.push({ 'index': 0, 'x': 0, 'y': 0, 'depth': 0, 'branch': '', 'passed': false, 'scene': scene, 'htmlNode': null, color: '#eee' });
 	});
 
 	let i = 0;
@@ -76,6 +77,7 @@ let render = function (json) {
 	});
 
 	NodeIdRenderer.initialize();
+	NodeContextRenderer.initialize();
 };
 
 let selectNodeById = function (sceneId) {
@@ -170,7 +172,7 @@ let updateBoundingBox = function (node) {
 };
 
 let buildSVGNode = function (nodeData) {
-	return new TreeNode(nodeData, connectionsMap, NodeIdRenderer);
+	return new TreeNode(nodeData, connectionsMap, NodeIdRenderer, NodeContextRenderer);
 };
 
 let buildSVGLine = function (node1, node2) {

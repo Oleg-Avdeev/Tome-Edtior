@@ -1,8 +1,10 @@
 class TreeNode { 
 	
-	constructor(nodeData, connectionsMap, nodeIdRenderer) {
+	constructor(nodeData, connectionsMap, nodeIdRenderer, nodeContextRenderer) {
 		
 		this.nodeData = nodeData;
+		this.nodeContextRenderer = nodeContextRenderer;
+
 		this.node = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 		this.svg = document.getElementById('canvas');
 
@@ -16,7 +18,8 @@ class TreeNode {
 		if (connectionsMap.has(nodeData) && connectionsMap.get(nodeData).length == 0)
 			this.node.classList.add('edge');
 
-		this.node.onclick = () => this.onClick();
+		this.node.onclick = e => this.onClick(e);
+		this.node.onmouseup = e => this.onRightClick(e);
 	
 		nodeData.htmlNode = this.node;
 		return this.node;
@@ -27,8 +30,13 @@ class TreeNode {
 			this.node.parentNode.removeChild(this.node);
 	}
 
-	onClick() {
+	onClick(e) {
 		Story.selectScene(this.nodeData.scene.Id);
+	}
+
+	onRightClick(e) {
+		if (e.button === 2)
+			this.nodeContextRenderer.draw(this.nodeData, { x: e.clientX, y: e.clientY });
 	}
 
 	// Haven't figured drag&drop out, some matrix transformation issues...
