@@ -25,7 +25,7 @@ class Character {
 			Story.invalidate();
 		});
 
-		this.htmlNode.addEventListener('keydown', event => {
+		this.htmlNode.addEventListener('keyup', event => {
 			if (event.key == 'Enter') 
 			{
 				event.stopPropagation();

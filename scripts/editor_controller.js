@@ -1,6 +1,10 @@
 let projectBrowser = new ProjectRenderer();
 let toolbar = new ToolbarRenderer(projectBrowser);
 
+document.addEventListener('DOMContentLoaded', function() {
+	toolbar.initialize();
+});
+
 // Editor entry function
 function setDocument(document) {
 	Story.onSceneSelect = onSceneSelect;
@@ -12,7 +16,6 @@ function setDocument(document) {
 
 function setProject( documents ) {
 	projectBrowser.setDocuments(documents);
-	toolbar.initialize();
 }
 
 function onSceneSelect(sceneId) {

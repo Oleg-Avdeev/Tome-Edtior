@@ -16,6 +16,7 @@ class ToolbarRenderer {
 
 	initialize() {
 		
+		this.list.innerHTML = null;
 		this.createProjectBrowserButton();
 		
 		document.getElementById('editor').appendChild(this.toolbar);

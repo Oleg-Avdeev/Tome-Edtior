@@ -29,6 +29,7 @@ class ProjectRenderer {
 	}
 
 	setDocuments( documentNames ) {
+		this.list.innerHTML = null;
 		this.documentNames = documentNames;
 		this.documentNames.forEach(file => this.createFileItem(file));
 		document.getElementById('editor').appendChild(this.project);

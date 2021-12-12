@@ -85,7 +85,6 @@ let render = function (json) {
 };
 
 let selectNodeById = function (sceneId) {
-	console.log(sceneId);
 	var node = nodes.find(n => n.scene.Id == sceneId);
 	if (node) selectNode(node);
 };

@@ -15,12 +15,9 @@ var NodeContextRenderer = {
 		this.menu.style.top = menuPosition.y + 'px';
 
 		this.nodeId.textContent = targetNode.scene.Id;
-
-		console.log(this.node.scene.Id);
 	},
 
 	hide: function () {
-		console.log('Hide');
 		this.menu.classList.add('hidden');
 	},
 

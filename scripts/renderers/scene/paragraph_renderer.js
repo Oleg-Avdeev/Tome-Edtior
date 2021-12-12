@@ -87,7 +87,6 @@ class Paragraph {
 		var content = this.htmlNode.childNodes[0];
 		
 		if (content) {
-			content.textContent = content.textContent.replace('\n', '');
 			return content.textContent;
 		}
 
