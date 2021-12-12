@@ -42,6 +42,7 @@ let render = function (json) {
 		treeDepthPass();
 
 	treeWidthPass();
+	phantomNodesPass();
 
 	for (const entries of depthMap.entries()) {
 		var index = 0;
@@ -49,18 +50,17 @@ let render = function (json) {
 		entries[1].forEach(n => {
 			n.x = xOffset * WMap(index, entries[1].length);
 			n.y = yOffset * n.depth;
-			updateBoundingBox(n);
+			
+			if (!n.isPhantom) 
+				updateBoundingBox(n);
+
 			index++;
 		});
 	}
+		
+	new CollisionReductionPass(depthMap, connectionsMap, xOffset, yOffset).execute();
 
 	container.setAttribute('viewBox', `${minX} ${minY} ${maxX - minX} ${maxY - minY}`);
-
-	nodes.forEach(n => {
-		var node = buildSVGNode(n);
-		updateApprovedState(n);
-		container.appendChild(node);
-	});
 
 	for (const entry of connectionsMap.entries()) {
 		entry[1].forEach(node2 => {
@@ -68,6 +68,12 @@ let render = function (json) {
 			container.appendChild(line);
 		});
 	}
+
+	nodes.forEach(n => {
+		var node = buildSVGNode(n);
+		updateApprovedState(n);
+		container.appendChild(node);
+	});
 
 	NodeIdRenderer.initialize();
 };
@@ -117,6 +123,22 @@ let treeDepthPass = function () {
 	}
 };
 
+let phantomNodesPass = function() {
+	for (const entry of connectionsMap.entries()) {
+		entry[1].forEach(node2 => {
+			let deltaDepth = node2.node.depth - entry[0].depth;
+
+			if (deltaDepth > 3) return;
+
+			for (let i = 1; i < deltaDepth; i++) {
+				let phantom = { branch: entry[0].branch + `${i}`, x: 0, y: 0, depth: entry[0].depth + i, isPhantom: true};
+				let row = depthMap.get(phantom.depth);
+				row.push(phantom);
+			}
+		});
+	}
+};
+
 let treeWidthPass = function () {
 	nodes.forEach(n => {
 		var depthList = depthMap.get(n.depth);
@@ -147,51 +169,18 @@ let updateBoundingBox = function (node) {
 	maxY = Math.max(node.y + 100, maxY);
 };
 
-let buildSVGNode = function (n) {
-	const node = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-
-	node.setAttribute('x', n.x - 10);
-	node.setAttribute('y', n.y - 10);
-	node.classList.add('node');
-
-	node.onmouseenter = () => NodeIdRenderer.draw(n);
-	node.onmouseleave = () => NodeIdRenderer.hide();
-
-	if (connectionsMap.has(n) && connectionsMap.get(n).length == 0)
-		node.classList.add('edge');
-
-	node.onclick = e => {
-		Story.selectScene(n.scene.Id);
-	};
-
-	n.htmlNode = node;
-
-	return node;
+let buildSVGNode = function (nodeData) {
+	return new TreeNode(nodeData, connectionsMap, NodeIdRenderer);
 };
 
 let buildSVGLine = function (node1, node2) {
-	const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-	var coordinates = shortenLine(node1.x, node2.x, node1.y, node2.y, 10);
-	line.setAttribute('x1', coordinates[0]);
-	line.setAttribute('x2', coordinates[1]);
-	line.setAttribute('y1', coordinates[2]);
-	line.setAttribute('y2', coordinates[3]);
-	line.classList.add('connector');
-	return line;
-};
 
-let shortenLine = function (x1, x2, y1, y2, r) {
-	var dx = x2 - x1;
-	var dy = y2 - y1;
-	var D = Math.sqrt(dx * dx + dy * dy);
-	var n = D - 2 * r;
+	let deltaDepth = node2.depth - node1.depth;
 
-	var nx1 = (1 - n / D) * x2 + (n / D) * x1;
-	var ny1 = (1 - n / D) * y2 + (n / D) * y1;
-	var nx2 = (1 - n / D) * x1 + (n / D) * x2;
-	var ny2 = (1 - n / D) * y1 + (n / D) * y2;
-
-	return [nx1, nx2, ny1, ny2];
+	if (deltaDepth > 3 || deltaDepth < -1) 
+		return new TreeBorkLine(node1, node2);
+	
+	else return new TreeLine(node1, node2);
 };
 
 let updateApprovedState = function (node) {

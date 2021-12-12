@@ -10,6 +10,7 @@
 	width: 20px;
 	height: 20px;
 
+	transform: translate( 0 );
 	transform-origin: center;
 	transform-box: fill-box;
 
@@ -59,9 +60,12 @@ rect.node-id {
 	display: none;
 }
 
-.connector {
+line {
 	stroke: #eee; 
 	stroke-width: 0.4;
+}
+
+.connector {
 	marker-end: url(#arrowhead);
 }
 
