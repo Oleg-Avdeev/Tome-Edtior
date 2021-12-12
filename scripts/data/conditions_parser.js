@@ -6,7 +6,6 @@ const ConditionParser = {
 		var parsedConditions = [];
 		
 		parsedConditions = parseOperation(conditions);
-		console.log(JSON.stringify(parsedConditions));
 
 		return parsedConditions;
 	},

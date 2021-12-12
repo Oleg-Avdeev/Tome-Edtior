@@ -31,6 +31,7 @@ var NodeContextRenderer = {
 		
 		this.menu = document.createElement('nav');
 		this.menu.classList.add('context-menu');
+		this.menu.classList.add('hidden');
 		this.menu.appendChild(this.list);
 		
 		this.nodeId = document.createElement('li');
@@ -89,6 +90,17 @@ var NodeContextRenderer = {
 				else this.node.color = color;
 
 				this.node.htmlNode.style.stroke = this.node.color;
+				
+				let data = Story.meta.sceneColors.find(sc => sc.Id === this.node.scene.Id);
+				if (!data)
+				{
+					data = { Id: this.node.scene.Id, color: color };
+					Story.meta.sceneColors.push(data);
+				}
+				
+				data.color = color;
+
+				Story.invalidate();
 			};
 
 			item.appendChild(colorButton);

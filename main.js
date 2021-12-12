@@ -9,10 +9,6 @@ const Store = require('electron-store');
 const store = new Store();
 let win;
 
-ipcMain.on('store-json', (event, args) => {
-	store.set('document.wip', args);
-});
-
 ipcMain.on('select-scene', (event, args) => {
 	store.set('document.scene', args);
 });

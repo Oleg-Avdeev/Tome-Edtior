@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Store = require('electron-store');
+const { ipcMain } = require('electron');
 
 const Story = require('../../app/story');
 const tsvParser = require('../../app/TSVParser');
@@ -31,7 +32,7 @@ module.exports = class Project {
 		this.storyFileNames
 			.filter(file => !fs.existsSync(this.getMetaPath(file)))
 			.forEach(file => fs.writeFileSync(this.getMetaPath(file), 
-				JSON.stringify( this.buildStoryMeta(`${this.path}/${file}`) )));
+				JSON.stringify( this.buildStoryMeta(file), null, 2 )));
 
 		if (!fs.existsSync(`${this.path}/project.meta`))
 			fs.writeFileSync(`${this.path}/project.meta`, '{}');
@@ -45,28 +46,45 @@ module.exports = class Project {
 
 		this.projectData = {
 			names: this.name,
-			stories: []
+			documents: []
 		};
 		
 		this.storyFileNames.forEach(filename => {
-			let story = fs.readFileSync( this.getMetaPath(filename), 'utf-8' ).toString();
-			this.projectData.stories.push(story);
+			let document = fs.readFileSync( this.getMetaPath(filename), 'utf-8' ).toString();
+			this.projectData.documents.push(document);
 		});
 
-		this.window.webContents.executeJavaScript(`setDocument(${this.projectData.stories[0]})`);
+		this.window.webContents.executeJavaScript(`setProject(${JSON.stringify(this.storyFileNames)})`);
+		this.window.webContents.executeJavaScript(`setDocument(${this.projectData.documents[0]})`);
+
+		ipcMain.on('commit-document', (event, args) => {
+			let file = this.getMetaPath( args.meta.fileName );
+			let json = JSON.stringify( args, null, 2 );
+
+			fs.writeFileSync( file, json );
+		});
+
+		ipcMain.on('select-document', (event, file) => {
+			let index = this.storyFileNames.indexOf(file);
+			let document = this.projectData.documents[index];
+			this.window.webContents.executeJavaScript(`setDocument(${document})`);
+		});
 	}
 
 	buildStoryMeta( storyFilePath ) {
 		
+		let fileName = storyFilePath;
 		let hasChanges = false;
+		let sceneColors = [];
+		let currentScene = '';
 		
-		let tsv = fs.readFileSync(storyFilePath, 'utf-8').toString();
+		let tsv = fs.readFileSync(`${this.path}/${storyFilePath}`, 'utf-8').toString();
 		let json = tsvParser.parseTSV(tsv);
 		
-		return { hasChanges, json };
+		return { meta: { fileName, hasChanges, currentScene, sceneColors }, story: json };
 	}
 
 	getMetaPath( file ) {
-		return `${this.path}/meta/${file}.meta`;
+		return `${this.path}/meta/${file}-meta.json`;
 	}
 };

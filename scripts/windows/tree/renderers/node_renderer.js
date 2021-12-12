@@ -11,6 +11,7 @@ class TreeNode {
 		this.node.setAttribute('x', nodeData.x - 10);
 		this.node.setAttribute('y', nodeData.y - 10);
 		this.node.classList.add('node');
+		this.node.style.stroke = nodeData.color;
 
 		this.node.onmouseenter = () => nodeIdRenderer.draw(nodeData);
 		this.node.onmouseleave = () => nodeIdRenderer.hide();

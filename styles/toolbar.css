@@ -1,0 +1,49 @@
+.toolbar {
+
+	color: #eee;
+	font-size: small;
+
+	z-index: 10;
+	display: block;
+	position: absolute;
+	top: 0;
+
+	padding: 10px 5px;
+}
+
+.toolbar.hidden {
+	display: none;
+}
+
+.toolbar-list {
+	margin: 0;
+	padding: 0;
+}
+
+.toolbar-button {
+	display: block;
+	padding: 10px;
+	height: 30px;
+
+	color: #eee8;
+	text-decoration: none;
+	border-radius: 2px;
+    border-bottom: solid 1px #eee4;
+}
+
+.toolbar-button.current {
+	font-weight: bold;
+	color: #fff;
+	background-color: #eee2;
+}
+
+.toolbar-button:hover {
+	color: #fff;
+	cursor: pointer;
+  	background-color: #eee4;
+}
+
+.toolbar-button:last-child {
+	margin-bottom: 0;
+	border-bottom: none;
+}

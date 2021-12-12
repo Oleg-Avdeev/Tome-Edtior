@@ -23,7 +23,7 @@ exports.buildMenu = function (win, refreshMenu) {
 			{
 				label: 'New',
 				accelerator: 'CommandOrControl+N',
-				click: () => { newFile(); }
+				click: () => { newProject(); }
 			},
 			{
 				label: 'Open',
@@ -69,7 +69,7 @@ const requestConfirmation = () => {
 	return resultPromise;
 };
 
-const newFile = () => {
+const newFile = (callback) => {
 	let confirmationPromise = requestConfirmation();
 	let document = { path: '', wip: Story.createEmpty(), scene: 'Scene 1' };
 
@@ -82,11 +82,15 @@ const newFile = () => {
 	});
 };
 
+const newProject = () => [
+	newFile(() => {})
+];
+
 const openProject = () => {
 	dialog
 		.showOpenDialog(window, { properties: ['openDirectory'], defaultPath: app.getAppPath() })
 		.then(path => {
-			if (!path) return;
+			if (!path || path.filePaths.length == 0) return;
 			let project = new Project(window, path.filePaths[0]);
 			project.read();
 		});

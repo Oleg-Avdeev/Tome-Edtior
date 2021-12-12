@@ -2,6 +2,7 @@ const Story = {
 	id: 0,
 	
 	json : {},
+	document: {},
 	meta: {},
 
 	currentSceneId : '',
@@ -11,8 +12,16 @@ const Story = {
 	onSceneSelect : null,
 	
 	initialize : function(document) {
-		this.json = document.json;
+		this.json = document.story;
+		this.meta = document.meta;
+		this.document = document;
+		this.currentSceneId = this.meta.currentSceneId;
+		
+		if (!this.currentSceneId)
+			this.currentSceneId =this.json.Scenes[0].Id;
+
 		this.onTreeUpdate(this.json);
+		this.onSceneSelect(this.currentSceneId);
 	},
 
 	invalidate : function() {
@@ -23,16 +32,15 @@ const Story = {
 		if (!this.valid && this.json)
 		{
 			this.valid = true;
-			console.log('Saving wip...');
-			window.api.send('store-json', this.json);
+			window.api.send('commit-document', this.document);
 		}
 	},
 
 	selectScene : function(sceneId) {
-		console.log('selectScene ' + sceneId);
 		this.currentSceneId = sceneId;
-		window.api.send('select-scene', sceneId);
+		this.meta.currentSceneId = sceneId;
 		this.onSceneSelect(sceneId);
+		this.invalidate();
 	},
 
 	updateTree : function () {

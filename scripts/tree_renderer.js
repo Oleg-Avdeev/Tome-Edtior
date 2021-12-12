@@ -27,7 +27,11 @@ let render = function (json) {
 
 	json.Scenes.forEach(scene => {
 		if (scene.Id == '') return;
-		nodes.push({ 'index': 0, 'x': 0, 'y': 0, 'depth': 0, 'branch': '', 'passed': false, 'scene': scene, 'htmlNode': null, color: '#eee' });
+		
+		let colorData = Story.meta.sceneColors.find(sc => sc.Id === scene.Id);
+		let color = colorData ? colorData.color : '#eee';
+
+		nodes.push({ 'index': 0, 'x': 0, 'y': 0, 'depth': 0, 'branch': '', 'passed': false, 'scene': scene, 'htmlNode': null, color: color });
 	});
 
 	let i = 0;

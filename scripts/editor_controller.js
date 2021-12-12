@@ -1,9 +1,18 @@
+let projectBrowser = new ProjectRenderer();
+let toolbar = new ToolbarRenderer(projectBrowser);
 
 // Editor entry function
 function setDocument(document) {
 	Story.onSceneSelect = onSceneSelect;
 	Story.onTreeUpdate = onTreeUpdate;
 	Story.initialize(document);
+	
+	projectBrowser.setCurrentDocument(document.meta.fileName);
+}
+
+function setProject( documents ) {
+	projectBrowser.setDocuments(documents);
+	toolbar.initialize();
 }
 
 function onSceneSelect(sceneId) {
