@@ -1,15 +1,18 @@
 const Story = {
 	id: 0,
+	
 	json : {},
+	meta: {},
+
 	currentSceneId : '',
 	valid : false,
 
 	onTreeUpdate : null,
 	onSceneSelect : null,
 	
-	initialize : function(json) {
-		this.json = json;
-		this.onTreeUpdate(json);
+	initialize : function(document) {
+		this.json = document.json;
+		this.onTreeUpdate(this.json);
 	},
 
 	invalidate : function() {

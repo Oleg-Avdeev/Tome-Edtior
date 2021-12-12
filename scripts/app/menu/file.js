@@ -1,4 +1,5 @@
 const { app, dialog } = require('electron');
+const Project = require('../../data/project/project_data');
 const Store = require('electron-store');
 const fs = require('fs');
 
@@ -27,7 +28,7 @@ exports.buildMenu = function (win, refreshMenu) {
 			{
 				label: 'Open',
 				accelerator: 'CommandOrControl+O',
-				click: () => { openFile(); }
+				click: () => { openProject(); }
 			},
 			{
 				label: 'Refresh',
@@ -79,6 +80,16 @@ const newFile = () => {
 			window.webContents.executeJavaScript(`Story.selectScene("${document.scene}")`);
 		}
 	});
+};
+
+const openProject = () => {
+	dialog
+		.showOpenDialog(window, { properties: ['openDirectory'], defaultPath: app.getAppPath() })
+		.then(path => {
+			if (!path) return;
+			let project = new Project(window, path.filePaths[0]);
+			project.read();
+		});
 };
 
 const openFile = () => {

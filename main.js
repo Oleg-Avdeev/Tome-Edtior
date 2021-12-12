@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron');
+const Project = require('./scripts/data/project/project_data');
 const { ipcMain } = require('electron');
 const menu = require('./scripts/app/menu');
 const Story = require('./scripts/app/story');
@@ -32,22 +33,11 @@ function createWindow() {
 	menu.setWindow(win);
 	menu.buildMenu();
 
-	var document = store.get('document');
-	
-	if (!document)
-		document = { path: '', wip: Story.createEmpty(), scene : 'Scene 1' };
-
-	if (document.wip) {
-		var wipJSON = JSON.stringify(document.wip);
-		win.webContents.executeJavaScript(`setDocument(${wipJSON})`);
-	}
-
-	if (document.scene) {
-		win.webContents.executeJavaScript(`Story.selectScene("${document.scene}")`);
-	}
-	
-	if (document.mode) {
-		win.webContents.executeJavaScript(`setProofreadingMode(${document.mode.proofreading})`);
+	let project_path = store.get('project-path');
+	if (project_path)
+	{
+		let project = new Project(win, project_path);
+		project.read();
 	}
 }
 

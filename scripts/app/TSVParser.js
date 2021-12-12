@@ -12,7 +12,7 @@ exports.parseFile = function (file, callback) {
 };
 
 exports.parseTSV = function (tsv, callback) {
-	parseTSV(tsv, callback);
+	return parseTSV(tsv, callback);
 };
 
 let parseTSV = function (data, callback) {
@@ -29,7 +29,10 @@ let parseTSV = function (data, callback) {
 
 	let json = toTJSON(result);
 
-	callback(json);
+	if (callback) 
+		callback(json);
+		
+	return json;
 };
 
 let toTJSON = function (tsv) {
