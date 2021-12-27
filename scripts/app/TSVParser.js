@@ -16,9 +16,6 @@ exports.parseTSV = function (tsv, callback) {
 };
 
 let parseTSV = function (data, callback) {
-	if (!data.startsWith('Scene'))
-		// data = `Scene	Character	Text	Count1	Desc	Trans	Count2	Action	Condition	Comments	Video\n${data}`;
-		data = `Scene	Character	Text	Count	Action\n${data}`;
 
 	let result = parse.parse(data, {
 		delimiter: '\t',

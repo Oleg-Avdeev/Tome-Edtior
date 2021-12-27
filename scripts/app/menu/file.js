@@ -1,19 +1,9 @@
 const { app, dialog } = require('electron');
 const Project = require('../../data/project/project_data');
-const Store = require('electron-store');
 const fs = require('fs');
 
-const Story = require('../story');
-const parser = require('../TSVParser');
-const tsvBuilder = require('../JSONtoTSV');
-const { Autoplayer } = require('../../data/verification/autoplayer');
-const { Verifier } = require('../../data/verification/verifier');
-const { randomInt } = require('crypto');
-
-let window;
-let lastOpenedFile;
-const store = new Store();
 const isMac = process.platform === 'darwin';
+let window;
 
 exports.buildMenu = function (win, refreshMenu) {
 	window = win;
@@ -21,43 +11,36 @@ exports.buildMenu = function (win, refreshMenu) {
 		label: 'File',
 		submenu: [
 			{
-				label: 'New',
+				label: 'New Project',
 				accelerator: 'CommandOrControl+N',
 				click: () => { newProject(); }
 			},
 			{
-				label: 'Open',
+				label: 'Open Project',
 				accelerator: 'CommandOrControl+O',
 				click: () => { openProject(); }
 			},
 			{
-				label: 'Refresh',
-				accelerator: 'CommandOrControl+R',
-				click: () => { reOpenFile(); }
-			},
-			{
-				label: 'Save',
+				label: 'Save Project',
 				accelerator: 'CommandOrControl+S',
 				click: () => { saveFile(); }
 			},
 			{
-				label: 'Save As',
-				accelerator: 'Shift+CommandOrControl+S',
-				click: () => { saveAsFile(); }
+				label: 'Reset Project',
+				accelerator: 'Shift+CommandOrControl+R',
+				click: () => { resetProject(); }
 			},
 			{
-				label: 'Verify Current Document',
-				click: () => { verifyDocument(); }
+				type: 'separator'
 			},
-			{ label: 'Export' },
 			isMac ? { role: 'close' } : { role: 'quit' }
 		]
 	};
 };
 
-const requestConfirmation = () => {
+const requestConfirmation = ( warningText ) => {
 	const resultPromise = dialog.showMessageBox(window, {
-		message: 'Are you sure you would like to create a new file? Current progress will be lost.',
+		message: `Are you sure you would like to ${warningText}? All unsaved progress will be lost.`,
 		type: 'info',
 		buttons: ['Cancel', 'OK'],
 		cancelId: 0,
@@ -69,21 +52,18 @@ const requestConfirmation = () => {
 	return resultPromise;
 };
 
-const newFile = (callback) => {
-	let confirmationPromise = requestConfirmation();
-	let document = { path: '', wip: Story.createEmpty(), scene: 'Scene 1' };
-
-	confirmationPromise.then(result => {
-		if (result.response == 1) {
-			store.set('document', document);
-			renderResult(document.wip);
-			window.webContents.executeJavaScript(`Story.selectScene("${document.scene}")`);
-		}
-	});
-};
-
 const newProject = () => [
-	newFile(() => {})
+	dialog
+		.showOpenDialog(window, { properties: ['openDirectory', 'createDirectory'], defaultPath: app.getAppPath() })
+		.then(path => {
+			if (!path || path.filePaths.length == 0) return;
+
+			let isEmpty = fs.readdirSync(path.filePaths[0]).length == 0;
+			if (!isEmpty) return;
+
+			let project = new Project(window, path.filePaths[0]);
+			project.create();
+		})
 ];
 
 const openProject = () => {
@@ -96,97 +76,21 @@ const openProject = () => {
 		});
 };
 
-const openFile = () => {
-	const files = dialog.showOpenDialog(window, {
-		properties: ['openFile'],
-		defaultPath: app.getAppPath(),
-		filters: [
-			{ name: 'TSV Files', extensions: ['tsv'] },
-			{ name: 'JSON Files', extensions: ['json'] },
-			{ name: 'All Files', extensions: ['*'] }
-		],
-	});
-
-	if (!files) { return; }
-
-	files.then(file => {
-		if (file.filePaths.length == 0) return;
-		parser.parseFile(file, renderResult);
-		store.set('document.path', file.filePaths[0]);
-		lastOpenedFile = file;
-	});
-};
-
-const reOpenFile = () => {
-	// lastOpenedFile = store.get('document.path');
-
-	if (lastOpenedFile)
-		parser.parseFile(lastOpenedFile, renderResult);
-};
-
-const renderResult = (document) => {
-	store.set('document.wip', document);
-	window.webContents.executeJavaScript(`setDocument(${JSON.stringify(document)})`);
-};
-
 const saveFile = () => {
-	var document = store.get('document');
 
-	if (!document.path || !fs.existsSync(document.path)) {
-		var path = saveFileDialogue(document.path);
-		if (!path) return;
-		document.path = path;
-		store.set('document.path', document.path);
-	}
+	if (!Project.Current) return;
+	Project.Current.save();
 
-	let tsv = tsvBuilder.build(document.wip);
-	fs.writeFileSync(document.path, tsv);
 };
 
-const saveAsFile = () => {
-	var document = store.get('document');
-
-	var path = saveFileDialogue(document.path);
-	if (!path) return;
-
-	store.set('document.path', document.path);
-
-	let tsv = tsvBuilder.build(document.wip);
-	fs.writeFileSync(document.path, tsv);
-};
-
-const saveFileDialogue = (currentPath) => {
-	if (!currentPath) currentPath = app.getAppPath();
-
-	return dialog.showSaveDialogSync(window, {
-		properties: ['createDirectory'],
-		defaultPath: currentPath,
-		filters: [
-			{ name: 'TSV Files', extensions: ['tsv'] },
-		],
-	});
-};
-
-const verifyDocument = () => {
-	console.log('verifying');
-	let story = store.get('document').wip;
-	Verifier.verifyStory(story);
+const resetProject = () => {
 	
-	console.log(`total contexts: ${Autoplayer._subcontexts.length}`);
+	if (!Project.Current) return;
 
-	let report = Verifier.buildVariableDistributionReport('12сцена10.3');
-	fs.writeFile('verification/Variable-Distribution-Report.json', JSON.stringify(report), () => {
-		console.log('Variable-Distribution-Report written');
-	});
+	requestConfirmation('reset current project')
+		.then(ok => {
+			if (ok.response == 0) return;
+			Project.Current.reset();
+		});
 
-	report = Verifier.buildErrorsReport();
-	fs.writeFile('verification/Errors-Report.json', JSON.stringify(report), () => {
-		console.log('Errors-Report written');
-	});
-
-	report = Verifier.buildTextLengthDistributionReport('12сцена10.3');
-	fs.writeFile('verification/Text-Length-Distribution-Report.json', JSON.stringify(report), () => {
-		console.log('Text-Length-Distribution-Report written');
-		Autoplayer.cleanup();
-	});
 };

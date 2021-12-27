@@ -39,6 +39,10 @@ class Paragraph {
 		});
 
 		this.htmlNode.addEventListener('keydown', event => {
+			if (event.key == 'Enter') { event.preventDefault(); }
+		});
+		
+		this.htmlNode.addEventListener('keyup', event => {
 			if (event.key == 'Enter') {
 				if (this.htmlNode.textContent.length > 0)
 					addNewParagraph(this);

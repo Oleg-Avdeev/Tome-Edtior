@@ -40,6 +40,14 @@ var NodeContextRenderer = {
 
 		this.createItem('Удалить Блок', 'danger', () => {
 			Story.json.Scenes = Story.json.Scenes.filter(s => s.Id != this.node.scene.Id);
+
+			Story.json.Scenes.forEach(scene => scene.Lines.forEach(line => {
+				if (line.Actions.find(a => a.ActionType === 1 && a.Value == this.node.scene.Id))
+				{
+					console.warn('TODO: Remove references to the removed scene');
+				}
+			}));
+
 			Story.updateTree();
 			Story.invalidate();
 		});
@@ -86,7 +94,7 @@ var NodeContextRenderer = {
 					this.node.color = '#eee';
 				else this.node.color = color;
 
-				this.node.htmlNode.style.stroke = this.node.color;
+				this.node.htmlNode.style.setProperty('--node-color', this.node.color);
 				
 				let data = Story.meta.sceneColors.find(sc => sc.Id === this.node.scene.Id);
 				if (!data)

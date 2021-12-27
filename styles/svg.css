@@ -4,7 +4,7 @@
 	ry: 2;
 
 	fill: #222;
-	stroke: #eee; 
+	stroke: var(--node-color); 
 	stroke-width: 1;
 
 	width: 20px;
@@ -18,17 +18,21 @@
 }
 
 .node:hover {
-	stroke: #fff; 
+	stroke: var(--node-color); 
 	stroke-width: 1;
-	cursor: default;
+	cursor: pointer;
 }
 
 .edge {
 	fill: rgb(104, 35, 35);
 }
 
+.next-tree {
+	fill: #2f571f;
+}
+
 .selected {
-	fill: #eee;
+	fill: var(--node-color);
 	font: bold 30px sans-serif;
 	transform: rotate( 45deg );
 	rx: 5;
@@ -46,8 +50,8 @@ text.new {
 
 text.node-id {
 	fill: #222;
-	font-family: 'Courier New', monospace;
-	font-size: 8pt;
+	font-family: 'Ubuntu Mono', monospace;
+	font-size: 6pt;
 	display: block;
 }
 

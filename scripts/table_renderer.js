@@ -2,6 +2,7 @@ let displayTable = function(chapter) {
 	var container = document.getElementById('chapter-table');
 	container.textContent = '';
 
+	container.appendChild(createTableName(chapter.Lines[0]));
 	container.appendChild(createHeader(chapter.Lines[0]));
 
 	chapter.Lines.forEach(line => {
@@ -10,9 +11,22 @@ let displayTable = function(chapter) {
 	});
 };
 
+let createTableName = function(line) {
+	
+	let colorData = Story.meta.sceneColors.find(sc => sc.Id === line.Scene);
+	let color = colorData ? colorData.color : '#eee';
+
+	const caption = document.createElement('caption');
+	let sceneId = line.Scene;
+
+	caption.textContent = sceneId;
+	caption.style.setProperty('--color', color);
+	return caption;
+};
+
 let createHeader = function(line) {
 	const row = document.createElement('tr');
-	let keys = Object.keys(line);
+	let keys = Object.keys(line).filter(k => k != 'Scene');
 
 	keys.forEach((value, index) => {
 		const cell = document.createElement('th');
@@ -30,11 +44,17 @@ let createRow = function(line) {
 	const keys = Object.keys(line);
 	
 	values.forEach((value, index) => {
+		
+		if (index == 0) return;
+		
 		const cell = document.createElement('td');
 		
 		if (keys[index] == 'Actions')
 			value = ActionParser.toText(value);
 		
+		if (keys[index] == 'Conditions')
+			value = ConditionParser.toText(value);
+
 		if (!value)
 			value = '-';
 

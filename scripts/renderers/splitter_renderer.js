@@ -1,7 +1,7 @@
 function dragElement(element, direction) {
 	var md; // remember mouse down info
 	const leftElement = document.getElementsByClassName('left')[0];
-	const rightElement = document.getElementsByClassName('right')[0];
+	const rightElements = document.getElementsByClassName('right');
 	const editorPanel = document.getElementsByClassName('editor')[0];
 
 	element.onmousedown = onMouseDown;
@@ -13,7 +13,7 @@ function dragElement(element, direction) {
 			offsetLeft: element.offsetLeft,
 			offsetTop: element.offsetTop,
 			firstWidth: leftElement.offsetWidth,
-			secondWidth: rightElement.offsetWidth
+			secondWidth: rightElements[0].offsetWidth
 		};
 
 		document.onmousemove = onMouseMove;
@@ -35,7 +35,9 @@ function dragElement(element, direction) {
 			delta.x = Math.min(Math.max(delta.x, -md.firstWidth), md.secondWidth);
 			
 			leftElement.style.width = (md.firstWidth + delta.x) + 'px';
-			rightElement.style.width = (editorPanel.clientWidth) - (element.clientWidth) - (md.firstWidth + delta.x) + 'px';
+			for (let i = 0; i < rightElements.length; i++)
+				rightElements[i].style.width = (editorPanel.clientWidth) - (element.clientWidth) - (md.firstWidth + delta.x) + 'px';
+
 			element.style.left = leftElement.style.width;
 		}
 	}

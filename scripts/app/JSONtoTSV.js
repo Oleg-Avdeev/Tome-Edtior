@@ -16,7 +16,7 @@ exports.build = function (document) {
 };
 
 let getHeader = function (document) {
-	return ['Scene'].concat(Object.keys(document.Scenes[0].Lines[0]));
+	return Object.keys(document.Scenes[0].Lines[0]);
 };
 
 let buildLine = function (header, line) {

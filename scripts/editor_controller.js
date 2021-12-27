@@ -18,11 +18,16 @@ function setProject( documents ) {
 	projectBrowser.setDocuments(documents);
 }
 
+function setMetaData( metadata ) {
+	
+}
+
 function onSceneSelect(sceneId) {
 	selectNodeById(sceneId);
 
 	let scene = getSceneById(sceneId);
 	displayChapter(scene);
+	// displayTable(scene);
 }
 
 function onTreeUpdate(tree) {

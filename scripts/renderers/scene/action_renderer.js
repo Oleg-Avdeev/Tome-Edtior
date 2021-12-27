@@ -19,8 +19,11 @@ class ActionView {
 
 		this.currentText = actionView.textContent;
 		this.htmlNode = actionView;
+		this.inputNode = input;
 		this.paragraph = paragraph;
 		this.line = line;
+
+		this.tagRE = /<[^>]*>/;
 
 		input.addEventListener('focus', () => { this.isFocused = true; });
 		input.addEventListener('blur', () => { this.isFocused = false; this.destroy(); });
@@ -43,6 +46,10 @@ class ActionView {
 	}
 
 	onTextChange(text) {
+		
+		text = text.replace(this.tagRE, '');
+		this.inputNode.textContent = text;
+
 		if (text != this.currentText) {
 			var newActions = ActionParser.parse(text);
 			

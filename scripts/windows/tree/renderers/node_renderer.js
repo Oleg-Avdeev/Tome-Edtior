@@ -11,13 +11,21 @@ class TreeNode {
 		this.node.setAttribute('x', nodeData.x - 10);
 		this.node.setAttribute('y', nodeData.y - 10);
 		this.node.classList.add('node');
-		this.node.style.stroke = nodeData.color;
+		this.node.style.setProperty('--node-color', nodeData.color);
 
 		this.node.onmouseenter = () => nodeIdRenderer.draw(nodeData);
 		this.node.onmouseleave = () => nodeIdRenderer.hide();
 
 		if (connectionsMap.has(nodeData) && connectionsMap.get(nodeData).length == 0)
-			this.node.classList.add('edge');
+		{
+			let isPointingToTheNextTree = this.nodeData.scene.Lines.find(line => 
+				line.Actions.find(a => a.Value === '@NEXTTREE'));
+			
+			if (isPointingToTheNextTree)
+				this.node.classList.add('next-tree');
+			else
+				this.node.classList.add('edge');
+		}
 
 		this.node.onclick = e => this.onClick(e);
 		this.node.onmouseup = e => this.onRightClick(e);

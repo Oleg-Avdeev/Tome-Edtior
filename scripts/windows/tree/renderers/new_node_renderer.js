@@ -12,10 +12,13 @@ var NewNode = {
 		let indexInLine = 0;
 		
 		let depthSlice = depthMap.get(parentNode.depth + 1);
-		if (depthSlice) indexInLine = depthSlice.length;
+		if (depthSlice) 
+		{
+			indexInLine = newNode.x < 0 ? -1 : depthSlice.length;
+			newNode.x = xOffset * WMap(indexInLine, depthSlice.length);
+		}
 		
 		newNode.depth = parentNode.depth + 1;
-		newNode.x = xOffset * WMap(indexInLine, Math.max(1, indexInLine));
 		newNode.y = yOffset * newNode.depth;
 
 		this.destroy();

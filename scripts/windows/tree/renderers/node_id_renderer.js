@@ -51,6 +51,6 @@ var NodeIdRenderer = {
 	},
 
 	_getStringLength: function(string) {
-		return string.length * 6.5;
+		return string.length * 6.5 * 5/8;
 	}
 };

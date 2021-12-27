@@ -1,8 +1,17 @@
 .chapter-table {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: 'Ubuntu Mono', monospace;
 	border-collapse: collapse;
 	table-layout: fixed;
 	width: 100%;
+}
+
+.chapter-table caption {
+	text-align: left;
+	background-color: #222;
+	color: var(--color);
+	/* border: 2px solid var(--color); */
+	font-weight: bold;
+	padding: 8px;
 }
   
 .chapter-table td, .chapter-table th {	

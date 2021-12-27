@@ -79,4 +79,4 @@ const Title = {
 			this.htmlNode.classList.add('invalid');
 		}
 	}
-}
+};
