@@ -1,9 +1,11 @@
 
+// Deprecated
 var NewNode = {
 	node : null,
 	line : null,
 	plus : null,
 	parentNode : null,
+	initialized: false,
 
 	draw : function (parentNode) {
 		this.parentNode = parentNode;
@@ -43,6 +45,15 @@ var NewNode = {
 		container.appendChild(this.node);
 		container.appendChild(this.line);
 		container.appendChild(this.plus);
+
+		this.checkMode(EditorMode.currentMode.value);
+	},
+
+	checkMode: function(mode) {
+		if (!this.node) return;
+		this.node.style.display = mode === 'edit' ? 'block' : 'none';
+		this.line.style.display = mode === 'edit' ? 'block' : 'none';
+		this.plus.style.display = mode === 'edit' ? 'block' : 'none';
 	},
 
 	destroy : function() {

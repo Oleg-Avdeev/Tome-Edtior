@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-	"build": "electron-packager . --overwrite"
+	"build": "electron-packager . --overwrite --icon=./tome.icns"
   },
   "keywords": [],
   "author": "Oleg Avdeev",

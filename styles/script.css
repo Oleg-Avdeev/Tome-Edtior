@@ -65,7 +65,7 @@
 .script .invalid::after {
 	display: inline-block;
 
-	content: 'Invalid ID';
+	content: attr(error);
 	background-color: red;
 	border: white;
 	color: white;
@@ -73,6 +73,7 @@
 	padding-left: 10px;
 	padding-right: 10px;
     margin-left: 10px;
+	font-size: 12pt;
 }
 
 .script .action {

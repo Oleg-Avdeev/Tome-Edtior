@@ -22,13 +22,21 @@
 
 .toolbar-button {
 	display: block;
-	padding: 10px;
+	padding: 5px;
 	height: 30px;
 
-	color: #eee8;
 	text-decoration: none;
-	border-radius: 2px;
-    border-bottom: solid 1px #eee4;
+	
+	border-radius: 10px;
+	border-color: #eee0;
+	border-width: 3px;
+	border-style: solid;
+	margin-bottom: 5px;
+}
+
+.toolbar-button.active {
+	background-color: #eee1;
+	border-color: #eee;
 }
 
 .toolbar-button.current {
@@ -41,9 +49,4 @@
 	color: #fff;
 	cursor: pointer;
   	background-color: #eee4;
-}
-
-.toolbar-button:last-child {
-	margin-bottom: 0;
-	border-bottom: none;
 }

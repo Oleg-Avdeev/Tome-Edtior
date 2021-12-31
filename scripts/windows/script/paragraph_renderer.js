@@ -1,6 +1,6 @@
 class Paragraph {
 
-	constructor(line, character) {
+	constructor(line, character, contextMenuRenderer) {
 		const paragraph = document.createElement('p');
 		const content = document.createElement('span');
 		const condition = document.createElement('span');
@@ -20,6 +20,7 @@ class Paragraph {
 		character.setTargetParagraph(paragraph);
 
 		this.htmlNode = paragraph;
+		this.contextMenuRenderer = contextMenuRenderer;
 		this.character = character.htmlNode;
 		this.line = line;
 
@@ -58,6 +59,8 @@ class Paragraph {
 			this.actionView.onOwnerLostFocus();
 			this.actionView = null;
 		});
+
+		this.htmlNode.onmouseup = e => this.onRightClick(e);
 	}
 
 	setAsActionable() {
@@ -67,15 +70,22 @@ class Paragraph {
 			this.htmlNode.classList.add('goto');
 			this.gotoTarget = getSceneById(action.Value);
 			this.htmlNode.onclick = event => this.onActionClick(event);
+			this.htmlNode.setAttribute('error', '');
+			this.isGotoId = action.Value;
 
 			if (!this.gotoTarget)
+			{
 				this.htmlNode.classList.add('invalid');
+				this.htmlNode.setAttribute('error', `Сцена "${action.Value}" не найдена`);
+			}
 		}
 		else {
 			this.htmlNode.classList.remove('goto');
 			this.htmlNode.classList.remove('invalid');
-			this.htmlNode.onclic = null;
+			this.htmlNode.setAttribute('error', '');
+			this.htmlNode.onclick = null;
 			this.gotoTarget = null;
+			this.isGotoId = null;
 		}
 	}
 
@@ -102,5 +112,10 @@ class Paragraph {
 			this.htmlNode.classList.add('approved');
 		else 
 			this.htmlNode.classList.add('pending');
+	}
+
+	onRightClick(e) {
+		if (e.button === 2)
+			this.contextMenuRenderer.draw(this, { x: e.clientX, y: e.clientY }, this.isGotoId && !this.gotoTarget);
 	}
 }

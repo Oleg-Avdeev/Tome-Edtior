@@ -65,6 +65,18 @@ let render = function (json) {
 		
 	new CollisionReductionPass(depthMap, connectionsMap, xOffset, yOffset).execute();
 
+	if (Story.meta.customOffsets) {
+		Story.meta.customOffsets.forEach(offset => {
+			let node = nodes.find(n => n.scene.Id === offset.Id);
+			if (node)
+			{
+				node.x += offset.x;
+				node.y += offset.y;
+				updateBoundingBox(node);
+			}
+		});
+	}
+
 	container.setAttribute('viewBox', `${minX} ${minY} ${maxX - minX} ${maxY - minY}`);
 
 	for (const entry of connectionsMap.entries()) {
@@ -95,8 +107,6 @@ let selectNode = function (node) {
 
 	currentNode = node;
 	currentNode.htmlNode.classList.add('selected');
-
-	NewNode.draw(node);
 };
 
 let getConnections = function (node) {
@@ -107,9 +117,6 @@ let getConnections = function (node) {
 				var n = findNodeById(action.Value);
 				if (n != null) {
 					actions.push({ 'node': n, 'ignoreDepthPass': action.Cyclical });
-				}
-				else {
-					console.error(`Node ${action.Value} not found`);
 				}
 			}
 		});

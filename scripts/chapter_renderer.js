@@ -2,6 +2,10 @@ let container = document.getElementById('chapter-container');
 let currentChapter;
 
 let displayChapter = function (chapter) {
+	
+	ContextMenuRenderer.destroy();
+	ContextMenuRenderer.initialize();
+
 	container = document.getElementById('chapter-container');
 	container.textContent = '';
 	currentChapter = chapter;
@@ -14,7 +18,7 @@ let displayChapter = function (chapter) {
 
 let createParagraph = function (line, index) {
 	const character = new Character(line);
-	const paragraph = new Paragraph(line, character);
+	const paragraph = new Paragraph(line, character, ContextMenuRenderer);
 
 	let lineDiv = document.createElement('div');
 	lineDiv.appendChild(character.htmlNode);
@@ -24,11 +28,13 @@ let createParagraph = function (line, index) {
 	container.insertBefore(lineDiv, container.childNodes[index + 1]);
 };
 
-let addNewParagraph = function (paragraph) {
+let addNewParagraph = function (paragraph, addAbove) {
 	let line = { ...paragraph.line };
 	line['checksum'] = null;
 	
-	let index = currentChapter.Lines.findIndex(line => line == paragraph.line) + 1;
+	let indexOffset = 1;
+	if (addAbove) indexOffset = 0;
+	let index = currentChapter.Lines.findIndex(line => line == paragraph.line) + indexOffset;
 
 	line.Character = '?';
 	line.Text = '...';

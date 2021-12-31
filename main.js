@@ -1,17 +1,11 @@
 const { app, BrowserWindow } = require('electron');
 const Project = require('./scripts/data/project/project_data');
-const { ipcMain } = require('electron');
 const menu = require('./scripts/app/menu');
-const Story = require('./scripts/app/story');
 const path = require('path');
 const Store = require('electron-store');
 
 const store = new Store();
 let win;
-
-ipcMain.on('select-scene', (event, args) => {
-	store.set('document.scene', args);
-});
 
 function createWindow() {
 	win = new BrowserWindow({
@@ -21,10 +15,12 @@ function createWindow() {
 			contextIsolation: true,
 			enableRemoteModule: false,
 			preload: path.join(__dirname, 'preload.js')
-		}
+		},
+		icon: __dirname + '/tome.icns'
 	});
 
 	win.loadFile('index.html');
+	// win.webContents.openDevTools();
 	
 	menu.setWindow(win);
 	menu.buildMenu();

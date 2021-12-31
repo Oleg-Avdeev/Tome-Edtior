@@ -38,18 +38,16 @@ var NodeContextRenderer = {
 
 		this.createColorPalette();
 
+		this.createItem('Вставить Предыдущий Блок', '', () => {
+			StoryHelper.createPreviousScene(this.node.scene);
+		});
+
+		this.createItem('Добавить Следующий Блок', '', () => {
+			StoryHelper.createNextScene(this.node.scene);
+		});
+
 		this.createItem('Удалить Блок', 'danger', () => {
-			Story.json.Scenes = Story.json.Scenes.filter(s => s.Id != this.node.scene.Id);
-
-			Story.json.Scenes.forEach(scene => scene.Lines.forEach(line => {
-				if (line.Actions.find(a => a.ActionType === 1 && a.Value == this.node.scene.Id))
-				{
-					console.warn('TODO: Remove references to the removed scene');
-				}
-			}));
-
-			Story.updateTree();
-			Story.invalidate();
+			StoryHelper.deleteScene(this.node.scene);
 		});
 
 		document.getElementById('editor').appendChild(this.menu);
@@ -67,7 +65,7 @@ var NodeContextRenderer = {
 
 		let item = document.createElement('li');
 		item.classList.add('context-item');
-		item.classList.add(style);
+		if (style) item.classList.add(style);
 		item.textContent = text;
 
 		item.onclick = () => action();
