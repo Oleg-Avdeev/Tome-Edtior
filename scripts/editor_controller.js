@@ -1,8 +1,12 @@
 let projectBrowser = new ProjectRenderer();
 let toolbar = new ToolbarRenderer(projectBrowser);
+let tabs = new TabsRenderer();
+
+let ProjectMeta = {};
 
 document.addEventListener('DOMContentLoaded', function() {
 	toolbar.initialize();
+	tabs.initialize();
 });
 
 // Editor entry function
@@ -19,7 +23,7 @@ function setProject( documents ) {
 }
 
 function setMetaData( metadata ) {
-	
+	ProjectMeta = metadata;
 }
 
 function onSceneSelect(sceneId) {
@@ -27,7 +31,7 @@ function onSceneSelect(sceneId) {
 
 	let scene = getSceneById(sceneId);
 	displayChapter(scene);
-	// displayTable(scene);
+	displayTable(scene);
 }
 
 function onTreeUpdate(tree) {

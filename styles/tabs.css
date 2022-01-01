@@ -1,0 +1,33 @@
+.editor-tabs {
+
+	background-color: #eee;
+	font-size: small;
+
+	z-index: 10;
+	display: block;
+	position: absolute;
+	top: -60px;
+	right: 0;
+
+	border-radius: 10px 0px 0px 10px;
+}
+
+.tabs-button {
+	display: block;
+	padding: 5px;
+	height: 15px;
+	margin: 5px;
+
+	border-bottom: solid;
+	border-width: 2px;
+	border-color: #eee;
+}
+
+.tabs-button.active {
+	border-color: #222;
+}
+
+.tabs-button:hover {
+	cursor: pointer;
+  	background-color: #2221;
+}

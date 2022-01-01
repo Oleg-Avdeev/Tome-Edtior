@@ -3,8 +3,9 @@ var ContextMenuRenderer = {
 	menu: null,
 	list: null,
 	node: null,
+	groups: [],
 
-	draw: function (targetParagraph, menuPosition, isMissingScene) {
+	draw: function (targetParagraph, menuPosition) {
 		
 		this.targetParagraph = targetParagraph;
 		this.menu.classList.remove('hidden');
@@ -12,12 +13,7 @@ var ContextMenuRenderer = {
 		this.menu.style.left = menuPosition.x + 'px';
 		this.menu.style.top = menuPosition.y + 'px';
 
-		if (isMissingScene) 
-			this.resolveSceneItem.classList.remove('hidden');
-		else this.resolveSceneItem.classList.add('hidden');
-		
-		// this.menu.style.borderColor = targetNode.color;
-		// this.nodeId.textContent = targetNode.scene.Id;
+		this.groups.forEach(group => this.clearGroup(group.key));
 	},
 
 	hide: function () {
@@ -33,9 +29,7 @@ var ContextMenuRenderer = {
 		this.menu.classList.add('context-menu');
 		this.menu.classList.add('hidden');
 		this.menu.appendChild(this.list);
-		
-		this.resolveSceneItem = 
-			this.createItem('Создать Сцену', 'resolve separated', () => this.resolveMissingScene());
+
 		this.createItem('Добавить Сверху', '', () => this.addLineAbove());
 		this.createItem('Добавить Снизу', '', () => this.addLineBelow());
 		this.createItem('Удалить Реплику', 'danger', () => this.removeLine());
@@ -47,7 +41,7 @@ var ContextMenuRenderer = {
 		window.onresize += e => this.hide();
 	},
 
-	createItem: function ( text, styles, action ) {
+	createItem: function ( text, styles, action, group ) {
 
 		let item = document.createElement('li');
 		item.classList.add('context-item');
@@ -59,7 +53,46 @@ var ContextMenuRenderer = {
 		item.onclick = () => action();
 
 		this.list.appendChild(item);
+
+		if (group)
+		{
+			let itemsGroup = this.groups.find(g => g.key == group);
+			if (!itemsGroup)
+			{
+				itemsGroup = { key: group, items: [] };
+				this.groups.push(itemsGroup);
+			}
+			
+			itemsGroup.items.push(item);
+		}
+
 		return item;
+	},
+
+	createSeparator: function ( group ) {
+		let item = document.createElement('li');
+		item.classList.add('context-item-separator');
+		this.list.appendChild(item);
+
+		if (group)
+		{
+			let itemsGroup = this.groups.find(g => g.key == group);
+			if (!itemsGroup)
+			{
+				itemsGroup = { key: group, items: [] };
+				this.groups.push(itemsGroup);
+			}
+			
+			itemsGroup.items.push(item);
+		}
+	},
+
+	clearGroup(group) {
+		let itemsGroup = this.groups.find(g => g.key == group);
+		if (!itemsGroup) return;
+
+		itemsGroup.items.forEach(item => item.parentNode.removeChild(item));
+		itemsGroup.items = [];
 	},
 
 	resolveMissingScene() {
@@ -75,20 +108,24 @@ var ContextMenuRenderer = {
 		Story.json.Scenes.push(newScene);
 		Story.updateTree();
 		Story.invalidate();
+		onSceneSelect(Story.currentSceneId);
 
 		this.targetParagraph.setAsActionable();
 	},
 
 	addLineAbove() {
 		addNewParagraph(this.targetParagraph, true);
+		onSceneSelect(Story.currentSceneId);
 	},
 
 	addLineBelow() {
 		addNewParagraph(this.targetParagraph);
+		onSceneSelect(Story.currentSceneId);
 	},
 
 	removeLine() {
 		removeParagraph(this.targetParagraph);
+		onSceneSelect(Story.currentSceneId);
 	},
 
 	destroy: function () {

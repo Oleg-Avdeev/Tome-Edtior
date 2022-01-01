@@ -4,6 +4,10 @@ body {
 	margin: 0px;
 }
 
+.hidden {
+	display: none;
+}
+
 .editor {
 	height: 100%;
 	width: 100%;
@@ -147,7 +151,11 @@ body {
 	background-color: red;
 }
 
-.context-item.separated {
+.context-item-separator {
+	display: block;
+	padding: 5px 10px;
+
+	border-radius: 2px;
 	margin-bottom: 7px;
 	border-bottom: solid 1px #eee4;
 }

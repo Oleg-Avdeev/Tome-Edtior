@@ -116,6 +116,15 @@ class Paragraph {
 
 	onRightClick(e) {
 		if (e.button === 2)
-			this.contextMenuRenderer.draw(this, { x: e.clientX, y: e.clientY }, this.isGotoId && !this.gotoTarget);
+		{
+			this.contextMenuRenderer.draw(this, { x: e.clientX, y: e.clientY });
+			
+			if (this.isGotoId && !this.gotoTarget)
+			{
+				this.contextMenuRenderer.createSeparator('resolve');
+				this.contextMenuRenderer.createItem('Создать Сцену', 'resolve', 
+					() => this.contextMenuRenderer.resolveMissingScene(), 'resolve');
+			}
+		}
 	}
 }

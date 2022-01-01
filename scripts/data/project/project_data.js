@@ -5,6 +5,7 @@ const { ipcMain } = require('electron');
 const parse = require('papaparse');
 const tsvParser = require('../../app/TSVParser');
 const tsvBuilder = require('../../app/JSONtoTSV');
+const Meta = require('./meta_data');
 
 module.exports = class Project {
 
@@ -15,6 +16,7 @@ module.exports = class Project {
 		this.path = path;
 		this.store = new Store();
 		this.name = segments[segments.length - 1];
+		this.metaBuilder = new Meta();
 
 		Project.Current = this;
 	}
@@ -54,7 +56,7 @@ module.exports = class Project {
 		if (!projectContents.find(f => f === 'meta'))
 			fs.mkdirSync(`${this.path}/meta`);
 		
-		this.storyFileNames = projectContents.filter(file => file.match(/.*\.tsv/));
+		this.storyFileNames = projectContents.filter(file => file.match(/.*\.tsv$/));
 
 		this.storyFileNames
 			.filter(file => !fs.existsSync(this.getMetaPath(file)))
@@ -87,7 +89,7 @@ module.exports = class Project {
 
 		this.projectData = {
 			names: this.name,
-			documents: []
+			documents: [],
 		};
 
 		this.storyFileNames.forEach(filename => {
@@ -95,8 +97,11 @@ module.exports = class Project {
 			this.projectData.documents.push(document);
 		});
 
+		let lookup = this.metaBuilder.buildLookup(this.projectData.documents);
+
 		var metaDataJSON = fs.readFileSync(`${this.path}/project-meta.json`).toString();
 		this.metaData = JSON.parse(metaDataJSON);
+		this.metaData.lookup = lookup;
 
 		let currentDocumentIndex = this.storyFileNames.indexOf(this.metaData.currentDocument);
 		if (currentDocumentIndex < 0) currentDocumentIndex = 0;
@@ -111,10 +116,14 @@ module.exports = class Project {
 			let file = this.getMetaPath( args.meta.fileName );
 			let json = JSON.stringify( args, null, 2 );
 			
-			let index = this.storyFileNames.indexOf(file);
+			let index = this.storyFileNames.indexOf(args.meta.fileName);
 			this.projectData.documents[index] = json;
-			
+
 			fs.writeFileSync( file, json );
+			
+			this.metaData.lookup = lookup;
+			metaDataJSON = JSON.stringify(this.metaData, null, 2);
+			fs.writeFileSync(`${this.path}/project-meta.json`, metaDataJSON);
 		});
 
 		ipcMain.on('select-document', (event, file) => {

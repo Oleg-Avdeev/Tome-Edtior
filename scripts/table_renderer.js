@@ -47,21 +47,9 @@ let createRow = function(line) {
 		
 		if (index == 0) return;
 		
-		const cell = document.createElement('td');
-		
-		if (keys[index] == 'Actions')
-			value = ActionParser.toText(value);
-		
-		if (keys[index] == 'Conditions')
-			value = ConditionParser.toText(value);
+		let cell = new Cell(line, keys[index], value);
+		row.appendChild(cell.htmlCell);
 
-		if (!value)
-			value = '-';
-
-		cell.textContent = value;
-		cell.classList.add(`column-${keys[index].replace(' ', '')}`);
-		cell.contentEditable = true;
-		row.appendChild(cell);
 	});
 
 	return row;

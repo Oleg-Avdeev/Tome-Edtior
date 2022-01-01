@@ -16,8 +16,12 @@ function createWindow() {
 			enableRemoteModule: false,
 			preload: path.join(__dirname, 'preload.js')
 		},
-		icon: __dirname + '/tome.icns'
+		icon: __dirname + '/build/tome.icns'
 	});
+
+	if (process.platform === 'darwin') {
+		app.dock.setIcon(path.join(__dirname, 'build/tome.png'));
+	}	
 
 	win.loadFile('index.html');
 	// win.webContents.openDevTools();

@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="styles/style.css">
 	<link rel="stylesheet" href="styles/svg.css">
 	<link rel="stylesheet" href="styles/script.css">
+	<link rel="stylesheet" href="styles/tabs.css">
 	<link rel="stylesheet" href="styles/table.css">
 	<link rel="stylesheet" href="styles/toolbar.css">
 	<link rel="stylesheet" href="styles/proofreading.css">
@@ -21,6 +22,7 @@
 	<script src="./scripts/data/story_helper.js"></script>
 	
 	<script src="./scripts/renderers/splitter_renderer.js"></script>
+	<script src="./scripts/windows/toolbar/tabs_renderer.js"></script>
 	<script src="./scripts/windows/toolbar/toolbar_renderer.js"></script>
 	<script src="./scripts/windows/project/project_renderer.js"></script>
 
@@ -45,6 +47,7 @@
 	<script src="./scripts/windows/script/context_menu_renderer.js"></script>
 	<script src="./scripts/chapter_renderer.js"></script>
 	
+	<script src="./scripts/windows/table/cell_renderer.js"></script>
 	<script src="./scripts/table_renderer.js"></script>
 
 	<script src="./scripts/editor_controller.js"></script>
@@ -68,7 +71,7 @@
 		<div class="splitter" id="splitter">
 		</div>		`
 		
-		<div class="split right">
+		<div class="split right" id="table-container">
 			<table class="chapter-table" id="chapter-table">
 			</table>
 		</div>
