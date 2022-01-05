@@ -30,7 +30,9 @@ let createHeader = function(line) {
 
 	keys.forEach((value, index) => {
 		const cell = document.createElement('th');
-		cell.classList.add(`column-${keys[index].replace(' ', '')}`);
+
+		let safeKey = keys[index].replaceAll(/[^a-z]/ig, '');
+		cell.classList.add(`column-${safeKey}`);
 		cell.textContent = value;
 		row.appendChild(cell);
 	});

@@ -14,8 +14,9 @@ class Cell {
 
 		if (!value)
 			value = '-';
-	
-		this.htmlCell.classList.add(`column-${key.replace(' ', '')}`);
+		
+		let safeKey = key.replaceAll(/[^a-z]/ig, '');
+		this.htmlCell.classList.add(`column-${safeKey}`);
 		this.htmlCell.contentEditable = true;
 		this.htmlCell.textContent = value;
 
