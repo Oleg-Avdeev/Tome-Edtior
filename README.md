@@ -38,3 +38,14 @@ For a more thorough integration that would run your story in one of the popular 
 ## Downloads 
 
 WIP... 
+
+## Contributions 
+
+Are welcome. However a note of warning, this is a passion project that I do for fun, and for one reason or another the definiion of fun for me is doing it in vanila JS without having any prior experience in writing JS apps. Am I ignoring 10+ years of web development tech that could make my life easier and the code prettier? Yes. It works really fast though!
+
+## Cool alternatives
+
+TOME is not the only tool out there to write stories. If you don't care too much about the meta-data and having everything in one file, might I introduce you to:
+
+- [Twine](https://twinery.org) — An open-source tool for telling interactive, nonlinear stories. You can make a full game just using it with some extensions. However it's not as easy to integrate into a game engine
+- [Inky](https://www.inklestudios.com/ink/) — A narrative scripting language for games. A very good tool for writing complex dialogues and stories with text-first approach. It has been very well tested, it's open-source, it has game engine integrations, give it a try!
