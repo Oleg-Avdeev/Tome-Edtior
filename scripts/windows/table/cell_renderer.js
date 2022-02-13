@@ -42,6 +42,23 @@ class Cell {
 		{
 			ContextMenuRenderer.draw(this, { x: e.clientX, y: e.clientY }, false);
 
+			ContextMenuRenderer.createItem( 'Разбить на Реплики', '', () => {
+				
+				let newLines = this.htmlCell.innerHTML
+					.split('<br>')
+					.flatMap(l => l.split('/'))
+					.filter(l => l);
+ 
+				for (let i = 1; i < newLines.length; i++) {
+					this.line['Text'] = newLines[newLines.length - i];
+					addNewParagraph(this, false, true);
+				}
+					
+				this.line['Text'] = newLines[0];
+				Story.invalidate();
+				onSceneSelect(Story.currentSceneId);
+			}, 'cell-actions');
+			
 			let existingValues = ProjectMeta.lookup.find(l => l.key == this.key);
 			if (existingValues)
 			{

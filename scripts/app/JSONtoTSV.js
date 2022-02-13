@@ -1,4 +1,5 @@
 const actionsParser = require('./ActionParser');
+const { ConditionParser } = require('./ConditionsParser');
 
 exports.build = function (document) {
 	let header = getHeader(document);
@@ -8,6 +9,8 @@ exports.build = function (document) {
 		scene.Lines.forEach(line => {
 			line.Scene = scene.Id;
 			line.Actions = actionsParser.toText(line.Actions);
+			line.Conditions = ConditionParser.toText(line.Conditions);
+
 			let tsvLine = buildLine(header, line);
 			body = body + '\n' + tsvLine;
 		});

@@ -1,5 +1,37 @@
 const StoryHelper = {
 
+	createSceneDescriptions : function() {
+
+		Story.json.Scenes.forEach(scene => {
+
+			if (scene.Lines[0].Character == 'SCENE')
+				return;
+				
+			let line = {
+				'Scene': scene.Id,
+				'Character': 'SCENE',
+				'Text': '',
+				'Счётчик': '',
+				'Actions': [],
+				'Conditions': [],
+				'Локация': scene.Lines[0]['Локация'],
+				'Музыка': '',
+				'Агата': '0',
+				'Елена': '1',
+				'Кристина': '2',
+				'Дух-Дождя': '3',
+				'Михаэль': '3',
+				'Девушка+': '',
+				'Девушка-': ''
+			};
+
+			scene.Lines = [ line ].concat(scene.Lines);
+			return;
+		});
+
+		Story.invalidate();
+	},
+
 	createScene : function(referenceScene, sceneId) {
 		
 		let newSceneId = sceneId ? sceneId : this.getUniqueSceneId(referenceScene.Id);

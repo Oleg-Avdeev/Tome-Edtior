@@ -28,8 +28,6 @@ module.exports = class Meta {
 			
 			if (uniqueValues.length > 0)
 				lookupTable.push({ key: key, values: uniqueValues });
-			
-			console.log(`${key} : ${uniqueValues}`);
 		});
 		
 		console.timeEnd('buildCharacterList');

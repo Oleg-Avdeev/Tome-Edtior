@@ -1,6 +1,11 @@
 const ActionType = Object.freeze({ 'goto' : 1, 'command' : 2, 'compute' : 3 });
 const OpenedBracket = ['', '[', '{', '('];
 const ClosedBracket = ['', ']', '}', ')'];
+const OperatorSigns = {
+	'plus':'+',
+	'minus':'-',
+	'assign':'='
+};
 
 const gotoRE = /\[([^[\]]*)\]/;
 const commandRE = /\{([^()]*)\}/;
@@ -24,7 +29,19 @@ exports.toText = function(actions) {
 		if (action.ActionType == ActionType.goto && action.Cyclical)
 			id = `*${id}`;
 
-		text += `${OpenedBracket[action.ActionType]}${id}${ClosedBracket[action.ActionType]}`;
+		if (action.ActionType == ActionType.goto)
+			text += `${OpenedBracket[action.ActionType]}${id}${ClosedBracket[action.ActionType]}`;
+		
+		if (action.ActionType == ActionType.command)
+			text += `${OpenedBracket[action.ActionType]}${id}${ClosedBracket[action.ActionType]}`;
+			
+		if (action.ActionType == ActionType.compute)
+		{
+			if (action.Operator == 'assign')
+				text += `${OpenedBracket[action.ActionType]}${action.Variable}=${action.Value}${ClosedBracket[action.ActionType]}`;
+			else 
+				text += `${OpenedBracket[action.ActionType]}${OperatorSigns[action.Operator]}${action.Variable}${ClosedBracket[action.ActionType]}`;
+		}
 	});
 	return text;
 };

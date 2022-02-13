@@ -92,6 +92,12 @@ let render = function (json) {
 		container.appendChild(node);
 	});
 
+	let scenePositions = [];
+	// nodes.forEach(n => scenePositions.push({id: n.scene.Id, x: n.x, y: n.y}));
+	
+	Story.meta.scenePositions = scenePositions;
+	Story.invalidate();
+
 	NodeIdRenderer.initialize();
 	NodeContextRenderer.initialize();
 };

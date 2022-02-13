@@ -28,7 +28,7 @@ let createParagraph = function (line, index) {
 	container.insertBefore(lineDiv, container.childNodes[index + 1]);
 };
 
-let addNewParagraph = function (paragraph, addAbove) {
+let addNewParagraph = function (paragraph, addAbove, copyContents) {
 	let line = { ...paragraph.line };
 	line['checksum'] = null;
 	
@@ -36,8 +36,11 @@ let addNewParagraph = function (paragraph, addAbove) {
 	if (addAbove) indexOffset = 0;
 	let index = currentChapter.Lines.findIndex(line => line == paragraph.line) + indexOffset;
 
-	line.Character = '?';
-	line.Text = '...';
+	if (!copyContents)
+	{
+		line.Character = '?';
+		line.Text = '...';
+	}
 
 	currentChapter.Lines.splice(index, 0, line);
 	Story.invalidate();
