@@ -69,6 +69,12 @@ var ContextMenuRenderer = {
 		return item;
 	},
 
+	reposition: function() {
+
+		//TODO: Move out of window edges
+
+	},
+
 	createSeparator: function ( group ) {
 		let item = document.createElement('li');
 		item.classList.add('context-item-separator');
@@ -99,7 +105,7 @@ var ContextMenuRenderer = {
 		let missingId = this.targetParagraph.isGotoId;
 		
 		let newLine = { ...this.targetParagraph.line };
-		newLine.Character = '?';
+		newLine.Character = 'Нарратор';
 		newLine.Actions = [];
 		newLine.Text = '...';
 		

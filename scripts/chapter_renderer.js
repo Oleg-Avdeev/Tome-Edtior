@@ -38,12 +38,22 @@ let addNewParagraph = function (paragraph, addAbove, copyContents) {
 
 	if (!copyContents)
 	{
-		line.Character = '?';
+		line.Character = 'Нарратор';
 		line.Text = '...';
 	}
 
 	currentChapter.Lines.splice(index, 0, line);
 	Story.invalidate();
+
+	registerCommand({redo: () => {
+		currentChapter.Lines.splice(index, 0, line);
+		Story.invalidate();
+		onSceneSelect(Story.currentSceneId);
+	}, undo: () => {
+		currentChapter.Lines.splice(index, 1);
+		Story.invalidate();
+		onSceneSelect(Story.currentSceneId);
+	}});
 
 	createParagraph(line, index);
 	container.childNodes[index + 1].childNodes[0].focus();
@@ -51,9 +61,21 @@ let addNewParagraph = function (paragraph, addAbove, copyContents) {
 
 let removeParagraph = function (paragraph) {
 	let index = currentChapter.Lines.findIndex(line => line == paragraph.line);
-	
+	let line = currentChapter.Lines[index];
+
 	currentChapter.Lines.splice(index, 1);
 	Story.invalidate();
+
+	registerCommand({redo: () => {
+		currentChapter.Lines.splice(index, 1);
+		Story.invalidate();
+		onSceneSelect(Story.currentSceneId);
+	}, undo: () => {
+		currentChapter.Lines.splice(index, 0, line);
+		Story.invalidate();
+		onSceneSelect(Story.currentSceneId);
+	}});
+	
 
 	container.removeChild(container.childNodes[index + 1]);
 };

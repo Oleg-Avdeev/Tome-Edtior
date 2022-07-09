@@ -79,7 +79,7 @@ var NewNode = {
 		this.parentNode.scene.Lines.push(newLink);
 
 		let newLine = { ...lastLine };
-		newLine.Character = '?';
+		newLine.Character = 'Нарратор';
 		newLine.Actions = [];
 		newLine.Text = '...';
 		

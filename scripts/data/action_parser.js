@@ -3,8 +3,8 @@ const OpenedBracket = ['', '[', '(', '{'];
 const ClosedBracket = ['', ']', ')', '}'];
 
 const gotoRE = /\[([^[\]]*)\]/;
-const commandRE = /\{([^()]*)\}/;
-const computeRE = /\(([^{}]*)\)/;
+const commandRE = /\(([^()]*)\)/;
+const computeRE = /\{([^{}]*)\}/;
 
 const ActionParser = {
 	parse: function (actions) {
@@ -26,7 +26,12 @@ const ActionParser = {
 				id = `*${id}`;
 			
 			if (action.ActionType == ActionType.compute)
-				id += action.Variable;
+			{
+				if (action.Operator == 'assign')
+					id = `${action.Variable}=${action.Value}`;
+				else
+					id += action.Variable;
+			}
 
 			text += `${OpenedBracket[action.ActionType]}${id}${ClosedBracket[action.ActionType]}`;
 		});
@@ -77,9 +82,9 @@ let parseCommand = function (actions) {
 	return [];
 };
 
-const plusRE = /([\\+])([a-zА-ЯA-Zа-я0-9]*)/;
-const minusRE = /([\\-])([a-zА-ЯA-Zа-я0-9]*)/;
-const assignRE = /([a-zА-ЯA-Zа-я0-9]*)\\=([\\-a-zА-ЯA-Zа-я0-9]*)/;
+const plusRE = /^([+])([a-zА-ЯA-Zа-я0-9]*)/;
+const minusRE = /^([-])([a-zА-ЯA-Zа-я0-9]*)/;
+const assignRE = /^([a-zА-ЯA-Zа-я0-9]*)=([-a-zА-ЯA-Zа-я0-9]*)/;
 
 let parseCompute = function (actions) {
 	const matches = computeRE.exec(actions);

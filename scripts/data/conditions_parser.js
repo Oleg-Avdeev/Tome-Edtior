@@ -14,7 +14,7 @@ const ConditionParser = {
 		var text = '';
 
 		conditions.forEach(condition => {
-			text = `${condition.Variable} ${condition.Operator} ${condition.Value}`;
+			text = `[${condition.Variable} ${condition.Operator} ${condition.Value}]`;
 		});
 
 		return text;

@@ -24,7 +24,7 @@ function createWindow() {
 	}	
 
 	win.loadFile('index.html');
-	// win.webContents.openDevTools();
+	win.webContents.openDevTools();
 	
 	menu.setWindow(win);
 	menu.buildMenu();
