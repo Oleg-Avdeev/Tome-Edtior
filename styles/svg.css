@@ -31,7 +31,7 @@
 	fill: #2f571f;
 }
 
-.selected {
+.node.selected {
 	fill: var(--node-color);
 	font: bold 30px sans-serif;
 	transform: rotate( 45deg );

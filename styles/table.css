@@ -38,3 +38,21 @@ th.column-Text {
 td.column-Text {
 	text-align: left; 
 }
+
+.chapter-table .selected {
+	border: rgb(255, 85, 0);
+	background-color: rgba(255, 85, 0, 0.1);
+	border-style: dotted;
+	border-width: 4px;
+}
+
+.chapter-table .collapsed {
+	width: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.chapter-table th.collapsed {
+	color: #ffffffaa;
+	border: thin dashed;
+}

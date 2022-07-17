@@ -1,3 +1,7 @@
+let cellFirst = { };
+let cellLast = { };
+let selectedCells = [];
+
 class Cell {
 
 	constructor(line, key, value) {
@@ -20,7 +24,7 @@ class Cell {
 		this.htmlCell.contentEditable = true;
 		this.htmlCell.textContent = value;
 
-		this.htmlCell.onmouseup = e => this.onRightClick(e);
+		this.htmlCell.onmouseup = e => this.onClick(e);
 
 		this.htmlCell.addEventListener('input', () => {
 			let content = this.htmlCell.textContent;
@@ -32,9 +36,33 @@ class Cell {
 				content = ConditionParser.parse(content);
 			
 			line[key] = content;
+			this.applyToSelectedCells(content);
 			
 			Story.invalidate();
 		});
+	}
+
+	onClick(e) {
+		if (e.button === 2)
+			this.onRightClick(e);
+
+		selectedCells.forEach(c => c.deselect());
+		selectedCells = [];
+
+		if (e.shiftKey)
+		{
+			cellLast = this;
+			let range = this.getRange();
+			
+			selectedCells = getCells(range[0], range[1], this.key);
+			selectedCells.forEach(c => c.select());
+
+			setTimeout(() => cellLast.htmlCell.focus(), 0);
+		}
+		else
+		{
+			cellFirst = this;
+		}
 	}
 
 	onRightClick(e) {
@@ -73,5 +101,28 @@ class Cell {
 			}
 
 		}
+	}
+
+	getRange() {
+		let index0 = currentChapter.Lines.findIndex(l => l == cellFirst.line);
+		let index1 = currentChapter.Lines.findIndex(l => l == cellLast.line);
+		let indexFirst = Math.min(index0, index1);
+		let indexLast = Math.max(index0, index1);
+		return [ indexFirst, indexLast ];
+	}
+
+	applyToSelectedCells(content) {
+		selectedCells.forEach(cell => cell.htmlCell.textContent = content);
+		selectedCells.forEach(cell => cell.line[cell.key] = content);
+		// selectedCells.forEach(c => c.deselect());
+		// selectedCells = [];
+	}
+
+	select() {
+		this.htmlCell.classList.add('selected');
+	}
+
+	deselect() {
+		this.htmlCell.classList.remove('selected');
 	}
 }
