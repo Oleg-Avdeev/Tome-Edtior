@@ -31,6 +31,11 @@
 	cursor: pointer;
 }
 
+.script .line {
+	max-width: 60ch;
+	margin-inline: auto;
+}
+
 .script p {
 	margin-left: 5%;
 	margin-right: 5%;

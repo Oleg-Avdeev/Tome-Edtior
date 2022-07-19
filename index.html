@@ -32,6 +32,7 @@
 	<script src="./scripts/windows/tree/renderers/node_renderer.js"></script>
 	<script src="./scripts/windows/tree/renderers/line_renderer.js"></script>
 	<script src="./scripts/windows/tree/renderers/borken_line_renderer.js"></script>
+	<script src="./scripts/windows/tree/renderers/curvy_line_renderer.js"></script>
 	<script src="./scripts/windows/tree/renderers/node_id_renderer.js"></script>
 	<script src="./scripts/windows/tree/renderers/new_node_renderer.js"></script>
 	<script src="./scripts/windows/tree/renderers/node_context_renderer.js"></script>
@@ -55,10 +56,12 @@
 </head>
 
 <body>
+	<div class="window-title"></div>
+
 	<svg>
 		<defs>
-			<marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-				<polygon points="0 0, 10 3.5, 0 7" />
+			<marker id="arrowhead" markerWidth="10" markerHeight="5" refX="0" refY="2.5" orient="auto">
+				<polygon points="0 0, 5 2.5, 0 5" />
 			</marker>
 		</defs>
 	</svg>

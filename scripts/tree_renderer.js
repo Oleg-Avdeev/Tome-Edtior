@@ -27,7 +27,7 @@ let render = function (json) {
 
 	json.Scenes.forEach(scene => {
 		if (scene.Id == '') return;
-		
+
 		let colorData = Story.meta.sceneColors.find(sc => sc.Id === scene.Id);
 		let color = colorData ? colorData.color : '#eee';
 
@@ -55,21 +55,20 @@ let render = function (json) {
 		entries[1].forEach(n => {
 			n.x = xOffset * WMap(index, entries[1].length);
 			n.y = yOffset * n.depth;
-			
-			if (!n.isPhantom) 
+
+			if (!n.isPhantom)
 				updateBoundingBox(n);
 
 			index++;
 		});
 	}
-		
+
 	new CollisionReductionPass(depthMap, connectionsMap, xOffset, yOffset).execute();
 
 	if (Story.meta.customOffsets) {
 		Story.meta.customOffsets.forEach(offset => {
 			let node = nodes.find(n => n.scene.Id === offset.Id);
-			if (node)
-			{
+			if (node) {
 				node.x += offset.x;
 				node.y += offset.y;
 				updateBoundingBox(node);
@@ -92,14 +91,53 @@ let render = function (json) {
 		container.appendChild(node);
 	});
 
+	renderGrid(container);
 	let scenePositions = [];
 	// nodes.forEach(n => scenePositions.push({id: n.scene.Id, x: n.x, y: n.y}));
-	
+
 	Story.meta.scenePositions = scenePositions;
 	Story.invalidate();
 
 	NodeIdRenderer.initialize();
 	NodeContextRenderer.initialize();
+};
+
+let renderGrid = function (container) {
+	let gridSize = 25;
+	let xSize = maxX / gridSize;
+	let ySize = maxY / gridSize;
+
+	let highlightFreq = 2;
+
+	for (let x = -xSize; x < xSize; x++) {
+		let lineSVG = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+		lineSVG.setAttribute('x1', x * gridSize);
+		lineSVG.setAttribute('x2', x * gridSize);
+		lineSVG.setAttribute('y1', -2000);
+		lineSVG.setAttribute('y2', 2000);
+		lineSVG.classList.add('grid-line');
+		
+		if (x % highlightFreq == 0)
+			lineSVG.classList.add('highlight');
+
+		container.prepend(lineSVG);
+	}
+
+	for (let y = -10; y < ySize; y++) {
+		let lineSVG = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+		lineSVG.setAttribute('y1', y * gridSize);
+		lineSVG.setAttribute('y2', y * gridSize);
+		lineSVG.setAttribute('x1', -2000);
+		lineSVG.setAttribute('x2', 2000);
+		lineSVG.classList.add('grid-line');
+
+		if (y % highlightFreq == 0)
+			lineSVG.classList.add('highlight');
+
+		container.prepend(lineSVG);
+	}
 };
 
 let selectNodeById = function (sceneId) {
@@ -141,7 +179,7 @@ let treeDepthPass = function () {
 	}
 };
 
-let phantomNodesPass = function() {
+let phantomNodesPass = function () {
 	for (const entry of connectionsMap.entries()) {
 		entry[1].forEach(node2 => {
 			let deltaDepth = node2.node.depth - entry[0].depth;
@@ -149,7 +187,7 @@ let phantomNodesPass = function() {
 			if (deltaDepth > 3) return;
 
 			for (let i = 1; i < deltaDepth; i++) {
-				let phantom = { branch: entry[0].branch + `${i}`, x: 0, y: 0, depth: entry[0].depth + i, isPhantom: true};
+				let phantom = { branch: entry[0].branch + `${i}`, x: 0, y: 0, depth: entry[0].depth + i, isPhantom: true };
 				let row = depthMap.get(phantom.depth);
 				row.push(phantom);
 			}
@@ -195,9 +233,9 @@ let buildSVGLine = function (node1, node2) {
 
 	let deltaDepth = node2.depth - node1.depth;
 
-	if (deltaDepth > 3 || deltaDepth < -1) 
-		return new TreeBorkLine(node1, node2);
-	
+	if (deltaDepth > 3 || deltaDepth < -1)
+		return new TreeCurvyLine(node1, node2);
+
 	else return new TreeLine(node1, node2);
 };
 

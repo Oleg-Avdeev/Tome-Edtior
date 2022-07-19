@@ -7,7 +7,6 @@ let displayTable = function (chapter) {
 	Header = [];
 	Table = [];
 
-	container.appendChild(createTableName(chapter.Lines[0]));
 	container.appendChild(createHeader(chapter.Lines[0]));
 
 	chapter.Lines.forEach(line => {

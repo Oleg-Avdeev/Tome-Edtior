@@ -3,7 +3,7 @@
 	rx: 2;
 	ry: 2;
 
-	fill: #222;
+	fill: #151515;
 	stroke: var(--node-color); 
 	stroke-width: 1;
 
@@ -49,7 +49,7 @@ text.new {
 }
 
 text.node-id {
-	fill: #222;
+	fill: #151515;
 	font-family: 'Ubuntu Mono', monospace;
 	font-size: 6pt;
 	display: block;
@@ -64,17 +64,30 @@ rect.node-id {
 	display: none;
 }
 
-line {
+#tree .line {
 	stroke: #eee; 
-	stroke-width: 0.4;
+	stroke-width: 0.7;
 }
 
 .connector {
 	marker-end: url(#arrowhead);
+	fill: none;
+	stroke: #eee; 
+	stroke-width: 0.7;
 }
 
 #arrowhead {
 	stroke: #eee; 
 	fill: #eee; 
+	stroke-width: 0.4;
+}
+
+.grid-line {
+	stroke: #eee4; 
+	stroke-width: 0.1;
+}
+
+.grid-line.highlight {
+	stroke: #eee2; 
 	stroke-width: 0.4;
 }

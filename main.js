@@ -11,6 +11,8 @@ function createWindow() {
 	win = new BrowserWindow({
 		width: 1600,
 		height: 900,
+		titleBarStyle: 'hidden',
+		titleBarOverlay: true,
 		webPreferences: {
 			contextIsolation: true,
 			enableRemoteModule: false,
@@ -24,7 +26,7 @@ function createWindow() {
 	}	
 
 	win.loadFile('index.html');
-	win.webContents.openDevTools();
+	// win.webContents.openDevTools();
 	
 	menu.setWindow(win);
 	menu.buildMenu();

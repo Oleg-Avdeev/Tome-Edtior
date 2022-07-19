@@ -9,6 +9,7 @@
 	top: 0;
 
 	padding: 10px 5px;
+	margin-top: 30px;
 }
 
 .toolbar.hidden {
@@ -23,20 +24,21 @@
 .toolbar-button {
 	display: block;
 	padding: 5px;
-	height: 30px;
+	height: 20px;
 
 	text-decoration: none;
 	
-	border-radius: 10px;
-	border-color: #eee0;
-	border-width: 3px;
-	border-style: solid;
+	color: #eee0;
+	border-bottom-width: 2px;
+	border-bottom: solid;
+
 	margin-bottom: 5px;
 }
 
 .toolbar-button.active {
 	background-color: #eee1;
 	border-color: #eee;
+	border-bottom-width: 2px;
 }
 
 .toolbar-button.current {
@@ -49,4 +51,5 @@
 	color: #fff;
 	cursor: pointer;
   	background-color: #eee4;
+	border-bottom-width: 2px;
 }

@@ -4,6 +4,14 @@ body {
 	margin: 0px;
 }
 
+.window-title {
+    -webkit-app-region: drag;
+	position: absolute;
+    height: 30px;
+    right: 0;
+    left: 0;
+}
+
 .hidden {
 	display: none;
 }
@@ -26,26 +34,7 @@ body {
 .left {
 	left: 0;
 	overflow: scroll;
-
-	background-color: #222;
-	background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
-	background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
-
-	background-image: -webkit-linear-gradient(white 2px, transparent 2px),
-		-webkit-linear-gradient(0, white 2px, transparent 2px),
-		-webkit-linear-gradient(rgba(255, 255, 255, .3) 1px, transparent 1px),
-		-webkit-linear-gradient(0, rgba(255, 255, 255, .3) 1px, transparent 1px);
-
-	background-image: -moz-linear-gradient(white 2px, transparent 2px),
-		-moz-linear-gradient(0, white 2px, transparent 2px),
-		-moz-linear-gradient(rgba(255, 255, 255, .3) 1px, transparent 1px),
-		-moz-linear-gradient(0, rgba(255, 255, 255, .3) 1px, transparent 1px);
-
-	background-image: linear-gradient(#555 1px, transparent 1px),
-		linear-gradient(90deg, #555 1px, transparent 1px),
-		linear-gradient(rgba(255, 255, 255, .1) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(255, 255, 255, .1) 1px, transparent 1px);
-
+	background-color: #151515;
 }
 
 .right {

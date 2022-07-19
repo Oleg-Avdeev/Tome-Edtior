@@ -31,6 +31,10 @@
 	color: white;
 }
 
+th {
+	position: sticky;
+}
+
 th.column-Text {
 	width: 300px;
 }
@@ -55,4 +59,8 @@ td.column-Text {
 .chapter-table th.collapsed {
 	color: #ffffffaa;
 	border: thin dashed;
+}
+
+.chapter-table th:hover {
+	cursor: pointer;
 }
