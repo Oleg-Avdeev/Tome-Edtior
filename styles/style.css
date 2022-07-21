@@ -50,7 +50,6 @@ body {
 	left: 50%;
 	cursor: col-resize;
 	width: 4px;
-	background-color: #fff;
 	user-select: none;
 }
 

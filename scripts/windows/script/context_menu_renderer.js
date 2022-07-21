@@ -6,7 +6,7 @@ var ContextMenuRenderer = {
 	groups: [],
 
 	draw: function (targetParagraph, menuPosition) {
-		
+
 		this.targetParagraph = targetParagraph;
 		this.menu.classList.remove('hidden');
 
@@ -14,6 +14,7 @@ var ContextMenuRenderer = {
 		this.menu.style.top = menuPosition.y + 'px';
 
 		this.groups.forEach(group => this.clearGroup(group.key));
+		this.reposition();
 	},
 
 	hide: function () {
@@ -21,10 +22,10 @@ var ContextMenuRenderer = {
 	},
 
 	initialize: function () {
-		
+
 		this.list = document.createElement('ul');
 		this.list.classList.add('context-items');
-		
+
 		this.menu = document.createElement('nav');
 		this.menu.classList.add('context-menu');
 		this.menu.classList.add('hidden');
@@ -37,58 +38,64 @@ var ContextMenuRenderer = {
 		document.getElementById('editor').appendChild(this.menu);
 
 		document.addEventListener('click', e => this.hide());
-		window.onkeyup += e => { if (e.keyCode === 27) { this.hide(); }};
+		window.onkeyup += e => { if (e.keyCode === 27) { this.hide(); } };
 		window.onresize += e => this.hide();
 	},
 
-	createItem: function ( text, styles, action, group ) {
+	createItem: function (text, styles, action, group) {
 
 		let item = document.createElement('li');
 		item.classList.add('context-item');
 		item.textContent = text;
-		
-		if (styles) 
+
+		if (styles)
 			styles.split(' ').forEach(style => item.classList.add(style));
 
 		item.onclick = () => action();
 
 		this.list.appendChild(item);
 
-		if (group)
-		{
+		if (group) {
 			let itemsGroup = this.groups.find(g => g.key == group);
-			if (!itemsGroup)
-			{
+			if (!itemsGroup) {
 				itemsGroup = { key: group, items: [] };
 				this.groups.push(itemsGroup);
 			}
-			
+
 			itemsGroup.items.push(item);
 		}
 
+		this.reposition();
 		return item;
 	},
 
-	reposition: function() {
+	reposition: function () {
+		let top = this.menu.getBoundingClientRect().top;
+		let bottomSideY = top + this.menu.clientHeight + 20;
+		if (bottomSideY > window.innerHeight)
+			top -= bottomSideY - window.innerHeight;
 
-		//TODO: Move out of window edges
+		let left = this.menu.getBoundingClientRect().left;
+		let rightSideX = left + this.menu.clientWidth + 20;
+		if (rightSideX > window.innerWidth)
+			left -= rightSideX - window.innerWidth;
 
+		this.menu.style.top = top + 'px';
+		this.menu.style.left = left + 'px';
 	},
 
-	createSeparator: function ( group ) {
+	createSeparator: function (group) {
 		let item = document.createElement('li');
 		item.classList.add('context-item-separator');
 		this.list.appendChild(item);
 
-		if (group)
-		{
+		if (group) {
 			let itemsGroup = this.groups.find(g => g.key == group);
-			if (!itemsGroup)
-			{
+			if (!itemsGroup) {
 				itemsGroup = { key: group, items: [] };
 				this.groups.push(itemsGroup);
 			}
-			
+
 			itemsGroup.items.push(item);
 		}
 	},
@@ -103,13 +110,13 @@ var ContextMenuRenderer = {
 
 	resolveMissingScene() {
 		let missingId = this.targetParagraph.isGotoId;
-		
+
 		let newLine = { ...this.targetParagraph.line };
 		newLine.Character = 'Нарратор';
 		newLine.Actions = [];
 		newLine.Text = '...';
-		
-		let newScene = { Id: missingId, Lines: [ newLine ] };
+
+		let newScene = { Id: missingId, Lines: [newLine] };
 
 		Story.json.Scenes.push(newScene);
 		Story.updateTree();

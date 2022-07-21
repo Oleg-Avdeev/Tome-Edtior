@@ -1,5 +1,6 @@
 function dragElement(element, direction) {
 	var md; // remember mouse down info
+	var rs; // remember resize info
 	const leftElement = document.getElementsByClassName('left')[0];
 	const rightElements = document.getElementsByClassName('right');
 	const editorPanel = document.getElementsByClassName('editor')[0];
@@ -23,22 +24,38 @@ function dragElement(element, direction) {
 	}
 
 	function onMouseMove(e) {
-
 		var delta = {
 			x: e.clientX - md.e.clientX,
 			y: e.clientY - md.e.clientY
 		};
 
+		// Prevent negative-sized elements
+		delta.x = Math.min(Math.max(delta.x, -md.firstWidth), md.secondWidth);
+
+		resize(md.firstWidth, delta);
+	}
+
+	function resize(initialWidth, delta) {
 		if (direction === 'H') // Horizontal
 		{
-			// Prevent negative-sized elements
-			delta.x = Math.min(Math.max(delta.x, -md.firstWidth), md.secondWidth);
+			let leftWidth = initialWidth + delta.x;
+			leftElement.style.width = (100 * leftWidth / editorPanel.clientWidth) + '%';
 			
-			leftElement.style.width = (md.firstWidth + delta.x) + 'px';
-			for (let i = 0; i < rightElements.length; i++)
-				rightElements[i].style.width = (editorPanel.clientWidth) - (element.clientWidth) - (md.firstWidth + delta.x) + 'px';
+			for (let i = 0; i < rightElements.length; i++) {
+				let rightWidth = editorPanel.clientWidth - leftWidth;
+				rightElements[i].style.width = (100 * rightWidth / editorPanel.clientWidth) + '%';
+			}
 
 			element.style.left = leftElement.style.width;
+			setProperties();
+		}
+	}
+
+	function setProperties() {
+		leftElement.style.setProperty('--panel-width', leftElement.style.width);
+		for (let i = 0; i < rightElements.length; i++) {
+			rightElements[i].style.setProperty('--panel-offset', leftElement.style.width);
+			rightElements[i].style.setProperty('--panel-width', rightElements[i].style.width);
 		}
 	}
 }

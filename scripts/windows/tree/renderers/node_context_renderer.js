@@ -11,8 +11,10 @@ var NodeContextRenderer = {
 		this.menu.classList.remove('hidden');
 
 		this.menu.style.borderColor = targetNode.color;
+
 		this.menu.style.left = menuPosition.x + 'px';
 		this.menu.style.top = menuPosition.y + 'px';
+		this.reposition();
 
 		this.nodeId.textContent = targetNode.scene.Id;
 	},
@@ -71,6 +73,7 @@ var NodeContextRenderer = {
 		item.onclick = () => action();
 
 		this.list.appendChild(item);
+		this.reposition();
 	},
 
 	createColorPalette: function () {
@@ -108,6 +111,21 @@ var NodeContextRenderer = {
 
 			item.appendChild(colorButton);
 		});
+	},
+
+	reposition: function () {
+		let top = this.menu.getBoundingClientRect().top;
+		let bottomSideY = top + this.menu.clientHeight + 20;
+		if (bottomSideY > window.innerHeight)
+			top -= bottomSideY - window.innerHeight;
+
+		let left = this.menu.getBoundingClientRect().left;
+		let rightSideX = left + this.menu.clientWidth + 20;
+		if (rightSideX > window.innerWidth)
+			left -= rightSideX - window.innerWidth;
+
+		this.menu.style.top = top + 'px';
+		this.menu.style.left = left + 'px';
 	},
 
 	destroy: function () {
