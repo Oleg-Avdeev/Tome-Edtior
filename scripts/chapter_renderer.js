@@ -38,7 +38,7 @@ let addNewParagraph = function (paragraph, addAbove, copyContents) {
 
 	if (!copyContents)
 	{
-		line.Character = 'Нарратор';
+		line.Character = getLocalized(localization.narrator);
 		line.Text = '...';
 	}
 

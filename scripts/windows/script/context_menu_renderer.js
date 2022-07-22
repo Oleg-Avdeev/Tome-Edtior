@@ -31,9 +31,9 @@ var ContextMenuRenderer = {
 		this.menu.classList.add('hidden');
 		this.menu.appendChild(this.list);
 
-		this.createItem('Добавить Сверху', '', () => this.addLineAbove());
-		this.createItem('Добавить Снизу', '', () => this.addLineBelow());
-		this.createItem('Удалить Реплику', 'danger', () => this.removeLine());
+		this.createItem(getLocalized(localization.addAbove), '', () => this.addLineAbove());
+		this.createItem(getLocalized(localization.addBelow), '', () => this.addLineBelow());
+		this.createItem(getLocalized(localization.deleteLine), 'danger', () => this.removeLine());
 
 		document.getElementById('editor').appendChild(this.menu);
 
@@ -112,7 +112,7 @@ var ContextMenuRenderer = {
 		let missingId = this.targetParagraph.isGotoId;
 
 		let newLine = { ...this.targetParagraph.line };
-		newLine.Character = 'Нарратор';
+		newLine.Character = getLocalized(localization.narrator);
 		newLine.Actions = [];
 		newLine.Text = '...';
 

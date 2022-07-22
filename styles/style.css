@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
+@font-face {
+	font-family: 'Ubuntu Mono';
+	font-style: normal;
+	font-weight: 400;
+	src: url(fonts/UbuntuMono-Regular.ttf)
+}
 
 body {
 	margin: 0px;
@@ -34,12 +39,12 @@ body {
 .left {
 	left: 0;
 	overflow: scroll;
-	background-color: #151515;
+	background: linear-gradient(180deg, #151515 0%, #0F0F0F 100%);
 }
 
 .right {
 	right: 0;
-	background-color: #eee;
+	background: linear-gradient(180deg, #eee 0%, #ddd 100%);
 	overflow: scroll;
 }
 

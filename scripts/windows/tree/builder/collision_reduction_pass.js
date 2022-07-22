@@ -68,7 +68,6 @@ class CollisionReductionPass {
 			if (entry[1].find(n => n.node == node))
 			{
 				parent = entry[0];
-				console.log(parent);
 				return parent && parent.x > X;
 			}
 	}

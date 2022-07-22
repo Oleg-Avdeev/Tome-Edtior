@@ -79,7 +79,7 @@ var NewNode = {
 		this.parentNode.scene.Lines.push(newLink);
 
 		let newLine = { ...lastLine };
-		newLine.Character = 'Нарратор';
+		newLine.Character = getLocalized(localization.narrator);
 		newLine.Actions = [];
 		newLine.Text = '...';
 		

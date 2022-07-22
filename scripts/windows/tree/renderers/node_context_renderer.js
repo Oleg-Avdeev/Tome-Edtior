@@ -40,15 +40,15 @@ var NodeContextRenderer = {
 
 		this.createColorPalette();
 
-		this.createItem('Вставить Предыдущий Блок', '', () => {
+		this.createItem(getLocalized(localization.insertPreviousNode), '', () => {
 			StoryHelper.createPreviousScene(this.node.scene);
 		});
 
-		this.createItem('Добавить Следующий Блок', '', () => {
+		this.createItem(getLocalized(localization.addNextNode), '', () => {
 			StoryHelper.createNextScene(this.node.scene);
 		});
 
-		this.createItem('Удалить Блок', 'danger', () => {
+		this.createItem(getLocalized(localization.deleteNode), 'danger', () => {
 			StoryHelper.deleteScene(this.node.scene);
 		});
 

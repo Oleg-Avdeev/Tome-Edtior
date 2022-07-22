@@ -77,7 +77,7 @@ const Title = {
 		else
 		{
 			this.htmlNode.classList.add('invalid');
-			this.htmlNode.setAttribute('error', 'Сцена с таким названием уже существует');
+			this.htmlNode.setAttribute('error', getLocalized(localization.sceneAlreadyExists));
 		}
 	}
 };

@@ -70,7 +70,7 @@ class Cell {
 		{
 			ContextMenuRenderer.draw(this, { x: e.clientX, y: e.clientY }, false);
 
-			ContextMenuRenderer.createItem( 'Разбить на Реплики', '', () => {
+			ContextMenuRenderer.createItem( getLocalized(localization.splitIntoLines), '', () => {
 				
 				let newLines = this.htmlCell.innerHTML
 					.split('<br>')

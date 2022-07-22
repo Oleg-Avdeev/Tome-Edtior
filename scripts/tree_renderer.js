@@ -234,7 +234,7 @@ let buildSVGLine = function (node1, node2) {
 	let deltaDepth = node2.depth - node1.depth;
 
 	if (deltaDepth > 3 || deltaDepth < -1)
-		return new TreeCurvyLine(node1, node2);
+		return new TreeBorkLine(node1, node2);
 
 	else return new TreeLine(node1, node2);
 };

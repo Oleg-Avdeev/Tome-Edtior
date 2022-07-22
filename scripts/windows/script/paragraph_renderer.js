@@ -76,7 +76,7 @@ class Paragraph {
 			if (!this.gotoTarget)
 			{
 				this.htmlNode.classList.add('invalid');
-				this.htmlNode.setAttribute('error', `Сцена "${action.Value}" не найдена`);
+				this.htmlNode.setAttribute('error', getLocalized(localization.sceneNotFound)(action.Value));
 			}
 		}
 		else {
@@ -122,7 +122,7 @@ class Paragraph {
 			if (this.isGotoId && !this.gotoTarget)
 			{
 				this.contextMenuRenderer.createSeparator('resolve');
-				this.contextMenuRenderer.createItem('Создать Сцену', 'resolve', 
+				this.contextMenuRenderer.createItem(getLocalized(localization.createScene), 'resolve', 
 					() => this.contextMenuRenderer.resolveMissingScene(), 'resolve');
 			}
 		}

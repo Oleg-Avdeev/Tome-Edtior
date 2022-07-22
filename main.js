@@ -9,31 +9,35 @@ let win;
 
 function createWindow() {
 	win = new BrowserWindow({
-		width: 1600,
+		width: 1200,
 		height: 900,
+
+		minWidth: 400,
+		minHeight: 200,
+		tabbingIdentifier: 'tome',
+
 		titleBarStyle: 'hidden',
 		titleBarOverlay: true,
 		webPreferences: {
 			contextIsolation: true,
 			enableRemoteModule: false,
-			preload: path.join(__dirname, 'preload.js')
+			preload: path.join(__dirname, 'preload.js'),
 		},
 		icon: __dirname + '/build/tome.icns'
 	});
 
 	if (process.platform === 'darwin') {
 		app.dock.setIcon(path.join(__dirname, 'build/tome.png'));
-	}	
+	}
 
 	win.loadFile('index.html');
 	// win.webContents.openDevTools();
-	
+
 	menu.setWindow(win);
 	menu.buildMenu();
 
 	let project_path = store.get('project-path');
-	if (project_path)
-	{
+	if (project_path) {
 		let project = new Project(win, project_path);
 		project.read();
 	}

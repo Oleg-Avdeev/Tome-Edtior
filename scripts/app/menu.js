@@ -4,7 +4,6 @@ const isMac = process.platform === 'darwin';
 
 // MENU:
 const file = require('./menu/file');
-const google = require('./menu/google');
 
 let win;
 const store = new Store();
@@ -100,8 +99,6 @@ function buildTemplate() {
 				])
 			]
 		},
-
-		google.buildMenu(win, buildMenu),
 
 		{
 			role: 'help',

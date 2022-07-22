@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld(
 	'api', {
 		send: (channel, data) => {
 			// whitelist channels
-			let validChannels = ['commit-document', 'select-document', 'google-auth-code', 'google-sheet-id'];
+			let validChannels = ['commit-document', 'select-document'];
 			if (validChannels.includes(channel)) {
 				ipcRenderer.send(channel, data);
 			}
