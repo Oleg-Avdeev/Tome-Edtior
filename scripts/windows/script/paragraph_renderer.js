@@ -118,6 +118,7 @@ class Paragraph {
 		if (e.button === 2)
 		{
 			this.contextMenuRenderer.draw(this, { x: e.clientX, y: e.clientY });
+			this.contextMenuRenderer.addLineActions();
 			
 			if (this.isGotoId && !this.gotoTarget)
 			{

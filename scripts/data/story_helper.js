@@ -2,36 +2,22 @@ const story = Story;
 
 const StoryHelper = {
 
-	createSceneDescriptions: function () {
+	getOrCreateMetaObject: function (key, defaultValue) {
+		if (story.meta[key])
+			return story.meta[key];
 
-		story.json.Scenes.forEach(scene => {
+		story.meta[key] = defaultValue;
+		Story.invalidate();
+		return defaultValue;
+	},
 
-			if (scene.Lines[0].Character == 'SCENE')
-				return;
+	getMetaObject: function (key) {
+		return story.meta[key];
+	},
 
-			let line = {
-				'Scene': scene.Id,
-				'Character': 'SCENE',
-				'Text': '',
-				'Счётчик': '',
-				'Actions': [],
-				'Conditions': [],
-				'Локация': scene.Lines[0]['Локация'],
-				'Музыка': '',
-				'Агата': '0',
-				'Елена': '1',
-				'Кристина': '2',
-				'Дух-Дождя': '3',
-				'Михаэль': '3',
-				'Девушка+': '',
-				'Девушка-': ''
-			};
-
-			scene.Lines = [line].concat(scene.Lines);
-			return;
-		});
-
-		story.invalidate();
+	isMandatoryKey: function (key) {
+		const mandatoryKeys = ['Scene', 'Character', 'Text', 'Actions', 'Conditions'];
+		return mandatoryKeys.includes(key);
 	},
 
 	createNextScene: function (parentScene) {
@@ -93,13 +79,83 @@ const StoryHelper = {
 
 		let lastLine = referenceScene.Lines[referenceScene.Lines.length - 1];
 		let newLine = { ...lastLine };
-		newLine.Character = 'Нарратор';
+		newLine.Character = getLocalized(localization.narrator);
 		newLine.Actions = [];
 		newLine.Text = '...';
 
 		let newScene = { Id: newSceneId, Lines: [newLine] };
 
 		return newScene;
+	},
+
+	renameColumn: function (currentKey, newKey) {
+
+		if (currentKey === newKey)
+			return currentKey;
+
+		newKey = newKey.replace(/\s/, '');
+		let ordering = this.getMetaObject('columnOrdering');
+		ordering[newKey] = ordering[currentKey];
+
+		let _rename = function (ok, nk) {
+			story.json.Scenes
+				.flatMap(scene => scene.Lines)
+				.forEach(line => {
+					Object.defineProperty(line, nk, Object.getOwnPropertyDescriptor(line, ok));
+					delete line[ok];
+				});
+		};
+
+		this.commitCommand(() => _rename(currentKey, newKey), () => _rename(newKey, currentKey));
+
+		return newKey;
+	},
+
+	deleteColumn: function (columnKey) {
+		let lines = story.json.Scenes.flatMap(scene => scene.Lines);
+		let lineValuesCopy = JSON.parse(JSON.stringify(lines.map(line => line[columnKey])));
+
+		let _delete = function () {
+			lines.forEach(line => delete line[columnKey]);
+		};
+
+		let _undo = function () {
+			lines.forEach((line, index) => line[columnKey] = lineValuesCopy[index]);
+		};
+
+		this.commitCommand(() => _delete(), () => _undo());
+	},
+
+	createColumn: function (index) {
+
+		let columnKeyFormat = 'New Column %n';
+		let columnKey = 'New Column';
+		let keyUniqueIndex = 0;
+		let lines = story.json.Scenes.flatMap(scene => scene.Lines);
+
+		while (columnKey in lines[0]) {
+			keyUniqueIndex++;
+			columnKey = columnKeyFormat.replace('%n', keyUniqueIndex);
+		}
+
+		index = index + 1; // offset by 1 because of 'Scene' key
+		let ordering = this.getMetaObject('columnOrdering');
+		let orderingCopy = JSON.parse(JSON.stringify(ordering));
+
+		let _create = function () {
+			Object.keys(ordering)
+				.filter(key => ordering[key] >= index)
+				.forEach(key => ordering[key]++);
+			ordering[columnKey] = index;
+			lines.forEach(line => line[columnKey] = '');
+		};
+
+		let _undo = function () {
+			lines.forEach(line => delete line[columnKey]);
+			story.meta.columnOrdering = orderingCopy;
+		};
+
+		this.commitCommand(() => _create(), () => _undo());
 	},
 
 	deleteScene: function (scene) {
@@ -125,22 +181,26 @@ const StoryHelper = {
 	},
 
 	getUniqueSceneId: function (parentId) {
+		let uidFormat = `${parentId} %n`;
 		let uid = parentId;
+		let index = 0;
 
-		while (story.json.Scenes.find(s => s.Id == uid))
-			uid = uid + '_';
+		while (story.json.Scenes.find(s => s.Id == uid)) {
+			index++;
+			uid = uidFormat.replace('%n', index);
+		}
 
 		return uid;
 	},
 
 	commitCommand: function (action, undo) {
 
-		const updateStory = () => { story.invalidate(); story.updateTree(); };
+		const updateStory = () => { story.invalidate(); story.updateTree(); onSceneSelect(Story.currentSceneId); };
 		const fullAction = () => { action(); updateStory(); };
 		const fullUndo = () => { undo(); updateStory(); };
 		fullAction();
 
-		try { registerCommand ({ redo: fullAction, undo: fullUndo }); } 
+		try { registerCommand({ redo: fullAction, undo: fullUndo }); }
 		catch (error) {
 			console.error('error while registering command ' + error);
 		}

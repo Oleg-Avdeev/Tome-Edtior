@@ -39,6 +39,7 @@ module.exports = class Project {
 	}
 
 	save() {
+		console.time('save-all');
 		this.storyFileNames.forEach((filename, index) => {
 
 			let document = JSON.parse(this.projectData.documents[index]);
@@ -47,6 +48,7 @@ module.exports = class Project {
 			fs.writeFile(`${this.path}/${filename}`, tsv, 
 				(err) => { if (err) console.error(err); });
 		});
+		console.timeEnd('save-all');
 	}
 
 	read() {
@@ -113,6 +115,7 @@ module.exports = class Project {
 		ipcMain.removeAllListeners('select-document');
 
 		ipcMain.on('commit-document', (event, args) => {
+			console.time('commit-document');
 			let file = this.getMetaPath( args.meta.fileName );
 			let json = JSON.stringify( args, null, 2 );
 			
@@ -124,6 +127,7 @@ module.exports = class Project {
 			this.metaData.lookup = lookup;
 			metaDataJSON = JSON.stringify(this.metaData, null, 2);
 			fs.writeFileSync(`${this.path}/project-meta.json`, metaDataJSON);
+			console.timeEnd('commit-document');
 		});
 
 		ipcMain.on('select-document', (event, file) => {

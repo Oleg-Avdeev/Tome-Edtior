@@ -17,51 +17,41 @@ let displayTable = function (chapter) {
 	collapseColumns();
 };
 
-let createTableName = function (line) {
-
-	let colorData = Story.meta.sceneColors.find(sc => sc.Id === line.Scene);
-	let color = colorData ? colorData.color : '#eee';
-
-	const caption = document.createElement('caption');
-	let sceneId = line.Scene;
-
-	caption.textContent = sceneId;
-	caption.style.setProperty('--color', color);
-	return caption;
-};
-
 let createHeader = function (line) {
 	const row = document.createElement('tr');
 	let keys = Object.keys(line).filter(k => k != 'Scene');
 
-	keys.forEach((value, index) => {
-		const cell = document.createElement('th');
-
-		let safeKey = keys[index].replaceAll(/[^a-z]/ig, '');
-		cell.classList.add(`column-${safeKey}`);
-		cell.textContent = value;
-		cell.onclick = () => toggleColumnCollapse(index);
-		row.appendChild(cell);
-		Header.push(cell);
-	});
+	let defaultOrdering = {}; keys.forEach((value, index) => defaultOrdering[value] = index);
+	let ordering = StoryHelper.getOrCreateMetaObject('columnOrdering', defaultOrdering);
+	
+	keys
+		.sort((k1, k2) => ordering[k1] - ordering[k2])
+		.forEach((value, index) => {
+			let cell = new ColumnHeader(value, index).htmlCell;
+			row.appendChild(cell);
+			Header.push(cell);
+		});
 
 	return row;
 };
 
 let createRow = function (line) {
+	let ordering = StoryHelper.getMetaObject('columnOrdering');
+
 	const row = document.createElement('tr');
-	const values = Object.values(line);
 	const keys = Object.keys(line);
 	const objectRow = [];
 
-	values.forEach((value, index) => {
+	keys
+		.sort((k1, k2) => ordering[k1] - ordering[k2])
+		.forEach((key, index) => {
 
-		if (index == 0) return;
+			if (index == 0) return;
 
-		let cell = new Cell(line, keys[index], value);
-		row.appendChild(cell.htmlCell);
-		objectRow.push(cell);
-	});
+			let cell = new Cell(line, key, line[key]);
+			row.appendChild(cell.htmlCell);
+			objectRow.push(cell);
+		});
 
 	Table.push(objectRow);
 
@@ -93,7 +83,7 @@ let toggleColumnCollapse = function (index) {
 	else {
 		Header[index].classList.remove('collapsed');
 		Table.forEach(row => row[index].htmlCell.classList.remove('collapsed'));
-		
+
 		let metaIndex = Story.meta.collapsedColumns.indexOf(index);
 		Story.meta.collapsedColumns.splice(metaIndex, 1);
 	}

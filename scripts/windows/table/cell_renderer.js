@@ -69,6 +69,7 @@ class Cell {
 		if (e.button === 2)
 		{
 			ContextMenuRenderer.draw(this, { x: e.clientX, y: e.clientY }, false);
+			ContextMenuRenderer.addLineActions();
 
 			ContextMenuRenderer.createItem( getLocalized(localization.splitIntoLines), '', () => {
 				
@@ -114,8 +115,6 @@ class Cell {
 	applyToSelectedCells(content) {
 		selectedCells.forEach(cell => cell.htmlCell.textContent = content);
 		selectedCells.forEach(cell => cell.line[cell.key] = content);
-		// selectedCells.forEach(c => c.deselect());
-		// selectedCells = [];
 	}
 
 	select() {

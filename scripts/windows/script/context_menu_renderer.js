@@ -31,15 +31,33 @@ var ContextMenuRenderer = {
 		this.menu.classList.add('hidden');
 		this.menu.appendChild(this.list);
 
-		this.createItem(getLocalized(localization.addAbove), '', () => this.addLineAbove());
-		this.createItem(getLocalized(localization.addBelow), '', () => this.addLineBelow());
-		this.createItem(getLocalized(localization.deleteLine), 'danger', () => this.removeLine());
-
 		document.getElementById('editor').appendChild(this.menu);
 
 		document.addEventListener('click', e => this.hide());
 		window.onkeyup += e => { if (e.keyCode === 27) { this.hide(); } };
 		window.onresize += e => this.hide();
+	},
+
+	addLineActions : function() {
+		this.createItem(getLocalized(localization.addAbove), '', () => this.addLineAbove(), 'line-actions');
+		this.createItem(getLocalized(localization.addBelow), '', () => this.addLineBelow(), 'line-actions');
+		this.createItem(getLocalized(localization.deleteLine), 'danger', () => this.removeLine(), 'line-actions');
+	},
+
+	addCustomItem: function (item, group) {
+		this.list.appendChild(item);
+
+		if (group) {
+			let itemsGroup = this.groups.find(g => g.key == group);
+			if (!itemsGroup) {
+				itemsGroup = { key: group, items: [] };
+				this.groups.push(itemsGroup);
+			}
+
+			itemsGroup.items.push(item);
+		}
+
+		this.reposition();
 	},
 
 	createItem: function (text, styles, action, group) {

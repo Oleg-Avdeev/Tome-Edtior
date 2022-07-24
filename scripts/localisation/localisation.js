@@ -14,12 +14,15 @@ const localization = {
 	sceneNotFound: { ru: (s) => `Сцена ${s} не найдена`, en: (s) => `Scene ${s} not found` },
 	createScene: { ru: 'Создать Сцену', en: 'Create Scene' },
 	sceneAlreadyExists: { ru: 'Сцена с таким названием уже существует', en: 'Scene with this ID already exists' },
+
+	renameColumn: { ru: 'Переименовать Колонку', en: 'Rename Column' },
+	addColumn: { ru: 'Добавить Колонку', en: 'Add Column' },
+	isEnumerable: { ru: 'Вести Список Значений', en: 'Is Enumerable' },
+	reviewValues: { ru: 'Просмотреть Значения', en: 'Review Values' },
+	deleteColumn: { ru: 'Удалить Колонку', en: 'Delete Column' },
 };
 
 const getLocalized = function(term) {
-
-	console.log(navigator.language);
-
 	if (/ru/.test(navigator.language))
 		return term.ru;
 
