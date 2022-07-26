@@ -11,6 +11,9 @@ This format allows you to design the tree, write all of the character lines, not
 - **Automatic tree building** : Just write your story! No need to move blocks, editor will do its best to keep your diagram clean, readable and beautiful. Color code your blocks to make the tree even easier to understand :christmas_tree:
 - **Script editing** : Feel like a professional script writer with script-styled editor. Easily add and remove lines, assign characters, set line actions or add narration;
 - **Table editting** : Jump into the table mode to review your story data, set meta keys like music and visual cues;
+
+![](resources/tome-table.png)
+
 - **Projects** : Sometimes one tree isn't enough — instead of working with individual files TOME opens project folders and allows you to switch between multiple trees;
 - **Work anywhere** : Editor is built using Electron, which means that you will be able to run it on your Mac, Windows or Linux machine. And maybe eventually online...
 - **Autosave** : Don't worry about losing your progress, it's being saved after every change you make
