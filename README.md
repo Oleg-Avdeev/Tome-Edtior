@@ -1,11 +1,12 @@
-# 🌳 tome : narrative tree editor 🌳
 
-TOME is an editor for dialogue and story trees that allows you to plan your entire game in one place. 
+<img align="left" width="170" height="170" src="build/tome.png">
+
+## **Tome** : narrative tree editor
+
+**TOME** is an editor for dialogue and story trees that allows you to plan your entire game in one place. 
 This format allows you to design the tree, write all of the character lines, notate actions and commands and store any additional data you might need for your game: scenes, backgrounds, visuals, music cues.
 
-## Editor
-
-![](resources/tome-screenshot.png)
+<br/>
 
 - **Automatic tree building** : Just write your story! No need to move blocks, editor will do its best to keep your diagram clean, readable and beautiful. Color code your blocks to make the tree even easier to understand :christmas_tree:
 - **Script editing** : Feel like a professional script writer with script-styled editor. Easily add and remove lines, assign characters, set line actions or add narration;
@@ -13,6 +14,8 @@ This format allows you to design the tree, write all of the character lines, not
 - **Projects** : Sometimes one tree isn't enough — instead of working with individual files TOME opens project folders and allows you to switch between multiple trees;
 - **Work anywhere** : Editor is built using Electron, which means that you will be able to run it on your Mac, Windows or Linux machine. And maybe eventually online...
 - **Autosave** : Don't worry about losing your progress, it's being saved after every change you make
+
+![](resources/tome-screenshot.png)
 
 ## TOME Format
 
