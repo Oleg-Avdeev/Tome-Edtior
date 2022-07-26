@@ -3,26 +3,25 @@
 
 ## **Tome** : narrative tree editor
 
-**TOME** is an editor for dialogue and story trees that allows you to plan your entire game in one place. 
+**Tome** is an editor for dialogue and story trees that allows you to plan your entire game in one place. 
 This format allows you to design the tree, write all of the character lines, notate actions and commands and store any additional data you might need for your game: scenes, backgrounds, visuals, music cues.
 
 <br/>
 
 - **Automatic tree building** : Just write your story! No need to move blocks, editor will do its best to keep your diagram clean, readable and beautiful. Color code your blocks to make the tree even easier to understand :christmas_tree:
-- **Script editing** : Feel like a professional script writer with script-styled editor. Easily add and remove lines, assign characters, set line actions or add narration;
+- **Projects** : Sometimes one tree isn't enough — instead of working with individual files Tome opens project folders and allows you to switch between multiple trees;
 - **Table editting** : Jump into the table mode to review your story data, set meta keys like music and visual cues;
 
 ![](resources/tome-table.png)
 
-- **Projects** : Sometimes one tree isn't enough — instead of working with individual files TOME opens project folders and allows you to switch between multiple trees;
 - **Work anywhere** : Editor is built using Electron, which means that you will be able to run it on your Mac, Windows or Linux machine. And maybe eventually online...
 - **Autosave** : Don't worry about losing your progress, it's being saved after every change you make
-
+- **Script editing** : Feel like a professional script writer with script-styled editor. Easily add and remove lines, assign characters, set line actions or add narration;
 ![](resources/tome-screenshot.png)
 
-## TOME Format
+## Tome Format
 
-Have you ever felt anxious about the state of your hobby project after long holidays or busy day-job months? Coming back to a project not being sure it's even going to compile, let alone play the right music for the right scene? This is the reason we (me and my wife) have designed the tome story format — as long as everything about your game is in just one place, it's way easier to keep track and feel confident about the state of your game.
+Have you ever felt anxious about the state of your hobby project after long holidays or busy day-job months? Coming back to a project not being sure it's even going to compile, let alone play the right music for the right scene? This is the reason we (me and my wife) have designed the Tome story format — as long as everything about your game is in just one place, it's way easier to keep track and feel confident about the state of your game.
 
 It's essentially a spreadsheet, the easiest of all formats. It's so simple you don't even need the editor, you can write your entire game using Google Spreadsheets (which we have done).  [Here is an example of what it looks like](https://docs.google.com/spreadsheets/d/1_-pYQTF3__aO8ktGBoTXIJRwPD7H56V2t4YUsSewUGw/edit?usp=sharing). 
 
@@ -51,7 +50,7 @@ Are welcome. However a note of warning, this is a passion project that I do for 
 
 ## Cool alternatives
 
-TOME is not the only tool out there to write stories. If you don't care too much about the meta-data and having everything in one file, might I introduce you to:
+Tome is not the only tool out there to write stories. If you don't care too much about the meta-data and having everything in one file, might I introduce you to:
 
 - [Twine](https://twinery.org) — An open-source tool for telling interactive, nonlinear stories. You can make a full game just using it with some extensions. However it's not as easy to integrate into a game engine
 - [Inky](https://www.inklestudios.com/ink/) — A narrative scripting language for games. A very good tool for writing complex dialogues and stories with text-first approach. It has been very well tested, it's open-source, it has game engine integrations, give it a try!
