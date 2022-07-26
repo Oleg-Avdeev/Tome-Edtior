@@ -5,7 +5,7 @@ This format allows you to design the tree, write all of the character lines, not
 
 ## Editor
 
-![](resources/tome-preview-sd.gif)
+![](resources/tome-screenshot.png)
 
 - **Automatic tree building** : Just write your story! No need to move blocks, editor will do its best to keep your diagram clean, readable and beautiful. Color code your blocks to make the tree even easier to understand :christmas_tree:
 - **Script editing** : Feel like a professional script writer with script-styled editor. Easily add and remove lines, assign characters, set line actions or add narration;
